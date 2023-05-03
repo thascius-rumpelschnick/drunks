@@ -10,11 +10,15 @@
 
 1. Comments
 
-```text
-  [Drunks-Client] Setting everything up
+    ```text
+      [Drunks-Client] Setting everything up
+    
+       - Add server folder (Don't touch yet)
+    ```
 
-   - Add server folder (Don't touch yet)
-```
+2. Pull Requests
+
+    TBA.
 
 ## Let's Build A Knowledge Base
 
