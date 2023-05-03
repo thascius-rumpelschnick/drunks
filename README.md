@@ -6,7 +6,15 @@
 
 ## HowTo
 
--> TBA.
+### Git
+
+1. Comments
+
+```text
+  [Drunks-Client] Setting everything up
+
+   - Add server folder (Don't touch yet)
+```
 
 ## Let's Build A Knowledge Base
 
