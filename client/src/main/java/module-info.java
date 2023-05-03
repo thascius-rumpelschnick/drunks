@@ -8,7 +8,7 @@ module org.kappa.client {
     requires net.synedra.validatorfx;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
-    requires eu.hansolo.tilesfx;
+    // requires eu.hansolo.tilesfx;
 
     opens org.kappa.client to javafx.fxml;
     exports org.kappa.client;
