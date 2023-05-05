@@ -8,7 +8,7 @@
 
 ### Git
 
-1. Comments
+1. Commit Message
 
     ```text
       [Drunks-Client] Setting everything up
