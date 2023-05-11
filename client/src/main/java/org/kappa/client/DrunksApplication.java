@@ -4,11 +4,9 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -63,7 +61,6 @@ public class DrunksApplication extends Application {
         // Fade out the welcome screen after 10 seconds
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
             root.getChildren().remove(imageView);
-            primaryStage.setScene(scene);
 
             // Create the sprite and add it to the root pane
             Sprite sprite = createSprite();
@@ -71,8 +68,44 @@ public class DrunksApplication extends Application {
 
             // Register key event handlers
             scene.setOnKeyPressed(event2 -> sprite.move(event2.getCode()));
+
+            // Create and show the second stage
+            Stage secondStage = createSecondStage();
+            secondStage.show();
+
+            // Hide the second stage after 10 seconds
+            Timeline secondTimeline = new Timeline(new KeyFrame(Duration.seconds(5), event3 -> {
+                secondStage.hide();
+            }));
+            secondTimeline.play();
         }));
         timeline.play();
+    }
+
+    private Stage createSecondStage() {
+        Stage secondStage = new Stage();
+        secondStage.setTitle("Second Stage");
+
+        Pane secondRoot = new Pane();
+        Scene secondScene = new Scene(secondRoot, WIDTH, HEIGHT);
+
+        // Set the background color
+        String hexColor = "#F2FFF5";
+        secondRoot.setStyle("-fx-background-color: " + hexColor + ";");
+
+        secondStage.setScene(secondScene);
+
+        // Load and center the image
+        Image image = new Image("Character.png");
+        ImageView imageView = new ImageView(image);
+        double imageX = (WIDTH - image.getWidth()) / 2;
+        double imageY = (HEIGHT - image.getHeight()) / 2;
+        imageView.setLayoutX(imageX);
+        imageView.setLayoutY(imageY);
+
+        secondRoot.getChildren().add(imageView);
+
+        return secondStage;
     }
 
     private Sprite createSprite() {
