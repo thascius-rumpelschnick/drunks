@@ -61,29 +61,40 @@ public class Sprite {
     }
 
     public void move(KeyCode keyCode) {
+        double newX = x;
+        double newY = y;
+
         switch (keyCode) {
             case W:
-                y -= speed;
+                newY -= speed;
                 imageView.setImage(imageUp);
                 break;
             case A:
-                x -= speed;
+                newX -= speed;
                 if (isRunningLeft)
                     imageView.setImage(imageLeftRunning);
                 else
                     imageView.setImage(imageLeft);
                 break;
             case S:
-                y += speed;
+                newY += speed;
                 imageView.setImage(imageDown);
                 break;
             case D:
-                x += speed;
+                newX += speed;
                 if (isRunningRight)
                     imageView.setImage(imageRightRunning);
                 else
                     imageView.setImage(imageRight);
                 break;
+        }
+
+        // Check if the new position is within the bounds of the pane
+        if (newX >= 0 && newX <= imageView.getScene().getWidth() - imageView.getFitWidth()) {
+            x = newX;
+        }
+        if (newY >= 0 && newY <= imageView.getScene().getHeight() - imageView.getFitHeight()) {
+            y = newY;
         }
 
         // Update the sprite's position

@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -23,19 +25,17 @@ public class DrunksApplication extends Application {
         primaryStage.setTitle("2D Game");
         primaryStage.setResizable(false);
 
-        Pane root = new Pane();
-        Scene scene = new Scene(root, WIDTH, HEIGHT);
+        Pane primaryStageRoot = new Pane();
+        Scene scene = new Scene(primaryStageRoot, WIDTH, HEIGHT);
 
         // Set the background color
         String hexColor = "#F2FFF5";
-        root.setStyle("-fx-background-color: " + hexColor + ";");
+        primaryStageRoot.setStyle("-fx-background-color: " + hexColor + ";");
 
         primaryStage.setScene(scene);
 
-        // Add your game elements to the root pane
-
         // Show welcoming screen
-        showWelcomeScreen(primaryStage, root, scene);
+        showWelcomeScreen(primaryStage, primaryStageRoot, scene);
 
         primaryStage.show();
     }
@@ -61,6 +61,9 @@ public class DrunksApplication extends Application {
         // Fade out the welcome screen after 10 seconds
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
             root.getChildren().remove(imageView);
+
+            // Add background tiles to the primaryStage
+            addBackgroundTiles(root);
 
             // Create the sprite and add it to the root pane
             Sprite sprite = createSprite();
@@ -106,6 +109,20 @@ public class DrunksApplication extends Application {
         secondRoot.getChildren().add(imageView);
 
         return secondStage;
+    }
+
+    private void addBackgroundTiles(Pane primaryStageRoot) {
+        int numCols = WIDTH / TILE_SIZE;
+        int numRows = HEIGHT / TILE_SIZE;
+
+        for (int col = 0; col < numCols; col++) {
+            for (int row = 0; row < numRows; row++) {
+                Rectangle tile = new Rectangle(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                tile.setFill(Color.web("#F2FFF5"));
+                tile.setStroke(Color.DARKGRAY);
+                primaryStageRoot.getChildren().add(tile);
+            }
+        }
     }
 
     private Sprite createSprite() {
