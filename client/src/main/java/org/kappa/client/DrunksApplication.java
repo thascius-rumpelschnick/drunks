@@ -1,8 +1,10 @@
 package org.kappa.client;
 
+import java.io.InputStream;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,15 +19,16 @@ import java.io.IOException;
 
 public class DrunksApplication extends Application {
 
+  public static final String ASSETS_PATH = "image/".replace("/", File.separator);
   public static final int TILE_SIZE = 32;
   private static final int WIDTH = 768;
   private static final int HEIGHT = 576;
 
   @Override
   public void start(Stage stage) throws IOException {
-    //FXMLLoader fxmlLoader = new FXMLLoader(DrunksApplication.class.getResource("hello-view.fxml"));
-    //Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-    //stage.setScene(scene);
+    // FXMLLoader fxmlLoader = new FXMLLoader(DrunksApplication.class.getResource("hello-view.fxml"));
+    // Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+    // stage.setScene(scene);
 
     stage.setTitle("Drunks!");
     stage.setResizable(false);
@@ -46,7 +49,7 @@ public class DrunksApplication extends Application {
   }
 
   private void showWelcomeScreen(Stage primaryStage, Pane root, Scene scene) {
-    Image welcomeImage = new Image("org/kappa/client/Title.png");
+    Image welcomeImage = new Image(getAssetAsStream("Title.png"));
     ImageView imageView = new ImageView(welcomeImage);
 
     // Set the position of the ImageView to center it
@@ -104,7 +107,7 @@ public class DrunksApplication extends Application {
     secondStage.setScene(secondScene);
 
     // Load and center the image
-    Image image = new Image("org/kappa/client/Character.png");
+    Image image = new Image(getAssetAsStream("Character.png"));
     ImageView imageView = new ImageView(image);
     double imageX = (WIDTH - image.getWidth()) / 2;
     double imageY = (HEIGHT - image.getHeight()) / 2;
@@ -144,19 +147,21 @@ public class DrunksApplication extends Application {
 
   private Sprite createSprite() {
     // Load the sprite image
-    final var imgPath = "org/kappa/client/".replace("/", File.separator);
-
-    final var imagePath = imgPath + "boyright_1.png";
-    final var imageUpPath = imgPath + "boyup_1.png";
-    final var imageDownPath = imgPath + "boydown_1.png";
-    final var imageLeftPath = imgPath + "boyleft_1.png";
-    final var imageRightPath = imgPath + "boyright_1.png";
-    final var imageLeftRunningPath = imgPath + "boyleft_2.png";
-    final var imageRightRunningPath = imgPath + "boyright_2.png";
+    final var imagePath = ASSETS_PATH + "boyright_1.png";
+    final var imageUpPath = ASSETS_PATH + "boyup_1.png";
+    final var imageDownPath = ASSETS_PATH + "boydown_1.png";
+    final var imageLeftPath = ASSETS_PATH + "boyleft_1.png";
+    final var imageRightPath = ASSETS_PATH + "boyright_1.png";
+    final var imageLeftRunningPath = ASSETS_PATH + "boyleft_2.png";
+    final var imageRightRunningPath = ASSETS_PATH + "boyright_2.png";
 
     // Create and return the sprite
     return new Sprite(imagePath, imageUpPath, imageDownPath, imageLeftPath, imageRightPath,
         imageLeftRunningPath, imageRightRunningPath, (double) WIDTH / 2, (double) HEIGHT / 2, 10);
+  }
+
+  private static InputStream getAssetAsStream(final String assetName) {
+    return DrunksApplication.class.getResourceAsStream(ASSETS_PATH + assetName);
   }
 
   public static void main(String[] args) {

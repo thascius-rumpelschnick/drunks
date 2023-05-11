@@ -8,32 +8,40 @@ import java.net.URL;
 
 public class Sprite {
 
-  private ImageView imageView;
+  private final ImageView imageView;
   private double x;
   private double y;
-  private double speed;
-  private Image imageUp;
-  private Image imageDown;
-  private Image imageLeft;
-  private Image imageRight;
-  private Image imageLeftRunning;
-  private Image imageRightRunning;
+  private final double speed;
+  private final Image imageUp;
+  private final Image imageDown;
+  private final Image imageLeft;
+  private final Image imageRight;
+  private final Image imageLeftRunning;
+  private final Image imageRightRunning;
 
   private boolean isRunningLeft;
   private boolean isRunningRight;
 
-  public Sprite(String imagePath, String imageUpPath, String imageDownPath, String imageLeftPath,
+  public Sprite(
+      String imagePath,
+      String imageUpPath,
+      String imageDownPath,
+      String imageLeftPath,
       String imageRightPath,
-      String imageLeftRunningPath, String imageRightRunningPath,
-      double x, double y, double speed) {
+      String imageLeftRunningPath,
+      String imageRightRunningPath,
+      double x,
+      double y,
+      double speed
+  ) {
 
-    URL imageUrl = getClass().getClassLoader().getResource(imagePath);
-    URL imageUpUrl = getClass().getClassLoader().getResource(imageUpPath);
-    URL imageDownUrl = getClass().getClassLoader().getResource(imageDownPath);
-    URL imageLeftUrl = getClass().getClassLoader().getResource(imageLeftPath);
-    URL imageRightUrl = getClass().getClassLoader().getResource(imageRightPath);
-    URL imageLeftRunningUrl = getClass().getClassLoader().getResource(imageLeftRunningPath);
-    URL imageRightRunningUrl = getClass().getClassLoader().getResource(imageRightRunningPath);
+    URL imageUrl = this.getClass().getResource(imagePath);
+    URL imageUpUrl = this.getClass().getResource(imageUpPath);
+    URL imageDownUrl = this.getClass().getResource(imageDownPath);
+    URL imageLeftUrl = this.getClass().getResource(imageLeftPath);
+    URL imageRightUrl = this.getClass().getResource(imageRightPath);
+    URL imageLeftRunningUrl = this.getClass().getResource(imageLeftRunningPath);
+    URL imageRightRunningUrl = this.getClass().getResource(imageRightRunningPath);
 
     if (imageUrl == null || imageUpUrl == null || imageDownUrl == null || imageLeftUrl == null ||
         imageRightUrl == null || imageLeftRunningUrl == null || imageRightRunningUrl == null) {
@@ -54,63 +62,64 @@ public class Sprite {
     this.speed = speed;
 
     // Set the initial position of the sprite
-    imageView.setLayoutX(x);
-    imageView.setLayoutY(y);
+    this.imageView.setLayoutX(x);
+    this.imageView.setLayoutY(y);
   }
 
   public ImageView getImageView() {
-    return imageView;
+    return this.imageView;
   }
 
   public void move(KeyCode keyCode) {
-    double newX = x;
-    double newY = y;
+    double newX = this.x;
+    double newY = this.y;
 
     switch (keyCode) {
       case W:
-        newY -= speed;
-        imageView.setImage(imageUp);
+        newY -= this.speed;
+        this.imageView.setImage(this.imageUp);
         break;
       case A:
-        newX -= speed;
-          if (isRunningLeft) {
-              imageView.setImage(imageLeftRunning);
-          } else {
-              imageView.setImage(imageLeft);
-          }
+        newX -= this.speed;
+        if (this.isRunningLeft) {
+          this.imageView.setImage(this.imageLeftRunning);
+        } else {
+          this.imageView.setImage(this.imageLeft);
+        }
         break;
       case S:
-        newY += speed;
-        imageView.setImage(imageDown);
+        newY += this.speed;
+        this.imageView.setImage(this.imageDown);
         break;
       case D:
-        newX += speed;
-          if (isRunningRight) {
-              imageView.setImage(imageRightRunning);
-          } else {
-              imageView.setImage(imageRight);
-          }
+        newX += this.speed;
+        if (this.isRunningRight) {
+          this.imageView.setImage(this.imageRightRunning);
+        } else {
+          this.imageView.setImage(this.imageRight);
+        }
         break;
     }
 
     // Check if the new position is within the bounds of the pane
-    if (newX >= 0 && newX <= imageView.getScene().getWidth() - imageView.getFitWidth()) {
-      x = newX;
+    if (newX >= 0 && newX <= this.imageView.getScene().getWidth() - this.imageView.getFitWidth()) {
+      this.x = newX;
     }
-    if (newY >= 0 && newY <= imageView.getScene().getHeight() - imageView.getFitHeight()) {
-      y = newY;
+    if (newY >= 0
+        && newY <= this.imageView.getScene().getHeight() - this.imageView.getFitHeight()) {
+      this.y = newY;
     }
 
     // Update the sprite's position
-    imageView.setLayoutX(x);
-    imageView.setLayoutY(y);
+    this.imageView.setLayoutX(this.x);
+    this.imageView.setLayoutY(this.y);
   }
 
   public void setRunningLeft(boolean runningLeft) {
-    isRunningLeft = runningLeft;
+    this.isRunningLeft = runningLeft;
   }
 
   public void setRunningRight(boolean runningRight) {
-    isRunningRight = runningRight;
+    this.isRunningRight = runningRight;
   }
 }
