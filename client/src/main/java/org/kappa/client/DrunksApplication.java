@@ -30,10 +30,16 @@ public class DrunksApplication extends Application {
         // Add your game elements to the root pane
 
         // Load the sprite image
-        String spriteImagePath = "boyright_1.png";
+        String imagePath = "boyright_1.png";
+        String imageUpPath = "boyup_1.png";
+        String imageDownPath = "boydown_1.png";
+        String imageLeftPath = "boyleft_1.png";
+        String imageRightPath = "boyright_1.png";
+        String imageLeftRunningPath = "boyleft_2.png";
+        String imageRightRunningPath = "boyright_2.png";
 
         // Create the sprite
-        Sprite sprite = new Sprite(spriteImagePath, WIDTH / 2, HEIGHT / 2, 8);
+        Sprite sprite = new Sprite(imagePath, imageUpPath, imageDownPath, imageLeftPath, imageRightPath, imageLeftRunningPath, imageRightRunningPath,  (double) WIDTH / 2, (double) HEIGHT / 2, 10);
 
         // Add the sprite's ImageView to the root pane
         root.getChildren().add(sprite.getImageView());

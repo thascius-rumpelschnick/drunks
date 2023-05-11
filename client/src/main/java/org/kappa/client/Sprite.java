@@ -3,6 +3,7 @@ package org.kappa.client;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+
 import java.net.URL;
 
 public class Sprite {
@@ -10,14 +11,41 @@ public class Sprite {
     private double x;
     private double y;
     private double speed;
+    private Image imageUp;
+    private Image imageDown;
+    private Image imageLeft;
+    private Image imageRight;
+    private Image imageLeftRunning;
+    private Image imageRightRunning;
 
-    public Sprite(String imagePath, double x, double y, double speed) {
+    private boolean isRunningLeft;
+    private boolean isRunningRight;
+
+    public Sprite(String imagePath, String imageUpPath, String imageDownPath, String imageLeftPath, String imageRightPath,
+                  String imageLeftRunningPath, String imageRightRunningPath,
+                  double x, double y, double speed) {
 
         URL imageUrl = getClass().getClassLoader().getResource(imagePath);
-        if (imageUrl == null) {
-            throw new IllegalArgumentException("Image not found: " + imagePath);
+        URL imageUpUrl = getClass().getClassLoader().getResource(imageUpPath);
+        URL imageDownUrl = getClass().getClassLoader().getResource(imageDownPath);
+        URL imageLeftUrl = getClass().getClassLoader().getResource(imageLeftPath);
+        URL imageRightUrl = getClass().getClassLoader().getResource(imageRightPath);
+        URL imageLeftRunningUrl = getClass().getClassLoader().getResource(imageLeftRunningPath);
+        URL imageRightRunningUrl = getClass().getClassLoader().getResource(imageRightRunningPath);
+
+        if (imageUrl == null || imageUpUrl == null || imageDownUrl == null || imageLeftUrl == null ||
+                imageRightUrl == null || imageLeftRunningUrl == null || imageRightRunningUrl == null) {
+            throw new IllegalArgumentException("Image not found");
         }
+
         Image image = new Image(imageUrl.toString());
+        this.imageUp = new Image(imageUpUrl.toString());
+        this.imageDown = new Image(imageDownUrl.toString());
+        this.imageLeft = new Image(imageLeftUrl.toString());
+        this.imageRight = new Image(imageRightUrl.toString());
+        this.imageLeftRunning = new Image(imageLeftRunningUrl.toString());
+        this.imageRightRunning = new Image(imageRightRunningUrl.toString());
+
         this.imageView = new ImageView(image);
         this.x = x;
         this.y = y;
@@ -34,14 +62,40 @@ public class Sprite {
 
     public void move(KeyCode keyCode) {
         switch (keyCode) {
-            case W -> y -= speed;
-            case A -> x -= speed;
-            case S -> y += speed;
-            case D -> x += speed;
+            case W:
+                y -= speed;
+                imageView.setImage(imageUp);
+                break;
+            case A:
+                x -= speed;
+                if (isRunningLeft)
+                    imageView.setImage(imageLeftRunning);
+                else
+                    imageView.setImage(imageLeft);
+                break;
+            case S:
+                y += speed;
+                imageView.setImage(imageDown);
+                break;
+            case D:
+                x += speed;
+                if (isRunningRight)
+                    imageView.setImage(imageRightRunning);
+                else
+                    imageView.setImage(imageRight);
+                break;
         }
 
         // Update the sprite's position
         imageView.setLayoutX(x);
         imageView.setLayoutY(y);
+    }
+
+    public void setRunningLeft(boolean runningLeft) {
+        isRunningLeft = runningLeft;
+    }
+
+    public void setRunningRight(boolean runningRight) {
+        isRunningRight = runningRight;
     }
 }
