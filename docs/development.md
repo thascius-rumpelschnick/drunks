@@ -2,6 +2,10 @@
 
 ## HowTo
 
+### Style Guide
+
+1. [Google Styleguide HowTo](https://medium.com/swlh/configuring-google-style-guide-for-java-for-intellij-c727af4ef248)
+
 ### Git
 
 1. Commit Message
