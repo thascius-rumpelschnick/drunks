@@ -16,7 +16,7 @@ import java.io.IOException;
 
 public class DrunksApplication extends Application {
 
-    public static final int TILE_SIZE = 16;
+    public static final int TILE_SIZE = 32;
     private static final int WIDTH = 768;
     private static final int HEIGHT = 576;
 
@@ -115,7 +115,7 @@ public class DrunksApplication extends Application {
         int numCols = WIDTH / TILE_SIZE;
         int numRows = HEIGHT / TILE_SIZE;
 
-        for (int col = 0; col < numCols; col++) {
+       for (int col = 0; col < numCols; col++) {
             for (int row = 0; row < numRows; row++) {
                 Rectangle tile = new Rectangle(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                 tile.setFill(Color.web("#F2FFF5"));
@@ -123,6 +123,18 @@ public class DrunksApplication extends Application {
                 primaryStageRoot.getChildren().add(tile);
             }
         }
+
+       // to add images in the background
+      /*  for (int col = 0; col < numCols; col++) {
+            for (int row = 0; row < numRows; row++) {
+                ImageView tileImageView = new ImageView(new Image("Shoe16x16.png"));
+                tileImageView.setFitWidth(TILE_SIZE);
+                tileImageView.setFitHeight(TILE_SIZE);
+                tileImageView.setLayoutX(col * TILE_SIZE);
+                tileImageView.setLayoutY(row * TILE_SIZE);
+                primaryStageRoot.getChildren().add(tileImageView);
+            }
+        }*/
     }
 
     private Sprite createSprite() {
