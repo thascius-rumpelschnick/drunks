@@ -11,13 +11,19 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.kappa.client.game.Coordinate;
+import org.kappa.client.game.DrunksObservable;
 import org.kappa.client.ui.BoardView;
 import org.kappa.client.ui.GameView;
+import org.kappa.client.ui.elements.Player;
+import org.kappa.client.utils.Direction;
 import org.kappa.client.utils.FXMLHelper;
+import org.kappa.client.utils.LayoutValues;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
 
 public class DrunksApplication extends Application {
 
@@ -26,25 +32,34 @@ public class DrunksApplication extends Application {
   private static final int WIDTH = 768;
   private static final int HEIGHT = 576;
 
+
   @Override
   public void start(final Stage stage) throws IOException {
-    // FXMLLoader fxmlLoader = new FXMLLoader(DrunksApplication.class.getResource("drunks-view.fxml"));
-    // Scene scene = new Scene(fxmlLoader.load(), 1280, 864);
-    // stage.setScene(scene);
-
     stage.setTitle("Drunks!");
     stage.setResizable(false);
 
     final var scene = FXMLHelper.createSceneFromFXML(GameView.FXML_FILE);
     final var board = (Pane) FXMLHelper.createNodeFromFXML(BoardView.FXML_FILE);
+    final var drunksObservable = DrunksObservable.getInstance();
 
-    final var gameView = new GameView(new BoardView(board),scene);
+    final var initialPosition = new Coordinate(
+        0,
+        LayoutValues.GAMEBOARD_HEIGHT - LayoutValues.GAMEBOARD_TILE
+    );
+
+    final var player = new Player(initialPosition, Direction.UP);
+    board.getChildren().add(player.getImageView());
+
+    drunksObservable.register(player);
+
+    final var gameView = new GameView(new BoardView(board), scene);
 
     stage.setScene(gameView.getScene());
     stage.show();
 
     // this.startGameTutorial(stage);
   }
+
 
   private void startGameTutorial(final Stage stage) {
     final Pane primaryStageRoot = new Pane();
@@ -60,6 +75,7 @@ public class DrunksApplication extends Application {
     this.showWelcomeScreen(stage, primaryStageRoot, scene);
     stage.show();
   }
+
 
   private void showWelcomeScreen(final Stage primaryStage, final Pane root, final Scene scene) {
     final Image welcomeImage = new Image(getAssetAsStream("Title.png"));
@@ -107,6 +123,7 @@ public class DrunksApplication extends Application {
     timeline.play();
   }
 
+
   private Stage createSecondStage() {
     final Stage secondStage = new Stage();
     secondStage.setTitle("Second Stage");
@@ -133,13 +150,15 @@ public class DrunksApplication extends Application {
     return secondStage;
   }
 
+
   private void addBackgroundTiles(final Pane primaryStageRoot) {
     final int numCols = WIDTH / TILE_SIZE;
     final int numRows = HEIGHT / TILE_SIZE;
 
     for (int col = 0; col < numCols; col++) {
       for (int row = 0; row < numRows; row++) {
-        final Rectangle tile = new Rectangle(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        final Rectangle tile = new Rectangle(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE,
+            TILE_SIZE);
         tile.setFill(Color.web("#F2FFF5"));
         tile.setStroke(Color.DARKGRAY);
         primaryStageRoot.getChildren().add(tile);
@@ -159,6 +178,7 @@ public class DrunksApplication extends Application {
         }*/
   }
 
+
   private Sprite createSprite() {
     // Load the sprite image
     final var imagePath = ASSETS_PATH + "boyright_1.png";
@@ -174,9 +194,11 @@ public class DrunksApplication extends Application {
         imageLeftRunningPath, imageRightRunningPath, (double) WIDTH / 2, (double) HEIGHT / 2, 10);
   }
 
+
   private static InputStream getAssetAsStream(final String assetName) {
     return DrunksApplication.class.getResourceAsStream(ASSETS_PATH + assetName);
   }
+
 
   public static void main(final String[] args) {
     launch();
