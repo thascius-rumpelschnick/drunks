@@ -8,16 +8,18 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import org.kappa.client.game.Coordinate;
-import org.kappa.client.game.Observer;
+import org.kappa.client.component.Position;
+import org.kappa.client.event.Event;
+import org.kappa.client.event.Listener;
+import org.kappa.client.event.MovementEvent;
 import org.kappa.client.utils.Direction;
 import org.kappa.client.utils.LayoutValues;
 import org.kappa.client.utils.UrlHelper;
 
 
-public class Player implements Observer {
+public class Player implements Listener {
 
-  private Coordinate position;
+  private Position position;
   private final Direction direction;
   private ImageView imageView;
 
@@ -27,7 +29,7 @@ public class Player implements Observer {
   private static final String[] RIGHT = {"boyright_1.png", "boyright_2.png"};
 
 
-  public Player(final Coordinate position, final Direction direction) {
+  public Player(final Position position, final Direction direction) {
     this.position = position;
     this.direction = direction;
 
@@ -70,14 +72,16 @@ public class Player implements Observer {
 
 
   @Override
-  public void update(final int notification) {
-    System.out.println("PLAYER:" + notification);
+  public void onEventReceived(final Event event) {
+    System.out.println("PLAYER:" + event);
 
-    switch (notification) {
-      case 0 -> this.moveUp();
-      case 1 -> this.moveDown();
-      case 2 -> this.moveLeft();
-      case 3 -> this.moveRight();
+    final var movementDirection = ((MovementEvent)event).getBody();
+
+    switch (movementDirection) {
+      case UP -> this.moveUp();
+      case DOWN -> this.moveDown();
+      case LEFT -> this.moveLeft();
+      case RIGHT -> this.moveRight();
       default -> System.out.println("PLAYER: WHOOT?");
     }
 
@@ -87,7 +91,7 @@ public class Player implements Observer {
 
 
   private void moveUp() {
-    final var destination = new Coordinate(
+    final var destination = new Position(
         this.position.x(),
         this.position.y() - LayoutValues.GAMEBOARD_TILE
     );
@@ -102,7 +106,7 @@ public class Player implements Observer {
 
 
   private void moveDown() {
-    final var destination = new Coordinate(
+    final var destination = new Position(
         this.position.x(),
         this.position.y() + LayoutValues.GAMEBOARD_TILE
     );
@@ -117,7 +121,7 @@ public class Player implements Observer {
 
 
   private void moveLeft() {
-    final var destination = new Coordinate(
+    final var destination = new Position(
         this.position.x() - LayoutValues.GAMEBOARD_TILE,
         this.position.y()
     );
@@ -132,7 +136,7 @@ public class Player implements Observer {
 
 
   private void moveRight() {
-    final var destination = new Coordinate(
+    final var destination = new Position(
         this.position.x() + LayoutValues.GAMEBOARD_TILE,
         this.position.y()
     );
@@ -146,7 +150,7 @@ public class Player implements Observer {
   }
 
 
-  private boolean isOutOfBounds(final Coordinate destination) {
+  private boolean isOutOfBounds(final Position destination) {
     // System.out.println("x:" + destination.x() + ", y:" + destination.y());
 
     return destination.x() < 0
@@ -156,7 +160,7 @@ public class Player implements Observer {
   }
 
 
-  private void move(final Coordinate destination) {
+  private void move(final Position destination) {
     this.position = destination;
   }
 

@@ -11,8 +11,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.kappa.client.game.Coordinate;
-import org.kappa.client.game.DrunksObservable;
+import org.kappa.client.component.Position;
+import org.kappa.client.event.EventPublisher;
+import org.kappa.client.event.EventType;
 import org.kappa.client.ui.BoardView;
 import org.kappa.client.ui.GameView;
 import org.kappa.client.ui.elements.Player;
@@ -40,9 +41,9 @@ public class DrunksApplication extends Application {
 
     final var scene = FXMLHelper.createSceneFromFXML(GameView.FXML_FILE);
     final var board = (Pane) FXMLHelper.createNodeFromFXML(BoardView.FXML_FILE);
-    final var drunksObservable = DrunksObservable.getInstance();
+    final var drunksObservable = EventPublisher.getInstance();
 
-    final var initialPosition = new Coordinate(
+    final var initialPosition = new Position(
         0,
         LayoutValues.GAMEBOARD_HEIGHT - LayoutValues.GAMEBOARD_TILE
     );
@@ -50,7 +51,7 @@ public class DrunksApplication extends Application {
     final var player = new Player(initialPosition, Direction.UP);
     board.getChildren().add(player.getImageView());
 
-    drunksObservable.register(player);
+    drunksObservable.subscribe(EventType.MOVEMENT, player);
 
     final var gameView = new GameView(new BoardView(board), scene);
 

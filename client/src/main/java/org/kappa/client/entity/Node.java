@@ -1,16 +1,19 @@
-package org.kappa.client.game;
+package org.kappa.client.entity;
+
+import org.kappa.client.component.Position;
+
 
 public abstract class Node {
 
-  protected Coordinate position;
+  protected Position position;
   protected int lives = -1;
 
-  protected Node(final Coordinate position, final int lives) {
+  protected Node(final Position position, final int lives) {
     this.position = position;
     this.lives = lives;
   }
 
-  public Coordinate getPosition() {
+  public Position getPosition() {
     return this.position;
   }
 

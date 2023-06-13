@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<Scene fx:id="gameViewScene" onKeyPressed="#handleKeyPress" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.kappa.client.ui.GameViewController">
+<Scene fx:id="gameViewScene" onKeyReleased="#handleKeyPress" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.kappa.client.ui.GameViewController">
    <root>
       <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="864.0" prefWidth="1280.0">
          <children>
