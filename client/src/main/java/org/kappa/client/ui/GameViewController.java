@@ -7,11 +7,15 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.kappa.client.event.EventPublisher;
 import org.kappa.client.event.MovementEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.kappa.client.utils.Direction.*;
 
 
 public class GameViewController {
+
+  private static Logger LOGGER = LoggerFactory.getLogger(GameViewController.class);
 
   @FXML
   private Scene gameViewScene;
@@ -22,13 +26,13 @@ public class GameViewController {
 
   @FXML
   private void handleGameViewButton(final MouseEvent event) {
-    System.out.println("Button clicked.");
+    LOGGER.debug("Button clicked.");
   }
 
 
   @FXML
   private void handleKeyPress(final KeyEvent event) {
-    System.out.println("Key pressed.");
+    LOGGER.debug("Key pressed.");
 
     final var publisher = EventPublisher.getInstance();
 

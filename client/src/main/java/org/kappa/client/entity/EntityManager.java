@@ -23,7 +23,7 @@ public class EntityManager {
   }
 
 
-  public void addComponent(final String entityId, final Component component) {
+  public void putComponent(final String entityId, final Component component) {
     final var componentMap = this.entityComponentMap.get(entityId);
     componentMap.put(component.getClass(), component);
   }

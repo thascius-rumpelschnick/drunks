@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import org.kappa.client.component.Position;
+import org.kappa.client.component.PositionComponent;
 import org.kappa.client.event.Event;
 import org.kappa.client.event.Listener;
 import org.kappa.client.event.MovementEvent;
@@ -17,9 +17,10 @@ import org.kappa.client.utils.LayoutValues;
 import org.kappa.client.utils.UrlHelper;
 
 
+@Deprecated
 public class Player implements Listener {
 
-  private Position position;
+  private PositionComponent positionComponent;
   private final Direction direction;
   private ImageView imageView;
 
@@ -29,8 +30,8 @@ public class Player implements Listener {
   private static final String[] RIGHT = {"boyright_1.png", "boyright_2.png"};
 
 
-  public Player(final Position position, final Direction direction) {
-    this.position = position;
+  public Player(final PositionComponent positionComponent, final Direction direction) {
+    this.positionComponent = positionComponent;
     this.direction = direction;
 
     this.initImageView();
@@ -45,8 +46,8 @@ public class Player implements Listener {
     this.imageView.setFitWidth(LayoutValues.GAMEBOARD_TILE);
     this.imageView.setFitHeight(LayoutValues.GAMEBOARD_TILE);
 
-    this.imageView.setX(this.position.x());
-    this.imageView.setY(this.position.y());
+    this.imageView.setX(this.positionComponent.x());
+    this.imageView.setY(this.positionComponent.y());
 
     this.setDropShadow();
   }
@@ -72,7 +73,7 @@ public class Player implements Listener {
 
 
   @Override
-  public void onEventReceived(final Event event) {
+  public void updateOnEventReceived(final Event event) {
     System.out.println("PLAYER:" + event);
 
     final var movementDirection = ((MovementEvent)event).getBody();
@@ -85,15 +86,15 @@ public class Player implements Listener {
       default -> System.out.println("PLAYER: WHOOT?");
     }
 
-    this.imageView.setX(this.position.x());
-    this.imageView.setY(this.position.y());
+    this.imageView.setX(this.positionComponent.x());
+    this.imageView.setY(this.positionComponent.y());
   }
 
 
   private void moveUp() {
-    final var destination = new Position(
-        this.position.x(),
-        this.position.y() - LayoutValues.GAMEBOARD_TILE
+    final var destination = new PositionComponent(
+        this.positionComponent.x(),
+        this.positionComponent.y() - LayoutValues.GAMEBOARD_TILE
     );
 
     if (this.isOutOfBounds(destination)) {
@@ -106,9 +107,9 @@ public class Player implements Listener {
 
 
   private void moveDown() {
-    final var destination = new Position(
-        this.position.x(),
-        this.position.y() + LayoutValues.GAMEBOARD_TILE
+    final var destination = new PositionComponent(
+        this.positionComponent.x(),
+        this.positionComponent.y() + LayoutValues.GAMEBOARD_TILE
     );
 
     if (this.isOutOfBounds(destination)) {
@@ -121,9 +122,9 @@ public class Player implements Listener {
 
 
   private void moveLeft() {
-    final var destination = new Position(
-        this.position.x() - LayoutValues.GAMEBOARD_TILE,
-        this.position.y()
+    final var destination = new PositionComponent(
+        this.positionComponent.x() - LayoutValues.GAMEBOARD_TILE,
+        this.positionComponent.y()
     );
 
     if (this.isOutOfBounds(destination)) {
@@ -136,9 +137,9 @@ public class Player implements Listener {
 
 
   private void moveRight() {
-    final var destination = new Position(
-        this.position.x() + LayoutValues.GAMEBOARD_TILE,
-        this.position.y()
+    final var destination = new PositionComponent(
+        this.positionComponent.x() + LayoutValues.GAMEBOARD_TILE,
+        this.positionComponent.y()
     );
 
     if (this.isOutOfBounds(destination)) {
@@ -150,7 +151,7 @@ public class Player implements Listener {
   }
 
 
-  private boolean isOutOfBounds(final Position destination) {
+  private boolean isOutOfBounds(final PositionComponent destination) {
     // System.out.println("x:" + destination.x() + ", y:" + destination.y());
 
     return destination.x() < 0
@@ -160,8 +161,8 @@ public class Player implements Listener {
   }
 
 
-  private void move(final Position destination) {
-    this.position = destination;
+  private void move(final PositionComponent destination) {
+    this.positionComponent = destination;
   }
 
 

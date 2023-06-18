@@ -14,7 +14,7 @@ public abstract class Event {
 
 
   public String getEntity() {
-    return entity;
+    return this.entity;
   }
 
 

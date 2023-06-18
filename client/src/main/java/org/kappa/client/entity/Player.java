@@ -1,21 +1,21 @@
 package org.kappa.client.entity;
 
 
-import org.kappa.client.component.Position;
+import org.kappa.client.component.PositionComponent;
 import org.kappa.client.utils.Direction;
 
 public class Player extends Node implements Movable {
 
   private final Direction direction = Direction.UP;
 
-  public Player(final Position position, final int lives) {
-    super(position, lives);
+  public Player(final PositionComponent positionComponent, final int lives) {
+    super(positionComponent, lives);
   }
 
   @Override
-  public void move(final Position from, final Position to) {
+  public void move(final PositionComponent from, final PositionComponent to) {
     // ToDo: Set direction as well.
-    this.position = to;
+    this.positionComponent = to;
   }
 
   @Override

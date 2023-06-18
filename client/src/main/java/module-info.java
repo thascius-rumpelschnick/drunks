@@ -1,4 +1,6 @@
 module org.kappa.client {
+    requires slf4j.api;
+
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;

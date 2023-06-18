@@ -1,20 +1,20 @@
 package org.kappa.client.entity;
 
-import org.kappa.client.component.Position;
+import org.kappa.client.component.PositionComponent;
 
 
 public abstract class Node {
 
-  protected Position position;
+  protected PositionComponent positionComponent;
   protected int lives = -1;
 
-  protected Node(final Position position, final int lives) {
-    this.position = position;
+  protected Node(final PositionComponent positionComponent, final int lives) {
+    this.positionComponent = positionComponent;
     this.lives = lives;
   }
 
-  public Position getPosition() {
-    return this.position;
+  public PositionComponent getPosition() {
+    return this.positionComponent;
   }
 
   public int getLives() {

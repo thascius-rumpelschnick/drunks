@@ -4,7 +4,8 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.kappa.client.entity.EntityManager;
 import org.kappa.client.event.EventPublisher;
-import org.kappa.client.system.Movement;
+import org.kappa.client.system.MovementSystem;
+import org.kappa.client.system.SystemManager;
 import org.kappa.client.ui.BoardView;
 import org.kappa.client.ui.GameView;
 import org.kappa.client.utils.FXMLHelper;
@@ -22,7 +23,9 @@ public class Game {
   private final Stage stage;
 
   private final EntityManager entityManager;
-  private final Movement movementSystem;
+  private final SystemManager systemManager;
+
+  private final MovementSystem movementSystem;
 
   private static final EventPublisher PUBLISHER = EventPublisher.getInstance();
 
@@ -36,7 +39,9 @@ public class Game {
     final var board = (Pane) FXMLHelper.createNodeFromFXML(BoardView.FXML_FILE);
 
     this.entityManager = new EntityManager();
-    this.movementSystem = new Movement(this.entityManager);
+    this.systemManager = new SystemManager();
+
+    this.movementSystem = new MovementSystem(this.entityManager);
 
     this.manageSubscriptions();
   }

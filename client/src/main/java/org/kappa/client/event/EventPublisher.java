@@ -38,7 +38,7 @@ public final class EventPublisher implements Publisher {
     }
 
     for (final Listener listener : this.listeners.get(eventType)) {
-      listener.onEventReceived(event);
+      listener.updateOnEventReceived(event);
     }
   }
 
