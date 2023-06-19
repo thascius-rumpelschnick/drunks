@@ -15,7 +15,7 @@ import static org.kappa.client.utils.Direction.*;
 
 public class GameViewController {
 
-  private static Logger LOGGER = LoggerFactory.getLogger(GameViewController.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GameViewController.class);
 
   @FXML
   private Scene gameViewScene;
@@ -31,8 +31,8 @@ public class GameViewController {
 
 
   @FXML
-  private void handleKeyPress(final KeyEvent event) {
-    LOGGER.debug("Key pressed.");
+  private void handleKeyRelease(final KeyEvent event) {
+    LOGGER.debug("Key released.");
 
     final var publisher = EventPublisher.getInstance();
 
@@ -41,8 +41,8 @@ public class GameViewController {
       case DOWN -> publisher.publishEvent(new MovementEvent("player", DOWN));
       case LEFT -> publisher.publishEvent(new MovementEvent("player", LEFT));
       case RIGHT -> publisher.publishEvent(new MovementEvent("player", RIGHT));
-      case SPACE -> System.out.println("Shoot.");
-      default -> System.out.println("GameViewController: Whoot?");
+      case SPACE -> LOGGER.debug("Shoot.");
+      default -> LOGGER.error("GameViewController: Whoot?");
     }
   }
 

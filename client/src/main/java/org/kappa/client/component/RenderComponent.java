@@ -8,6 +8,7 @@ import org.kappa.client.utils.LayoutValues;
 
 
 public record RenderComponent(ImageView imageView) implements Component {
+
   public RenderComponent(final ImageView imageView) {
     this.imageView = imageView;
 

@@ -22,14 +22,18 @@ public class MovementSystem implements System, Listener<MovementEvent> {
 
   @Override
   public void updateOnEventReceived(final MovementEvent event) {
-    final var sprite = this.entityManager.getComponent(event.getEntity(), RenderComponent.class);
-    final var animation = this.entityManager.getComponent(event.getEntity(), MovementAnimationComponent.class);
-    final var direction = this.entityManager.getComponent(event.getEntity(), DirectionComponent.class);
-    final var position = this.entityManager.getComponent(event.getEntity(), PositionComponent.class);
+    final var entityId = event.getEntity();
+    final var newDirection = event.getBody();
 
-    animation.animate(sprite.imageView(), event.getBody());
 
-    // this.entityManager.putComponent(); ToDo: Complete!
+    final var sprite = this.entityManager.getComponent(entityId, RenderComponent.class);
+    final var animation = this.entityManager.getComponent(entityId, MovementAnimationComponent.class);
+    final var direction = this.entityManager.getComponent(entityId, DirectionComponent.class);
+    final var position = this.entityManager.getComponent(entityId, PositionComponent.class);
+
+
+    animation.animate(sprite.imageView(), newDirection);
+
 
   }
 
@@ -42,10 +46,10 @@ public class MovementSystem implements System, Listener<MovementEvent> {
   private boolean isOutOfBounds(final PositionComponent destination) {
     // System.out.println("x:" + destination.x() + ", y:" + destination.y());
 
-    return destination.x() < 0
-        || destination.x() >= LayoutValues.GAMEBOARD_WITH
-        || destination.y() < 0
-        || destination.y() >= LayoutValues.GAMEBOARD_HEIGHT;
+    return destination.getX() < 0
+        || destination.getX() >= LayoutValues.GAMEBOARD_WITH
+        || destination.getY() < 0
+        || destination.getY() >= LayoutValues.GAMEBOARD_HEIGHT;
   }
 
 }
