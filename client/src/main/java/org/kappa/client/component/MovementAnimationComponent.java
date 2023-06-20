@@ -19,7 +19,7 @@ public class MovementAnimationComponent implements Component {
   private final String[] right;
 
 
-  public MovementAnimationComponent(String[] up, String[] down, String[] left, String[] right) {
+  public MovementAnimationComponent(final String[] up, final String[] down, final String[] left, final String[] right) {
     Objects.requireNonNull(up);
     Objects.requireNonNull(down);
     Objects.requireNonNull(left);
@@ -31,6 +31,7 @@ public class MovementAnimationComponent implements Component {
     this.right = right;
   }
 
+
   public void animate(final ImageView imageView, final Direction direction) {
     final var animation = new Transition() {
       {
@@ -40,12 +41,12 @@ public class MovementAnimationComponent implements Component {
 
       @Override
       protected void interpolate(final double frac) {
-        final var a = ((frac * 10) % 2) > 0 ? 1 : 0;
+        final var index = ((frac * 10) % 2) > 0 ? 1 : 0;
 
         imageView.setImage(
             new Image(
                 UrlHelper.getRessourceAsString(
-                    MovementAnimationComponent.this.getSpriteDirection(direction)[a])
+                    MovementAnimationComponent.this.getSpriteDirection(direction)[index])
             )
         );
       }
@@ -53,6 +54,7 @@ public class MovementAnimationComponent implements Component {
 
     animation.play();
   }
+
 
   private String[] getSpriteDirection(final Direction direction) throws IllegalArgumentException {
     final String[] d;

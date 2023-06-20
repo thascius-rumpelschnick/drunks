@@ -46,8 +46,8 @@ public class Player implements Listener {
     this.imageView.setFitWidth(LayoutValues.GAMEBOARD_TILE);
     this.imageView.setFitHeight(LayoutValues.GAMEBOARD_TILE);
 
-    this.imageView.setX(this.positionComponent.getX());
-    this.imageView.setY(this.positionComponent.getY());
+    this.imageView.setX(this.positionComponent.x());
+    this.imageView.setY(this.positionComponent.y());
 
     this.setDropShadow();
   }
@@ -86,15 +86,15 @@ public class Player implements Listener {
       default -> System.out.println("PLAYER: WHOOT?");
     }
 
-    this.imageView.setX(this.positionComponent.getX());
-    this.imageView.setY(this.positionComponent.getY());
+    this.imageView.setX(this.positionComponent.x());
+    this.imageView.setY(this.positionComponent.y());
   }
 
 
   private void moveUp() {
     final var destination = new PositionComponent(
-        this.positionComponent.getX(),
-        this.positionComponent.getY() - LayoutValues.GAMEBOARD_TILE
+        this.positionComponent.x(),
+        this.positionComponent.y() - LayoutValues.GAMEBOARD_TILE
     );
 
     if (this.isOutOfBounds(destination)) {
@@ -108,8 +108,8 @@ public class Player implements Listener {
 
   private void moveDown() {
     final var destination = new PositionComponent(
-        this.positionComponent.getX(),
-        this.positionComponent.getY() + LayoutValues.GAMEBOARD_TILE
+        this.positionComponent.x(),
+        this.positionComponent.y() + LayoutValues.GAMEBOARD_TILE
     );
 
     if (this.isOutOfBounds(destination)) {
@@ -123,8 +123,8 @@ public class Player implements Listener {
 
   private void moveLeft() {
     final var destination = new PositionComponent(
-        this.positionComponent.getX() - LayoutValues.GAMEBOARD_TILE,
-        this.positionComponent.getY()
+        this.positionComponent.x() - LayoutValues.GAMEBOARD_TILE,
+        this.positionComponent.y()
     );
 
     if (this.isOutOfBounds(destination)) {
@@ -138,8 +138,8 @@ public class Player implements Listener {
 
   private void moveRight() {
     final var destination = new PositionComponent(
-        this.positionComponent.getX() + LayoutValues.GAMEBOARD_TILE,
-        this.positionComponent.getY()
+        this.positionComponent.x() + LayoutValues.GAMEBOARD_TILE,
+        this.positionComponent.y()
     );
 
     if (this.isOutOfBounds(destination)) {
@@ -154,10 +154,10 @@ public class Player implements Listener {
   private boolean isOutOfBounds(final PositionComponent destination) {
     // System.out.println("x:" + destination.getX() + ", y:" + destination.getY());
 
-    return destination.getX() < 0
-        || destination.getX() >= LayoutValues.GAMEBOARD_WITH
-        || destination.getY() < 0
-        || destination.getY() >= LayoutValues.GAMEBOARD_HEIGHT;
+    return destination.x() < 0
+        || destination.x() >= LayoutValues.GAMEBOARD_WITH
+        || destination.y() < 0
+        || destination.y() >= LayoutValues.GAMEBOARD_HEIGHT;
   }
 
 

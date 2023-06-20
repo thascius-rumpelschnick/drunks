@@ -11,15 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.kappa.client.component.PositionComponent;
-import org.kappa.client.event.EventPublisher;
-import org.kappa.client.event.EventType;
-import org.kappa.client.ui.BoardView;
-import org.kappa.client.ui.GameView;
-import org.kappa.client.ui.elements.Player;
-import org.kappa.client.utils.Direction;
-import org.kappa.client.utils.FXMLHelper;
-import org.kappa.client.utils.LayoutValues;
+import org.kappa.client.game.Game;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,26 +31,9 @@ public class DrunksApplication extends Application {
     stage.setTitle("Drunks!");
     stage.setResizable(false);
 
-    final var scene = FXMLHelper.createSceneFromFXML(GameView.FXML_FILE);
-    final var board = (Pane) FXMLHelper.createNodeFromFXML(BoardView.FXML_FILE);
-    final var drunksObservable = EventPublisher.getInstance();
+    new Game("player", null, stage);
 
-    final var initialPosition = new PositionComponent(
-        0,
-        LayoutValues.GAMEBOARD_HEIGHT - LayoutValues.GAMEBOARD_TILE
-    );
-
-    final var player = new Player(initialPosition, Direction.UP);
-    board.getChildren().add(player.getImageView());
-
-    drunksObservable.subscribe(EventType.MOVEMENT, player);
-
-    final var gameView = new GameView(new BoardView(board), scene);
-
-    stage.setScene(gameView.getScene());
     stage.show();
-
-    // this.startGameTutorial(stage);
   }
 
 

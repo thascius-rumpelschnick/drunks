@@ -13,12 +13,12 @@ public class DirectionComponent implements Component {
   }
 
 
-  public Direction getDirection() {
+  public Direction direction() {
     return this.direction;
   }
 
 
-  public void setDirection(final Direction direction) {
+  public void update(final Direction direction) {
     this.direction = direction;
   }
 

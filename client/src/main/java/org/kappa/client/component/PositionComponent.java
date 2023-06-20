@@ -12,22 +12,19 @@ public class PositionComponent implements Component {
   }
 
 
-  public int getX() {
+  public int x() {
     return this.x;
   }
 
 
-  public void setX(final int x) {
-    this.x = x;
-  }
-
-
-  public int getY() {
+  public int y() {
     return this.y;
   }
 
 
-  public void setY(final int y) {
+  public void update(final int x, final int y) {
+    this.x = x;
     this.y = y;
   }
+
 }

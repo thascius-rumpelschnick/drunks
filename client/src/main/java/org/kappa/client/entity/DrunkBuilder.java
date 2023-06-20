@@ -6,6 +6,7 @@ import org.kappa.client.component.MovementAnimationComponent;
 import org.kappa.client.component.PositionComponent;
 import org.kappa.client.component.RenderComponent;
 import org.kappa.client.utils.Direction;
+import org.kappa.client.utils.UrlHelper;
 
 import java.util.Objects;
 
@@ -46,6 +47,17 @@ public class DrunkBuilder {
   }
 
 
+  public DrunkBuilder render(final Direction direction) {
+    final var imageView = new ImageView(UrlHelper.getRessourceAsString(
+        this.getSpriteDirection(direction)[0])
+    );
+
+    this.render(imageView);
+
+    return this;
+  }
+
+
   public DrunkBuilder position(final int x, final int y) {
     this.entity.positionComponent = new PositionComponent(x, y);
 
@@ -69,8 +81,39 @@ public class DrunkBuilder {
   }
 
 
+  private String[] getSpriteDirection(final Direction direction) throws IllegalArgumentException {
+    final String[] d;
+
+    switch (direction) {
+      case UP -> d = UP;
+      case DOWN -> d = DOWN;
+      case LEFT -> d = LEFT;
+      case RIGHT -> d = RIGHT;
+      default -> throw new IllegalArgumentException();
+    }
+
+    return d;
+  }
+
+
   public Drunk build() {
+    if (!this.isValid()) {
+      throw new IllegalArgumentException();
+    }
+
+    this.entity.renderComponent.imageView().setX(this.entity.positionComponent.x());
+    this.entity.renderComponent.imageView().setY(this.entity.positionComponent.y());
+
     return this.entity;
+  }
+
+
+  private boolean isValid() {
+    return this.entity.id != null
+        && this.entity.positionComponent != null
+        && this.entity.directionComponent != null
+        && this.entity.renderComponent != null
+        && this.entity.movementAnimationComponent != null;
   }
 
 
@@ -93,7 +136,7 @@ public class DrunkBuilder {
 
 
     public RenderComponent getRenderComponent() {
-      return renderComponent;
+      return this.renderComponent;
     }
 
 

@@ -8,9 +8,13 @@ import org.kappa.client.entity.EntityManager;
 import org.kappa.client.event.Listener;
 import org.kappa.client.event.MovementEvent;
 import org.kappa.client.utils.LayoutValues;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class MovementSystem implements System, Listener<MovementEvent> {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(MovementSystem.class);
 
   private final EntityManager entityManager;
 
@@ -23,18 +27,36 @@ public class MovementSystem implements System, Listener<MovementEvent> {
   @Override
   public void updateOnEventReceived(final MovementEvent event) {
     final var entityId = event.getEntity();
-    final var newDirection = event.getBody();
-
+    final var movementDirection = event.getBody();
 
     final var sprite = this.entityManager.getComponent(entityId, RenderComponent.class);
     final var animation = this.entityManager.getComponent(entityId, MovementAnimationComponent.class);
     final var direction = this.entityManager.getComponent(entityId, DirectionComponent.class);
     final var position = this.entityManager.getComponent(entityId, PositionComponent.class);
 
+    animation.animate(sprite.imageView(), movementDirection);
 
-    animation.animate(sprite.imageView(), newDirection);
+    var x = position.x();
+    var y = position.y();
 
+    switch (movementDirection) {
+      case UP -> y -= LayoutValues.GAMEBOARD_TILE;
+      case DOWN -> y += LayoutValues.GAMEBOARD_TILE;
+      case LEFT -> x -= LayoutValues.GAMEBOARD_TILE;
+      case RIGHT -> x += LayoutValues.GAMEBOARD_TILE;
+      default -> LOGGER.error("PLAYER: WHOOT?");
+    }
 
+    if (this.isOutOfBounds(x, y)) {
+      LOGGER.debug("Out of bounds: x = {}, y = {}", x, y);
+      return;
+    }
+
+    sprite.imageView().setX(x);
+    sprite.imageView().setY(y);
+
+    direction.update(movementDirection);
+    position.update(x, y);
   }
 
 
@@ -43,13 +65,12 @@ public class MovementSystem implements System, Listener<MovementEvent> {
 
   }
 
-  private boolean isOutOfBounds(final PositionComponent destination) {
-    // System.out.println("x:" + destination.x() + ", y:" + destination.y());
 
-    return destination.getX() < 0
-        || destination.getX() >= LayoutValues.GAMEBOARD_WITH
-        || destination.getY() < 0
-        || destination.getY() >= LayoutValues.GAMEBOARD_HEIGHT;
+  private boolean isOutOfBounds(final int x, final int y) {
+    return x < 0
+        || x >= LayoutValues.GAMEBOARD_WITH
+        || y < 0
+        || y >= LayoutValues.GAMEBOARD_HEIGHT;
   }
 
 }
