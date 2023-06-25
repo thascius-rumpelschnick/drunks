@@ -11,19 +11,9 @@
             <Image url="@images/application/background.png" />
          </image>
       </ImageView>
-      <ImageView layoutX="256.0">
-         <image>
-            <Image url="@images/wall/bottle.png" />
-         </image>
-      </ImageView>
       <ImageView id="dummyPlayer" fitHeight="64.0" fitWidth="64.0" layoutX="131.0" layoutY="129.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/punk/boyup_1.png" />
-         </image>
-      </ImageView>
-      <ImageView layoutX="191.0" layoutY="255.0">
-         <image>
-            <Image url="@images/kebab/kebab.png" />
          </image>
       </ImageView>
       <ImageView layoutX="321.0">
@@ -141,16 +131,6 @@
             <Image url="@images/wall/wall1.png" />
          </image>
       </ImageView>
-      <ImageView layoutX="512.0" layoutY="383.0">
-         <image>
-            <Image url="@images/kebab/kebab.png" />
-         </image>
-      </ImageView>
-      <ImageView layoutX="834.0" layoutY="448.0">
-         <image>
-            <Image url="@images/kebab/kebab.png" />
-         </image>
-      </ImageView>
       <ImageView layoutX="256.0" layoutY="449.0">
          <image>
             <Image url="@images/wall/wall1.png" />
@@ -174,21 +154,6 @@
       <ImageView layoutY="513.0">
          <image>
             <Image url="@images/wall/wall3.png" />
-         </image>
-      </ImageView>
-      <ImageView layoutX="575.0" layoutY="128.0">
-         <image>
-            <Image url="@images/wall/bottle.png" />
-         </image>
-      </ImageView>
-      <ImageView layoutX="66.0" layoutY="383.0">
-         <image>
-            <Image url="@images/wall/bottle.png" />
-         </image>
-      </ImageView>
-      <ImageView layoutX="513.0" layoutY="512.0">
-         <image>
-            <Image url="@images/wall/bottle.png" />
          </image>
       </ImageView>
       <ImageView fitWidth="64.0" layoutX="641.0" layoutY="448.0">
@@ -251,11 +216,6 @@
             <Image url="@images/wall/wall3.png" />
          </image>
       </ImageView>
-      <ImageView layoutX="770.0" layoutY="638.0">
-         <image>
-            <Image url="@images/wall/bottle.png" />
-         </image>
-      </ImageView>
       <ImageView layoutX="961.0" layoutY="512.0">
          <image>
             <Image url="@images/wall/wall3.png" />
@@ -309,11 +269,6 @@
       <ImageView layoutX="320.0" layoutY="319.0">
          <image>
             <Image url="@images/wall/wall3.png" />
-         </image>
-      </ImageView>
-      <ImageView layoutX="832.0" layoutY="127.0">
-         <image>
-            <Image url="@images/wall/bottle.png" />
          </image>
       </ImageView>
       <ImageView fitWidth="64.0" layoutX="257.0" layoutY="128.0">
