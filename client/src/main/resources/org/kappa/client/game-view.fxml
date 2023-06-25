@@ -33,7 +33,7 @@
                <children>
                   <ImageView id="dummyBoard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@image/background.png" />
+                        <Image url="@images/systemImages/background.png" />
                      </image>
                   </ImageView>
                   <GridPane minHeight="704.0">
