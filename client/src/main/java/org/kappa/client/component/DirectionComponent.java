@@ -13,7 +13,7 @@ public class DirectionComponent implements Component {
   }
 
 
-  public Direction direction() {
+  public Direction getDirection() {
     return this.direction;
   }
 

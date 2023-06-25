@@ -52,9 +52,7 @@ public class DrunkBuilder {
         this.getSpriteDirection(direction)[0])
     );
 
-    this.render(imageView);
-
-    return this;
+    return this.render(imageView);
   }
 
 

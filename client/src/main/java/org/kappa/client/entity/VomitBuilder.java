@@ -11,43 +11,43 @@ import org.kappa.client.utils.UrlHelper;
 import java.util.Objects;
 
 
-public class CopBuilder {
+public class VomitBuilder {
 
   private static final String[] UP = {"boyup_1.png", "boyup_2.png"};
   private static final String[] DOWN = {"boydown_1.png", "boydown_2.png"};
   private static final String[] LEFT = {"boyleft_1.png", "boyleft_2.png"};
   private static final String[] RIGHT = {"boyright_1.png", "boyright_2.png"};
 
-  private Cop entity;
+  private Vomit entity;
 
 
-  private CopBuilder() {
+  private VomitBuilder() {
   }
 
 
-  public static CopBuilder get() {
-    final var builder = new CopBuilder();
-    builder.entity = new Cop();
+  public static VomitBuilder get() {
+    final var builder = new VomitBuilder();
+    builder.entity = new Vomit();
 
     return builder;
   }
 
 
-  public CopBuilder id(final String uuid) {
+  public VomitBuilder id(final String uuid) {
     this.entity.id = uuid;
 
     return this;
   }
 
 
-  public CopBuilder render(final ImageView imageView) {
+  public VomitBuilder render(final ImageView imageView) {
     this.entity.renderComponent = new RenderComponent(imageView);
 
     return this;
   }
 
 
-  public CopBuilder render(final Direction direction) {
+  public VomitBuilder render(final Direction direction) {
     final var imageView = new ImageView(UrlHelper.getRessourceAsString(
         this.getSpriteDirection(direction)[0])
     );
@@ -56,14 +56,14 @@ public class CopBuilder {
   }
 
 
-  public CopBuilder position(final int x, final int y) {
+  public VomitBuilder position(final int x, final int y) {
     this.entity.positionComponent = new PositionComponent(x, y);
 
     return this;
   }
 
 
-  public CopBuilder direction(final Direction direction) {
+  public VomitBuilder direction(final Direction direction) {
     Objects.requireNonNull(direction);
 
     this.entity.directionComponent = new DirectionComponent(direction);
@@ -72,7 +72,7 @@ public class CopBuilder {
   }
 
 
-  public CopBuilder movement() {
+  public VomitBuilder movement() {
     this.entity.movementAnimationComponent = new MovementAnimationComponent(UP, DOWN, LEFT, RIGHT);
 
     return this;
@@ -94,12 +94,28 @@ public class CopBuilder {
   }
 
 
-  public Cop build() {
+  public Vomit build() {
+    if (!this.isValid()) {
+      throw new IllegalArgumentException();
+    }
+
+    this.entity.renderComponent.imageView().setX(this.entity.positionComponent.x());
+    this.entity.renderComponent.imageView().setY(this.entity.positionComponent.y());
+
     return this.entity;
   }
 
 
-  public static class Cop {
+  private boolean isValid() {
+    return this.entity.id != null
+        && this.entity.positionComponent != null
+        && this.entity.directionComponent != null
+        && this.entity.renderComponent != null
+        && this.entity.movementAnimationComponent != null;
+  }
+
+
+  public static class Vomit {
 
     private String id;
     private PositionComponent positionComponent;
@@ -108,7 +124,7 @@ public class CopBuilder {
     private MovementAnimationComponent movementAnimationComponent;
 
 
-    private Cop() {
+    private Vomit() {
     }
 
 

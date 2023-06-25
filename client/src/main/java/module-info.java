@@ -14,10 +14,11 @@ module org.kappa.client {
     opens org.kappa.client to javafx.fxml;
     opens org.kappa.client.ui to javafx.fxml;
 
-    exports org.kappa.client.component;
-    exports org.kappa.client.game;
-    exports org.kappa.client.utils;
     exports org.kappa.client;
+    exports org.kappa.client.component;
     exports org.kappa.client.entity;
     exports org.kappa.client.event;
+    exports org.kappa.client.game;
+    exports org.kappa.client.ui;
+    exports org.kappa.client.utils;
 }
