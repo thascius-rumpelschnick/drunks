@@ -5,9 +5,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import org.kappa.client.game.DrunksObservable;
+import org.kappa.client.event.AttackEvent;
+import org.kappa.client.event.EventPublisher;
+import org.kappa.client.event.MovementEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static org.kappa.client.utils.AttackType.VOMIT;
+import static org.kappa.client.utils.Direction.*;
+
 
 public class GameViewController {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(GameViewController.class);
 
   @FXML
   private Scene gameViewScene;
@@ -15,24 +25,26 @@ public class GameViewController {
   @FXML
   private Button gameViewButton;
 
+
   @FXML
-  private void handleGameViewButton(MouseEvent event) {
-    System.out.println("Button clicked.");
+  private void handleGameViewButton(final MouseEvent event) {
+    LOGGER.debug("Button clicked.");
   }
 
-  @FXML
-  private void handleKeyPress(KeyEvent event) {
-    System.out.println("Key pressed.");
 
-    final var drunksObservable = DrunksObservable.getInstance();
+  @FXML
+  private void handleKeyRelease(final KeyEvent event) {
+    LOGGER.debug("Key released.");
+
+    final var publisher = EventPublisher.getInstance();
 
     switch (event.getCode()) {
-      case UP -> drunksObservable.update(0);
-      case DOWN -> drunksObservable.update(1);
-      case LEFT -> drunksObservable.update(2);
-      case RIGHT -> drunksObservable.update(3);
-      case SPACE -> System.out.println("Shoot.");
-      default -> System.out.println("GameViewController: Whoot?");
+      case UP -> publisher.publishEvent(new MovementEvent("player", UP));
+      case DOWN -> publisher.publishEvent(new MovementEvent("player", DOWN));
+      case LEFT -> publisher.publishEvent(new MovementEvent("player", LEFT));
+      case RIGHT -> publisher.publishEvent(new MovementEvent("player", RIGHT));
+      case SPACE -> publisher.publishEvent(new AttackEvent("player", VOMIT));
+      default -> LOGGER.error("GameViewController: Whoot?");
     }
   }
 

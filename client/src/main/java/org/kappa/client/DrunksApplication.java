@@ -11,14 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.kappa.client.game.Coordinate;
-import org.kappa.client.game.DrunksObservable;
-import org.kappa.client.ui.BoardView;
-import org.kappa.client.ui.GameView;
-import org.kappa.client.ui.elements.Player;
-import org.kappa.client.utils.Direction;
-import org.kappa.client.utils.FXMLHelper;
-import org.kappa.client.utils.LayoutValues;
+import org.kappa.client.game.Game;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +20,7 @@ import java.io.InputStream;
 
 public class DrunksApplication extends Application {
 
-  public static final String ASSETS_PATH = "image/".replace("/", File.separator);
+  public static final String ASSETS_PATH = "images/".replace("/", File.separator);
   public static final int TILE_SIZE = 32;
   private static final int WIDTH = 768;
   private static final int HEIGHT = 576;
@@ -38,26 +31,10 @@ public class DrunksApplication extends Application {
     stage.setTitle("Drunks!");
     stage.setResizable(false);
 
-    final var scene = FXMLHelper.createSceneFromFXML(GameView.FXML_FILE);
-    final var board = (Pane) FXMLHelper.createNodeFromFXML(BoardView.FXML_FILE);
-    final var drunksObservable = DrunksObservable.getInstance();
+    final var applicationManager = ApplicationManager.getInstance();
+    applicationManager.newGame(new Game("player", null, stage));
 
-    final var initialPosition = new Coordinate(
-        0,
-        LayoutValues.GAMEBOARD_HEIGHT - LayoutValues.GAMEBOARD_TILE
-    );
-
-    final var player = new Player(initialPosition, Direction.UP);
-    board.getChildren().add(player.getImageView());
-
-    drunksObservable.register(player);
-
-    final var gameView = new GameView(new BoardView(board), scene);
-
-    stage.setScene(gameView.getScene());
     stage.show();
-
-    // this.startGameTutorial(stage);
   }
 
 
@@ -137,7 +114,7 @@ public class DrunksApplication extends Application {
 
     secondStage.setScene(secondScene);
 
-    // Load and center the image
+    // Load and center the images
     final Image image = new Image(getAssetAsStream("Character.png"));
     final ImageView imageView = new ImageView(image);
     final double imageX = (WIDTH - image.getWidth()) / 2;
@@ -168,7 +145,7 @@ public class DrunksApplication extends Application {
     // to add images in the background
       /*  for (int col = 0; col < numCols; col++) {
             for (int row = 0; row < numRows; row++) {
-                ImageView tileImageView = new ImageView(new Image("Shoe16x16.png"));
+                ImageView tileImageView = new ImageView(new Image("shoe.png"));
                 tileImageView.setFitWidth(TILE_SIZE);
                 tileImageView.setFitHeight(TILE_SIZE);
                 tileImageView.setLayoutX(col * TILE_SIZE);
@@ -180,7 +157,7 @@ public class DrunksApplication extends Application {
 
 
   private Sprite createSprite() {
-    // Load the sprite image
+    // Load the sprite images
     final var imagePath = ASSETS_PATH + "boyright_1.png";
     final var imageUpPath = ASSETS_PATH + "boyup_1.png";
     final var imageDownPath = ASSETS_PATH + "boydown_1.png";

@@ -4,16 +4,356 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane fx:id="boardView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPress" prefHeight="704.0" prefWidth="1024.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.kappa.client.ui.BoardViewController">
+<Pane fx:id="boardView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPress" prefHeight="704.0" prefWidth="1024.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.kappa.client.ui.BoardViewController">
    <children>
       <ImageView id="dummyBoard" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@image/background.png" />
+            <Image url="@images/application/background.png" />
          </image>
       </ImageView>
-      <ImageView id="dummyPlayer" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView id="dummyPlayer" fitHeight="64.0" fitWidth="64.0" layoutX="131.0" layoutY="129.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@image/boyup_1.png" />
+            <Image url="@images/punk/boyup_1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="321.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="960.0" layoutY="192.0">
+         <image>
+            <Image url="@images/wall/wall2.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="960.0" layoutY="128.0">
+         <image>
+            <Image url="@images/wall/wall3.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="960.0" layoutY="256.0">
+         <image>
+            <Image url="@images/wall/wall3.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="832.0" layoutY="192.0">
+         <image>
+            <Image url="@images/wall/wall2.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="768.0" layoutY="192.0">
+         <image>
+            <Image url="@images/wall/wall2.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="704.0" layoutY="192.0">
+         <image>
+            <Image url="@images/wall/wall2.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="704.0" layoutY="256.0">
+         <image>
+            <Image url="@images/wall/wall2.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="704.0" layoutY="384.0">
+         <image>
+            <Image url="@images/wall/wall3.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="640.0" layoutY="384.0">
+         <image>
+            <Image url="@images/wall/wall3.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="960.0" layoutY="320.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="896.0" layoutY="320.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="64.0" layoutY="576.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="-1.0" layoutY="576.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="449.0" layoutY="192.0">
+         <image>
+            <Image url="@images/wall/wall2.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="449.0" layoutY="256.0">
+         <image>
+            <Image url="@images/wall/wall2.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="319.0" layoutY="449.0">
+         <image>
+            <Image url="@images/wall/wall2.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="319.0" layoutY="513.0">
+         <image>
+            <Image url="@images/wall/wall2.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="704.0" layoutY="576.0">
+         <image>
+            <Image url="@images/wall/wall2.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="704.0" layoutY="640.0">
+         <image>
+            <Image url="@images/wall/wall2.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="512.0" layoutY="640.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="448.0" layoutY="640.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutY="192.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="256.0" layoutY="449.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="256.0" layoutY="385.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="256.0" layoutY="321.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="64.0" layoutY="513.0">
+         <image>
+            <Image url="@images/wall/wall3.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutY="513.0">
+         <image>
+            <Image url="@images/wall/wall3.png" />
+         </image>
+      </ImageView>
+      <ImageView fitWidth="64.0" layoutX="641.0" layoutY="448.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView fitWidth="64.0" layoutX="897.0" layoutY="512.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView fitWidth="64.0" layoutX="704.0" layoutY="128.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView fitWidth="64.0" layoutX="384.0" layoutY="192.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView fitWidth="64.0" layoutX="129.0" layoutY="64.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="448.0" layoutY="128.0">
+         <image>
+            <Image url="@images/wall/wall3.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="384.0" layoutY="128.0">
+         <image>
+            <Image url="@images/wall/wall3.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="320.0" layoutY="575.0">
+         <image>
+            <Image url="@images/wall/wall3.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="256.0" layoutY="575.0">
+         <image>
+            <Image url="@images/wall/wall3.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="577.0" layoutY="448.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="513.0" layoutY="448.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutY="128.0">
+         <image>
+            <Image url="@images/wall/wall3.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="961.0" layoutY="512.0">
+         <image>
+            <Image url="@images/wall/wall3.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="321.0" layoutY="128.0">
+         <image>
+            <Image url="@images/wall/wall3.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="576.0" layoutY="-1.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="640.0" layoutY="-1.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="703.0" layoutY="-1.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="1.0" layoutY="383.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="192.0" layoutY="383.0">
+         <image>
+            <Image url="@images/wall/wall2.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="64.0" layoutY="192.0">
+         <image>
+            <Image url="@images/wall/wall2.png" />
+         </image>
+      </ImageView>
+      <ImageView fitWidth="64.0" layoutX="640.0" layoutY="256.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView fitWidth="64.0" layoutX="576.0" layoutY="256.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="320.0" layoutY="319.0">
+         <image>
+            <Image url="@images/wall/wall3.png" />
+         </image>
+      </ImageView>
+      <ImageView fitWidth="64.0" layoutX="257.0" layoutY="128.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="449.0" layoutY="447.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView fitWidth="64.0" layoutX="897.0" layoutY="575.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="833.0" layoutY="320.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="257.0" layoutY="257.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="193.0" layoutY="319.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView fitWidth="64.0" layoutX="897.0" layoutY="449.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="575.0" layoutY="640.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="192.0" layoutY="575.0">
+         <image>
+            <Image url="@images/wall/wall3.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="63.0" layoutY="256.0">
+         <image>
+            <Image url="@images/wall/wall2.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="641.0" layoutY="192.0">
+         <image>
+            <Image url="@images/wall/wall2.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="641.0" layoutY="128.0">
+         <image>
+            <Image url="@images/wall/wall2.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="640.0" layoutY="576.0">
+         <image>
+            <Image url="@images/wall/wall2.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="640.0" layoutY="640.0">
+         <image>
+            <Image url="@images/wall/wall2.png" />
+         </image>
+      </ImageView>
+      <ImageView fitWidth="64.0" layoutX="129.0">
+         <image>
+            <Image url="@images/wall/wall1.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="449.0" layoutY="64.0">
+         <image>
+            <Image url="@images/wall/wall3.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="961.0" layoutY="65.0">
+         <image>
+            <Image url="@images/wall/wall3.png" />
          </image>
       </ImageView>
    </children>
