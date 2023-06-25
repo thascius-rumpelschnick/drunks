@@ -6,7 +6,7 @@ import org.kappa.client.DrunksApplication;
 public class UrlHelper {
 
   public static URL getRessourceAsUrl(final String url) {
-    return DrunksApplication.class.getResource("image/" + url);
+    return DrunksApplication.class.getResource("images/" + url);
   }
 
   public static String getRessourceAsString(final String url) {

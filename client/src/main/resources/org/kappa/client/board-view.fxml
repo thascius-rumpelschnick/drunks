@@ -8,12 +8,12 @@
    <children>
       <ImageView id="dummyBoard" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@image/background.png" />
+            <Image url="@images/systemImages/background.png" />
          </image>
       </ImageView>
       <ImageView id="dummyPlayer" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@image/boyup_1.png" />
+            <Image url="@images/mainPlayer/boyup_1.png" />
          </image>
       </ImageView>
    </children>

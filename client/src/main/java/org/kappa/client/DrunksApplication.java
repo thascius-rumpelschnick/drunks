@@ -20,7 +20,7 @@ import java.io.InputStream;
 
 public class DrunksApplication extends Application {
 
-  public static final String ASSETS_PATH = "image/".replace("/", File.separator);
+  public static final String ASSETS_PATH = "images/".replace("/", File.separator);
   public static final int TILE_SIZE = 32;
   private static final int WIDTH = 768;
   private static final int HEIGHT = 576;
@@ -113,7 +113,7 @@ public class DrunksApplication extends Application {
 
     secondStage.setScene(secondScene);
 
-    // Load and center the image
+    // Load and center the images
     final Image image = new Image(getAssetAsStream("Character.png"));
     final ImageView imageView = new ImageView(image);
     final double imageX = (WIDTH - image.getWidth()) / 2;
@@ -156,7 +156,7 @@ public class DrunksApplication extends Application {
 
 
   private Sprite createSprite() {
-    // Load the sprite image
+    // Load the sprite images
     final var imagePath = ASSETS_PATH + "boyright_1.png";
     final var imageUpPath = ASSETS_PATH + "boyup_1.png";
     final var imageDownPath = ASSETS_PATH + "boydown_1.png";
