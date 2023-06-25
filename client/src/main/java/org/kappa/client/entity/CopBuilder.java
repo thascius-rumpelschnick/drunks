@@ -12,10 +12,10 @@ import java.util.Objects;
 
 public class CopBuilder {
 
-  private static final String[] UP = {"boyup_1.png", "boyup_2.png"};
-  private static final String[] DOWN = {"boydown_1.png", "boydown_2.png"};
-  private static final String[] LEFT = {"boyleft_1.png", "boyleft_2.png"};
-  private static final String[] RIGHT = {"boyright_1.png", "boyright_2.png"};
+  private static final String[] UP = {"enemy/copup_1.png", "enemy/copup_1.png"};
+  private static final String[] DOWN = {"enemy/copdown_1.png", "enemy/copdown_1.png"};
+  private static final String[] LEFT = {"enemy/copleft_1.png", "enemy/copleft_1.png"};
+  private static final String[] RIGHT = {"enemy/copright_1.png", "enemy/copright_1.png"};
 
   private Cop entity;
 

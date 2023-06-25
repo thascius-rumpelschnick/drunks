@@ -13,10 +13,10 @@ import java.util.Objects;
 
 public class DrunkBuilder {
 
-  private static final String[] UP = {"boyup_1.png", "boyup_2.png"};
-  private static final String[] DOWN = {"boydown_1.png", "boydown_2.png"};
-  private static final String[] LEFT = {"boyleft_1.png", "boyleft_2.png"};
-  private static final String[] RIGHT = {"boyright_1.png", "boyright_2.png"};
+  private static final String[] UP = {"punk/boyup_1.png", "punk/boyup_2.png"};
+  private static final String[] DOWN = {"punk/boydown_1.png", "punk/boydown_2.png"};
+  private static final String[] LEFT = {"punk/boyleft_1.png", "punk/boyleft_2.png"};
+  private static final String[] RIGHT = {"punk/boyright_1.png", "punk/boyright_2.png"};
 
   private Drunk entity;
 
