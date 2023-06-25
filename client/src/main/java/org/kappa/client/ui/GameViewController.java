@@ -5,11 +5,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import org.kappa.client.event.AttackEvent;
 import org.kappa.client.event.EventPublisher;
 import org.kappa.client.event.MovementEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.kappa.client.utils.AttackType.VOMIT;
 import static org.kappa.client.utils.Direction.*;
 
 
@@ -41,7 +43,7 @@ public class GameViewController {
       case DOWN -> publisher.publishEvent(new MovementEvent("player", DOWN));
       case LEFT -> publisher.publishEvent(new MovementEvent("player", LEFT));
       case RIGHT -> publisher.publishEvent(new MovementEvent("player", RIGHT));
-      case SPACE -> LOGGER.debug("Shoot.");
+      case SPACE -> publisher.publishEvent(new AttackEvent("player", VOMIT));
       default -> LOGGER.error("GameViewController: Whoot?");
     }
   }

@@ -31,7 +31,8 @@ public class DrunksApplication extends Application {
     stage.setTitle("Drunks!");
     stage.setResizable(false);
 
-    new Game("player", null, stage);
+    final var applicationManager = ApplicationManager.getInstance();
+    applicationManager.newGame(new Game("player", null, stage));
 
     stage.show();
   }

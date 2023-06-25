@@ -11,43 +11,43 @@ import org.kappa.client.utils.UrlHelper;
 import java.util.Objects;
 
 
-public class DrunkBuilder {
+public class ClubBuilder {
 
-  private static final String[] UP = {"punk/boyup_1.png", "punk/boyup_2.png"};
-  private static final String[] DOWN = {"punk/boydown_1.png", "punk/boydown_2.png"};
-  private static final String[] LEFT = {"punk/boyleft_1.png", "punk/boyleft_2.png"};
-  private static final String[] RIGHT = {"punk/boyright_1.png", "punk/boyright_2.png"};
+  private static final String[] UP = {"boyup_1.png", "boyup_2.png"};
+  private static final String[] DOWN = {"boydown_1.png", "boydown_2.png"};
+  private static final String[] LEFT = {"boyleft_1.png", "boyleft_2.png"};
+  private static final String[] RIGHT = {"boyright_1.png", "boyright_2.png"};
 
-  private Drunk entity;
+  private Club entity;
 
 
-  private DrunkBuilder() {
+  private ClubBuilder() {
   }
 
 
-  public static DrunkBuilder get() {
-    final var builder = new DrunkBuilder();
-    builder.entity = new Drunk();
+  public static ClubBuilder get() {
+    final var builder = new ClubBuilder();
+    builder.entity = new Club();
 
     return builder;
   }
 
 
-  public DrunkBuilder id(final String uuid) {
+  public ClubBuilder id(final String uuid) {
     this.entity.id = uuid;
 
     return this;
   }
 
 
-  public DrunkBuilder render(final ImageView imageView) {
+  public ClubBuilder render(final ImageView imageView) {
     this.entity.renderComponent = new RenderComponent(imageView);
 
     return this;
   }
 
 
-  public DrunkBuilder render(final Direction direction) {
+  public ClubBuilder render(final Direction direction) {
     final var imageView = new ImageView(UrlHelper.getRessourceAsString(
         this.getSpriteDirection(direction)[0])
     );
@@ -56,14 +56,14 @@ public class DrunkBuilder {
   }
 
 
-  public DrunkBuilder position(final int x, final int y) {
+  public ClubBuilder position(final int x, final int y) {
     this.entity.positionComponent = new PositionComponent(x, y);
 
     return this;
   }
 
 
-  public DrunkBuilder direction(final Direction direction) {
+  public ClubBuilder direction(final Direction direction) {
     Objects.requireNonNull(direction);
 
     this.entity.directionComponent = new DirectionComponent(direction);
@@ -72,7 +72,7 @@ public class DrunkBuilder {
   }
 
 
-  public DrunkBuilder movement() {
+  public ClubBuilder movement() {
     this.entity.movementAnimationComponent = new MovementAnimationComponent(UP, DOWN, LEFT, RIGHT);
 
     return this;
@@ -94,7 +94,7 @@ public class DrunkBuilder {
   }
 
 
-  public Drunk build() {
+  public Club build() {
     if (!this.isValid()) {
       throw new IllegalArgumentException();
     }
@@ -115,7 +115,7 @@ public class DrunkBuilder {
   }
 
 
-  public static class Drunk {
+  public static class Club {
 
     private String id;
     private PositionComponent positionComponent;
@@ -124,7 +124,7 @@ public class DrunkBuilder {
     private MovementAnimationComponent movementAnimationComponent;
 
 
-    private Drunk() {
+    private Club() {
     }
 
 

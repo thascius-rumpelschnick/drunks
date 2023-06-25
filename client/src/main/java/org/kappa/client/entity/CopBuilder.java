@@ -6,6 +6,7 @@ import org.kappa.client.component.MovementAnimationComponent;
 import org.kappa.client.component.PositionComponent;
 import org.kappa.client.component.RenderComponent;
 import org.kappa.client.utils.Direction;
+import org.kappa.client.utils.UrlHelper;
 
 import java.util.Objects;
 
@@ -46,6 +47,15 @@ public class CopBuilder {
   }
 
 
+  public CopBuilder render(final Direction direction) {
+    final var imageView = new ImageView(UrlHelper.getRessourceAsString(
+        this.getSpriteDirection(direction)[0])
+    );
+
+    return this.render(imageView);
+  }
+
+
   public CopBuilder position(final int x, final int y) {
     this.entity.positionComponent = new PositionComponent(x, y);
 
@@ -66,6 +76,21 @@ public class CopBuilder {
     this.entity.movementAnimationComponent = new MovementAnimationComponent(UP, DOWN, LEFT, RIGHT);
 
     return this;
+  }
+
+
+  private String[] getSpriteDirection(final Direction direction) throws IllegalArgumentException {
+    final String[] d;
+
+    switch (direction) {
+      case UP -> d = UP;
+      case DOWN -> d = DOWN;
+      case LEFT -> d = LEFT;
+      case RIGHT -> d = RIGHT;
+      default -> throw new IllegalArgumentException();
+    }
+
+    return d;
   }
 
 
