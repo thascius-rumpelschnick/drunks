@@ -2,6 +2,10 @@
 
 ## HowTo
 
+### Style Guide
+
+1. [Google Styleguide HowTo](https://medium.com/swlh/configuring-google-style-guide-for-java-for-intellij-c727af4ef248)
+
 ### Git
 
 1. Commit Message
@@ -32,6 +36,8 @@
 - [Create a new JavaFX project](https://www.jetbrains.com/help/idea/javafx.html)
 - [Getting Started with JavaFX - JavaFX and IntelliJ IDEA](https://openjfx.io/openjfx-docs/#install-javafx)
 - [Download Scenebuilder](https://gluonhq.com/products/scene-builder/x)
+- [How to Make a 2D Game in Java](https://www.youtube.com/playlist?list=PL_QPQmz5C6WUF-pOQDsbsKbaBZqXj4qSq)
+- [JavaFX GUI Full Course](https://youtu.be/9XJicRt_FaI)
 
 ---
 
