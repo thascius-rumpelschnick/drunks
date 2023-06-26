@@ -10,6 +10,6 @@ public class DrunksController {
 
   @FXML
   protected void onHelloButtonClick() {
-    welcomeText.setText("Welcome to Drunks Application!");
+    this.welcomeText.setText("Welcome to Drunks Application!");
   }
 }

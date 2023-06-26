@@ -23,7 +23,7 @@ public class AttackSystem implements System, Listener<AttackEvent> {
   private final SystemManager systemManager;
 
 
-  public AttackSystem(EntityManager entityManager, SystemManager systemManager) {
+  public AttackSystem(final EntityManager entityManager, final SystemManager systemManager) {
     this.entityManager = entityManager;
     this.systemManager = systemManager;
   }
@@ -38,10 +38,10 @@ public class AttackSystem implements System, Listener<AttackEvent> {
     final var attackEntity = IdHelper.createRandomUuid();
 
     final var entityId = event.getEntity();
-    final PositionComponent position = entityManager.getComponent(entityId, PositionComponent.class);
-    final DirectionComponent direction = entityManager.getComponent(entityId, DirectionComponent.class);
+    final PositionComponent position = this.entityManager.getComponent(entityId, PositionComponent.class);
+    final DirectionComponent direction = this.entityManager.getComponent(entityId, DirectionComponent.class);
 
-    if (AttackType.VOMIT.equals(attackType)) {
+    if (AttackType.VOMIT == attackType) {
       final var vomit = this.getVomit(attackEntity, direction, position);
 
       this.entityManager.createEntity(attackEntity);
@@ -50,7 +50,7 @@ public class AttackSystem implements System, Listener<AttackEvent> {
       this.entityManager.putComponent(attackEntity, vomit.getPositionComponent());
       this.entityManager.putComponent(attackEntity, vomit.getMovementAnimationComponent());
 
-    } else if (AttackType.CLUB.equals(attackType)) {
+    } else if (AttackType.CLUB == attackType) {
       final var club = this.getClub(attackEntity, direction, position);
 
       this.entityManager.createEntity(attackEntity);
@@ -65,7 +65,7 @@ public class AttackSystem implements System, Listener<AttackEvent> {
       throw new IllegalArgumentException("Unknown attack type.");
     }
 
-    final var renderSystem = systemManager.getSystem(RenderSystem.class);
+    final var renderSystem = this.systemManager.getSystem(RenderSystem.class);
     renderSystem.addEntityToGameBoard(attackEntity);
   }
 

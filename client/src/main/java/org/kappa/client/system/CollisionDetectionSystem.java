@@ -19,7 +19,7 @@ public class CollisionDetectionSystem implements System {
   private final SystemManager systemManager;
 
 
-  public CollisionDetectionSystem(EntityManager entityManager, SystemManager systemManager) {
+  public CollisionDetectionSystem(final EntityManager entityManager, final SystemManager systemManager) {
     this.entityManager = entityManager;
     this.systemManager = systemManager;
   }

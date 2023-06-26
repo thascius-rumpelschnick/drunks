@@ -1,9 +1,12 @@
 package org.kappa.client.utils;
 
-import java.net.URL;
 import org.kappa.client.DrunksApplication;
 
-public class UrlHelper {
+import java.net.URL;
+
+public enum UrlHelper {
+  ;
+
 
   public static URL getRessourceAsUrl(final String url) {
     return DrunksApplication.class.getResource("images/" + url);

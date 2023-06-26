@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import org.kappa.client.entity.DrunkBuilder;
 import org.kappa.client.entity.EntityManager;
 import org.kappa.client.entity.WallBuilder;
+import org.kappa.client.entity.WaterBuilder;
 import org.kappa.client.event.EventPublisher;
 import org.kappa.client.system.*;
 import org.kappa.client.ui.BoardView;
@@ -69,11 +70,20 @@ public class Game {
 
 
   private void initializeGame() throws IOException {
-    // See: org/kappa/client/DrunksApplication.java:42
     final var scene = FXMLHelper.createSceneFromFXML(GameView.FXML_FILE);
     final var board = (Pane) FXMLHelper.createNodeFromFXML(BoardView.FXML_FILE);
 
+    this.renderSystem.setGameView(new GameView(new BoardView(board), scene));
 
+    this.parseBoardElements(board);
+    this.addPlayerToGame();
+    LOGGER.debug("Game: {}", this.entityManager);
+
+    this.stage.setScene(this.renderSystem.getGameView().getScene());
+  }
+
+
+  private void addPlayerToGame() {
     final var drunk = DrunkBuilder
         .get()
         .id(this.player)
@@ -89,32 +99,48 @@ public class Game {
     this.entityManager.putComponent(drunk.getId(), drunk.getPositionComponent());
     this.entityManager.putComponent(drunk.getId(), drunk.getMovementAnimationComponent());
 
-    final var gameView = new GameView(new BoardView(board), scene);
-    this.renderSystem.setGameView(gameView);
     this.renderSystem.addEntityToGameBoard(drunk.getId());
-
-    board.getChildren().filtered((Node node) -> {
-      if (node instanceof ImageView imageView) {
-        if (imageView.getImage() != null && imageView.getImage().getUrl().endsWith("wall1.png")) {
-          final var wall = WallBuilder
-                  .get()
-                  .render(imageView)
-                  .id(IdHelper.createRandomUuid())
-                  .position((int) imageView.getX(), (int) imageView.getY())
-                  .build();
-
-          this.entityManager.createEntity(wall.getId());
-          this.entityManager.putComponent(wall.getId(), wall.getPositionComponent());
-          this.entityManager.putComponent(wall.getId(), wall.getRenderComponent());
-        }
-      }
-      return false;
-    });
-
-    LOGGER.debug("Game: {}", entityManager);
-
-    this.stage.setScene(this.renderSystem.getGameView().getScene());
   }
+
+
+  private void parseBoardElements(final Pane board) {
+    for (final Node node : board.getChildren()) {
+      if (node instanceof final ImageView imageView && imageView.getImage() != null) {
+        this.addBoardElementsToEntityManager(imageView);
+      }
+    }
+  }
+
+
+  private void addBoardElementsToEntityManager(final ImageView imageView) {
+    FXMLHelper.validateLayoutPosition(imageView.getLayoutX(), imageView.getLayoutY());
+
+    if (imageView.getImage().getUrl().endsWith("wall1.png")) {
+      final var wall = WallBuilder
+          .get()
+          .render(imageView)
+          .id(IdHelper.createRandomUuid())
+          .position((int) imageView.layoutXProperty().get(), (int) imageView.layoutYProperty().get())
+          .build();
+
+      this.entityManager.createEntity(wall.getId());
+      this.entityManager.putComponent(wall.getId(), wall.getPositionComponent());
+      this.entityManager.putComponent(wall.getId(), wall.getRenderComponent());
+
+    } else if (imageView.getImage().getUrl().endsWith("wall2.png")) {
+      final var water = WaterBuilder
+          .get()
+          .render(imageView)
+          .id(IdHelper.createRandomUuid())
+          .position((int) imageView.layoutXProperty().get(), (int) imageView.layoutYProperty().get())
+          .build();
+
+      this.entityManager.createEntity(water.getId());
+      this.entityManager.putComponent(water.getId(), water.getPositionComponent());
+      this.entityManager.putComponent(water.getId(), water.getRenderComponent());
+    }
+  }
+
 
   private void manageSubscriptions() {
     PUBLISHER.reset();

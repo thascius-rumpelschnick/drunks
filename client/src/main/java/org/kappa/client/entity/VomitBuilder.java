@@ -99,8 +99,8 @@ public class VomitBuilder {
       throw new IllegalArgumentException();
     }
 
-    this.entity.renderComponent.imageView().setX(this.entity.positionComponent.x());
-    this.entity.renderComponent.imageView().setY(this.entity.positionComponent.y());
+    this.entity.renderComponent.imageView().setLayoutX(this.entity.positionComponent.x());
+    this.entity.renderComponent.imageView().setLayoutY(this.entity.positionComponent.y());
 
     return this.entity;
   }

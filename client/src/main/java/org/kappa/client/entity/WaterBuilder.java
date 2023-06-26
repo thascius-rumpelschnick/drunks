@@ -6,14 +6,14 @@ import org.kappa.client.component.RenderComponent;
 
 public class WaterBuilder {
 
-    private Drunk entity;
+    private Water entity;
 
     private WaterBuilder() {
     }
 
     public static WaterBuilder get() {
         final var builder = new WaterBuilder();
-        builder.entity = new Drunk();
+        builder.entity = new Water();
 
         return builder;
     }
@@ -36,13 +36,13 @@ public class WaterBuilder {
         return this;
     }
 
-    public Drunk build() {
+    public Water build() {
         if (!this.isValid()) {
             throw new IllegalArgumentException();
         }
 
-        this.entity.renderComponent.imageView().setX(this.entity.positionComponent.x());
-        this.entity.renderComponent.imageView().setY(this.entity.positionComponent.y());
+        this.entity.renderComponent.imageView().setLayoutX(this.entity.positionComponent.x());
+        this.entity.renderComponent.imageView().setLayoutY(this.entity.positionComponent.y());
 
         return this.entity;
     }
@@ -53,12 +53,12 @@ public class WaterBuilder {
                 && this.entity.renderComponent != null;
     }
 
-    public static class Drunk {
+    public static class Water {
 
         private String id;
         private PositionComponent positionComponent;
         private RenderComponent renderComponent;
-        private Drunk() {
+        private Water() {
         }
 
         public String getId() {

@@ -57,7 +57,7 @@ public class MovementSystem implements System, Listener<MovementEvent> {
     }
 
     if (collisionDetectionSystem.isOutOfBounds(x, y) || collisionDetectionSystem.detectCollision(x, y).isPresent()) {
-      LOGGER.debug("Out of bounds: x = {}, y = {}", x, y);
+      LOGGER.debug("Out of bounds or collision detected: x = {}, y = {}", x, y);
       return;
     }
 

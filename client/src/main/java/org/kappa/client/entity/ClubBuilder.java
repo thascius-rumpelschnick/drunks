@@ -99,9 +99,6 @@ public class ClubBuilder {
       throw new IllegalArgumentException();
     }
 
-    this.entity.renderComponent.imageView().setX(this.entity.positionComponent.x());
-    this.entity.renderComponent.imageView().setY(this.entity.positionComponent.y());
-
     return this.entity;
   }
 

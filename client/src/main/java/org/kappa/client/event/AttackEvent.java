@@ -10,7 +10,7 @@ public class AttackEvent extends Event {
   private final AttackType attackType;
 
 
-  public AttackEvent(String entity, AttackType attackType) {
+  public AttackEvent(final String entity, final AttackType attackType) {
     super(entity, ATTACK);
     this.attackType = attackType;
   }

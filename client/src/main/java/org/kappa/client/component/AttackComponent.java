@@ -2,7 +2,7 @@ package org.kappa.client.component;
 
 public class AttackComponent implements Component {
 
-  final private int damage;
+  private final int damage;
 
 
   public AttackComponent(final int damage) {

@@ -17,15 +17,17 @@ public record RenderComponent(ImageView imageView) implements Component {
 
 
   public void update(final int x, final int y) {
-    this.imageView.setX(x);
-    this.imageView.setY(y);
+    this.imageView.setLayoutX(x);
+    this.imageView.setLayoutY(y);
   }
 
 
   private void initImageView() {
 
-    this.imageView.setFitWidth(LayoutValues.GAMEBOARD_TILE);
-    this.imageView.setFitHeight(LayoutValues.GAMEBOARD_TILE);
+    if (this.imageView.getImage().getUrl().startsWith("boy")) {
+      this.imageView.setFitWidth(LayoutValues.GAMEBOARD_TILE);
+      this.imageView.setFitHeight(LayoutValues.GAMEBOARD_TILE);
+    }
 
     this.setDropShadow();
   }
