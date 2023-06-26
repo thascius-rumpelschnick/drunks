@@ -44,4 +44,10 @@ public class EntityManager {
     return componentClass.cast(componentMap.get(componentClass));
   }
 
+  @Override
+  public String toString() {
+    return "EntityManager{" +
+            "entityComponentMap=" + entityComponentMap +
+            '}';
+  }
 }
