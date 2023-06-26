@@ -71,4 +71,11 @@ public class EntityManager {
         .findFirst();
   }
 
+
+  @Override
+  public String toString() {
+    return "EntityManager{" +
+        "entityComponentMap=" + this.entityComponentMap +
+        '}';
+  }
 }

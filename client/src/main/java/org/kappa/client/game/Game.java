@@ -1,17 +1,19 @@
 package org.kappa.client.game;
 
+import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.kappa.client.entity.DrunkBuilder;
 import org.kappa.client.entity.EntityManager;
+import org.kappa.client.entity.WallBuilder;
 import org.kappa.client.event.EventPublisher;
 import org.kappa.client.system.*;
 import org.kappa.client.ui.BoardView;
 import org.kappa.client.ui.GameView;
-import org.kappa.client.utils.Direction;
-import org.kappa.client.utils.FXMLHelper;
-import org.kappa.client.utils.LayoutValues;
-import org.kappa.client.utils.Level;
+import org.kappa.client.utils.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -20,6 +22,8 @@ import static org.kappa.client.event.EventType.MOVEMENT;
 
 
 public class Game {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(Game.class);
 
   private final String player;
   private final Level level;
@@ -69,6 +73,7 @@ public class Game {
     final var scene = FXMLHelper.createSceneFromFXML(GameView.FXML_FILE);
     final var board = (Pane) FXMLHelper.createNodeFromFXML(BoardView.FXML_FILE);
 
+
     final var drunk = DrunkBuilder
         .get()
         .id(this.player)
@@ -88,9 +93,28 @@ public class Game {
     this.renderSystem.setGameView(gameView);
     this.renderSystem.addEntityToGameBoard(drunk.getId());
 
+    board.getChildren().filtered((Node node) -> {
+      if (node instanceof ImageView imageView) {
+        if (imageView.getImage() != null && imageView.getImage().getUrl().endsWith("wall1.png")) {
+          final var wall = WallBuilder
+                  .get()
+                  .render(imageView)
+                  .id(IdHelper.createRandomUuid())
+                  .position((int) imageView.getX(), (int) imageView.getY())
+                  .build();
+
+          this.entityManager.createEntity(wall.getId());
+          this.entityManager.putComponent(wall.getId(), wall.getPositionComponent());
+          this.entityManager.putComponent(wall.getId(), wall.getRenderComponent());
+        }
+      }
+      return false;
+    });
+
+    LOGGER.debug("Game: {}", entityManager);
+
     this.stage.setScene(this.renderSystem.getGameView().getScene());
   }
-
 
   private void manageSubscriptions() {
     PUBLISHER.reset();
@@ -98,6 +122,4 @@ public class Game {
     PUBLISHER.subscribe(MOVEMENT, this.movementSystem);
     PUBLISHER.subscribe(ATTACK, this.attackSystem);
   }
-
-
 }
