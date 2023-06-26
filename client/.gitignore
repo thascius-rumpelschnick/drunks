@@ -1,4 +1,5 @@
 target/
+logs/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -9,7 +10,7 @@ target/
 .idea/compiler.xml
 .idea/misc.xml
 .idea/libraries/
-.idea/sonarlint/
+.idea/sonarlint/*
 *.iws
 *.iml
 *.ipr
