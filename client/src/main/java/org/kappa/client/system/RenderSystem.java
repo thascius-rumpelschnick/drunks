@@ -7,7 +7,7 @@ import org.kappa.client.ui.GameView;
 import java.util.Objects;
 
 
-public class RenderSystem implements  System{
+public class RenderSystem implements System {
 
   private final EntityManager entityManager;
   private final SystemManager systemManager;
@@ -15,7 +15,7 @@ public class RenderSystem implements  System{
   private GameView gameView;
 
 
-  public RenderSystem(EntityManager entityManager, SystemManager systemManager) {
+  public RenderSystem(final EntityManager entityManager, final SystemManager systemManager) {
     this.entityManager = entityManager;
     this.systemManager = systemManager;
   }
@@ -31,13 +31,13 @@ public class RenderSystem implements  System{
   }
 
 
-  public void setGameView(GameView gameView) {
+  public void setGameView(final GameView gameView) {
     this.gameView = gameView;
   }
 
 
   public GameView getGameView() {
-    return gameView;
+    return this.gameView;
   }
 
 

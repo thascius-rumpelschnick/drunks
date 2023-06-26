@@ -13,10 +13,10 @@ import java.util.Objects;
 
 public class VomitBuilder {
 
-  private static final String[] UP = {"boyup_1.png", "boyup_2.png"};
-  private static final String[] DOWN = {"boydown_1.png", "boydown_2.png"};
-  private static final String[] LEFT = {"boyleft_1.png", "boyleft_2.png"};
-  private static final String[] RIGHT = {"boyright_1.png", "boyright_2.png"};
+  private static final String[] UP = {"vomit/vomit_1.png", "vomit/vomit_2.png"};
+  private static final String[] DOWN = {"vomit/vomit_1.png", "vomit/vomit_2.png"};
+  private static final String[] LEFT = {"vomit/vomit_1.png", "vomit/vomit_2.png"};
+  private static final String[] RIGHT = {"vomit/vomit_1.png", "vomit/vomit_2.png"};
 
   private Vomit entity;
 

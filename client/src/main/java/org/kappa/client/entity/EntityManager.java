@@ -1,13 +1,18 @@
 package org.kappa.client.entity;
 
 import org.kappa.client.component.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 
 public class EntityManager {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(EntityManager.class);
 
   private final Map<String, Map<Class<? extends Component>, Component>> entityComponentMap;
 
@@ -42,6 +47,28 @@ public class EntityManager {
     final var componentMap = this.entityComponentMap.get(entityId);
 
     return componentClass.cast(componentMap.get(componentClass));
+  }
+
+
+  public Optional<Map.Entry<String, Map<Class<? extends Component>, Component>>> filterEntityByComponent(final Component component) {
+    return this.entityComponentMap
+        .entrySet()
+        .stream()
+        .filter(
+            (final Map.Entry<String, Map<Class<? extends Component>, Component>> entry) -> {
+              try {
+                final var components = entry.getValue();
+                final var entityComponent = components.get(component.getClass());
+
+                return component.equals(entityComponent);
+              } catch (final Exception exception) {
+                LOGGER.error(exception.getMessage(), exception);
+
+                return false;
+              }
+            }
+        )
+        .findFirst();
   }
 
 }

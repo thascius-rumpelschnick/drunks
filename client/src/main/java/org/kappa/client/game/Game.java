@@ -5,10 +5,7 @@ import javafx.stage.Stage;
 import org.kappa.client.entity.DrunkBuilder;
 import org.kappa.client.entity.EntityManager;
 import org.kappa.client.event.EventPublisher;
-import org.kappa.client.system.AttackSystem;
-import org.kappa.client.system.MovementSystem;
-import org.kappa.client.system.RenderSystem;
-import org.kappa.client.system.SystemManager;
+import org.kappa.client.system.*;
 import org.kappa.client.ui.BoardView;
 import org.kappa.client.ui.GameView;
 import org.kappa.client.utils.Direction;
@@ -32,8 +29,10 @@ public class Game {
   private final SystemManager systemManager;
 
   private final RenderSystem renderSystem;
-  private final MovementSystem movementSystem;
   private final AttackSystem attackSystem;
+  private final CollisionDetectionSystem collisionDetectionSystem;
+  private final AnimationSystem animationSystem;
+  private final MovementSystem movementSystem;
 
   private static final EventPublisher PUBLISHER = EventPublisher.getInstance();
 
@@ -46,10 +45,11 @@ public class Game {
     this.entityManager = new EntityManager();
     this.systemManager = new SystemManager();
 
-
     this.renderSystem = new RenderSystem(this.entityManager, this.systemManager);
     this.attackSystem = new AttackSystem(this.entityManager, this.systemManager);
-    this.movementSystem = new MovementSystem(this.entityManager);
+    this.collisionDetectionSystem = new CollisionDetectionSystem(this.entityManager, this.systemManager);
+    this.animationSystem = new AnimationSystem(this.entityManager, this.systemManager);
+    this.movementSystem = new MovementSystem(this.entityManager, this.systemManager);
 
     this.manageSystems();
     this.manageSubscriptions();
@@ -59,6 +59,8 @@ public class Game {
 
   private void manageSystems() {
     this.systemManager.putSystem(this.renderSystem);
+    this.systemManager.putSystem(this.collisionDetectionSystem);
+    this.systemManager.putSystem(this.animationSystem);
   }
 
 
