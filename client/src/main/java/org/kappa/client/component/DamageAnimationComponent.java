@@ -12,16 +12,24 @@ import java.util.Objects;
 
 public class DamageAnimationComponent implements Component {
 
-    private final Image sprite;
+    String[] state0;
+    String[] state1;
+    String[] state2;
+    String[] state3;
 
-    public DamageAnimationComponent(final Image sprite) {
-        Objects.requireNonNull(sprite);
-        this.sprite = sprite;
+    public DamageAnimationComponent(final String[] state0, final String[] state1, final String[] state2, final String[] state3) {
+        Objects.requireNonNull(state0);
+        Objects.requireNonNull(state1);
+        Objects.requireNonNull(state2);
+        Objects.requireNonNull(state3);
+
+        this.state0 = state0;
+        this.state1 = state1;
+        this.state2 = state2;
+        this.state3 = state3;
     }
 
-    //just to set the sprite
-    public void show(final ImageView imageView) {
-        imageView.setImage(sprite);
+    public DamageAnimationComponent() {
     }
 
     public void animate(final ImageView imageView) {
@@ -34,10 +42,7 @@ public class DamageAnimationComponent implements Component {
         createShadowEffect(imageView);
 
         final var animation = createTransition(imageView);
-        animation.setOnFinished(event -> {
-            imageView.setEffect(null);
-            imageView.setImage(sprite);
-        });
+        animation.setOnFinished(event -> imageView.setEffect(null));
         animation.play();
     }
 
@@ -65,7 +70,7 @@ public class DamageAnimationComponent implements Component {
 
         @Override
         protected void interpolate(double frac) {
-            imageView.setImage(sprite);
+            //change Images imageView.setImage(sprite);
         }
 
         // Create a new instance of AnimationTransition

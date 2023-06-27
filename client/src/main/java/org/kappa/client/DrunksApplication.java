@@ -128,15 +128,14 @@ public class DrunksApplication extends Application {
     //TODO: HealthComponent gibt den state
     //TODO: sprite wechseln und schatten
 
-    Image spriteImage = new Image(getAssetAsStream("punk/boydown_1.png"));
-    DamageAnimationComponent animationComponent = new DamageAnimationComponent(spriteImage);
+    DamageAnimationComponent animationComponent = new DamageAnimationComponent();
 
     Button button = new Button("Animate");
 
     ImageView imageView = new ImageView();
     imageView.setPreserveRatio(true);
 
-    animationComponent.show(imageView);
+    imageView.setImage(new Image(getAssetAsStream("punk/boydown_1.png")));
 
     double desiredWidth = 200;
     imageView.setFitWidth(desiredWidth);
@@ -161,16 +160,6 @@ public class DrunksApplication extends Application {
 
     return secondStage;
   }
-
-  //DamageAnimationComponent
-  private Effect createShadowEffect() {
-    DropShadow shadow = new DropShadow();
-    shadow.setColor(Color.GREY);
-    shadow.setRadius(15);
-    shadow.setSpread(0.5);
-    return shadow;
-  }
-
 
   private void addBackgroundTiles(final Pane primaryStageRoot) {
     final int numCols = WIDTH / TILE_SIZE;
