@@ -3,12 +3,15 @@ package org.kappa.client.system;
 import org.kappa.client.component.MovementAnimationComponent;
 import org.kappa.client.component.RenderComponent;
 import org.kappa.client.entity.EntityManager;
+import org.kappa.client.game.Time;
 import org.kappa.client.utils.Direction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
 
-public class AnimationSystem implements System {
+
+public class AnimationSystem implements UpdatableSystem {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AnimationSystem.class);
 
@@ -17,9 +20,13 @@ public class AnimationSystem implements System {
 
 
   public AnimationSystem(final EntityManager entityManager, final SystemManager systemManager) {
+    Objects.requireNonNull(entityManager);
+    Objects.requireNonNull(systemManager);
+
     this.entityManager = entityManager;
     this.systemManager = systemManager;
   }
+
 
   public void startMovementAnimation(final String entityId, final Direction movementDirection) {
     final var sprite = this.entityManager.getComponent(entityId, RenderComponent.class);
@@ -30,7 +37,7 @@ public class AnimationSystem implements System {
 
 
   @Override
-  public void update() {
+  public void update(final Time time) {
 
   }
 }

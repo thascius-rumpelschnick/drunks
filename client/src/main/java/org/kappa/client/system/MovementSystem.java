@@ -6,13 +6,16 @@ import org.kappa.client.component.RenderComponent;
 import org.kappa.client.entity.EntityManager;
 import org.kappa.client.event.Listener;
 import org.kappa.client.event.MovementEvent;
+import org.kappa.client.game.Time;
 import org.kappa.client.utils.Direction;
 import org.kappa.client.utils.LayoutValues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
 
-public class MovementSystem implements System, Listener<MovementEvent> {
+
+public class MovementSystem implements UpdatableSystem, Listener<MovementEvent> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MovementSystem.class);
 
@@ -21,6 +24,9 @@ public class MovementSystem implements System, Listener<MovementEvent> {
 
 
   public MovementSystem(final EntityManager entityManager, final SystemManager systemManager) {
+    Objects.requireNonNull(entityManager);
+    Objects.requireNonNull(systemManager);
+
     this.entityManager = entityManager;
     this.systemManager = systemManager;
   }
@@ -68,7 +74,7 @@ public class MovementSystem implements System, Listener<MovementEvent> {
 
 
   @Override
-  public void update() {
+  public void update(final Time time) {
 
   }
 

@@ -6,9 +6,47 @@ public enum Level {
     public String getLevelView() {
       return "board-view.fxml";
     }
+
+
+    @Override
+    public int getLoopInterval() {
+      return 1000;
+    }
+
+  },
+  TWO {
+    @Override
+    public String getLevelView() {
+      return "board-view.fxml";
+    }
+
+
+    @Override
+    public int getLoopInterval() {
+      return 1000;
+    }
+
+  },
+  THREE {
+    @Override
+    public String getLevelView() {
+      return "board-view.fxml";
+    }
+
+
+    @Override
+    public int getLoopInterval() {
+      return 1000;
+    }
+
   };
 
 
   public abstract String getLevelView();
+
+  /**
+   * Loop interval in milliseconds.
+   **/
+  public abstract int getLoopInterval();
 
 }

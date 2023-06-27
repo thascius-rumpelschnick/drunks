@@ -1,5 +1,6 @@
 package org.kappa.client.game;
 
+import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -17,17 +18,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.lang.System;
 
-import static org.kappa.client.event.EventType.ATTACK;
-import static org.kappa.client.event.EventType.MOVEMENT;
+import static org.kappa.client.event.EventType.*;
 
 
 public class Game {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Game.class);
+  private static final EventPublisher PUBLISHER = EventPublisher.getInstance();
 
   private final String player;
   private final Level level;
+  private final Time time;
+  private AnimationTimer animationTimer;
   private final Stage stage;
 
   private final EntityManager entityManager;
@@ -39,12 +43,11 @@ public class Game {
   private final AnimationSystem animationSystem;
   private final MovementSystem movementSystem;
 
-  private static final EventPublisher PUBLISHER = EventPublisher.getInstance();
-
 
   public Game(final String playerId, final Level level, final Stage stage) throws IOException {
     this.player = playerId;
     this.level = level;
+    this.time = new Time(System.nanoTime(), this.level.getLoopInterval());
     this.stage = stage;
 
     this.entityManager = new EntityManager();
@@ -59,6 +62,8 @@ public class Game {
     this.manageSystems();
     this.manageSubscriptions();
     this.initializeGame();
+
+    this.startGame();
   }
 
 
@@ -66,6 +71,15 @@ public class Game {
     this.systemManager.putSystem(this.renderSystem);
     this.systemManager.putSystem(this.collisionDetectionSystem);
     this.systemManager.putSystem(this.animationSystem);
+  }
+
+
+  private void manageSubscriptions() {
+    PUBLISHER.reset();
+
+    PUBLISHER.subscribe(MOVEMENT, this.movementSystem);
+    PUBLISHER.subscribe(ATTACK, this.attackSystem);
+    PUBLISHER.subscribe(ENTITY_CREATED, this.renderSystem);
   }
 
 
@@ -77,9 +91,39 @@ public class Game {
 
     this.parseBoardElements(board);
     this.addPlayerToGame();
-    LOGGER.debug("Game: {}", this.entityManager);
+    // LOGGER.debug("Game: {}", this.entityManager);
 
     this.stage.setScene(this.renderSystem.getGameView().getScene());
+
+    this.animationTimer = new AnimationTimer() {
+      @Override
+      public void handle(final long now) {
+        Game.this.update(now);
+      }
+    };
+  }
+
+
+  private void update(final long now) {
+    this.time.update(now);
+
+    LOGGER.debug("START: {}\nNOW: {}\nELASPSED: {}", this.time.getStartTime(), this.time.getNow(), this.time.getElapsedTimeInMilliseconds());
+
+    this.systemManager.update(this.time);
+  }
+
+
+  public void startGame() {
+    LOGGER.debug("startGame");
+
+    this.animationTimer.start();
+  }
+
+
+  public void stopGame() {
+    LOGGER.debug("startGame");
+
+    this.animationTimer.stop();
   }
 
 
@@ -90,6 +134,7 @@ public class Game {
         .render(Direction.UP)
         .direction(Direction.UP)
         .position(0, LayoutValues.GAMEBOARD_HEIGHT - LayoutValues.GAMEBOARD_TILE)
+        .velocity(1)
         .movement()
         .build();
 
@@ -141,11 +186,4 @@ public class Game {
     }
   }
 
-
-  private void manageSubscriptions() {
-    PUBLISHER.reset();
-
-    PUBLISHER.subscribe(MOVEMENT, this.movementSystem);
-    PUBLISHER.subscribe(ATTACK, this.attackSystem);
-  }
 }
