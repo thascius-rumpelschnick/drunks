@@ -3,15 +3,21 @@ package org.kappa.client;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.kappa.client.game.Game;
+import org.kappa.client.component.DamageAnimationComponent;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,16 +31,19 @@ public class DrunksApplication extends Application {
   private static final int WIDTH = 768;
   private static final int HEIGHT = 576;
 
+  private static final int INITIAL_HEALTH = 0;
+
 
   @Override
   public void start(final Stage stage) throws IOException {
     stage.setTitle("Drunks!");
     stage.setResizable(false);
 
-    final var applicationManager = ApplicationManager.getInstance();
-    applicationManager.newGame(new Game("player", null, stage));
+    //final var applicationManager = ApplicationManager.getInstance();
+    //applicationManager.newGame(new Game("player", null, stage));
 
-    stage.show();
+    this.createSecondStage().show();
+    //stage.show();
   }
 
 
@@ -100,7 +109,6 @@ public class DrunksApplication extends Application {
     timeline.play();
   }
 
-
   private Stage createSecondStage() {
     final Stage secondStage = new Stage();
     secondStage.setTitle("Second Stage");
@@ -114,17 +122,53 @@ public class DrunksApplication extends Application {
 
     secondStage.setScene(secondScene);
 
-    // Load and center the images
-    final Image image = new Image(getAssetAsStream("Character.png"));
-    final ImageView imageView = new ImageView(image);
-    final double imageX = (WIDTH - image.getWidth()) / 2;
-    final double imageY = (HEIGHT - image.getHeight()) / 2;
+    //TODO: Button der es triggered
+    //TODO: movement 2 constructoren, wie in movement, eine animate methode die aufgerufen wird, der eine bekommt die als array, im wallbuilder kommt es rein
+    //TODO: dropShadow bei statischen und dynamischen entities
+    //TODO: HealthComponent gibt den state
+    //TODO: sprite wechseln und schatten
+
+    Image spriteImage = new Image(getAssetAsStream("punk/boydown_1.png"));
+    DamageAnimationComponent animationComponent = new DamageAnimationComponent(spriteImage);
+
+    Button button = new Button("Animate");
+
+    ImageView imageView = new ImageView();
+    imageView.setPreserveRatio(true);
+
+    animationComponent.show(imageView);
+
+    double desiredWidth = 200;
+    imageView.setFitWidth(desiredWidth);
+    imageView.setFitHeight(desiredWidth);
+
+    double imageX = (WIDTH - desiredWidth) / 2;
+    double imageY = (HEIGHT - desiredWidth) / 2;
     imageView.setLayoutX(imageX);
     imageView.setLayoutY(imageY);
 
-    secondRoot.getChildren().add(imageView);
+    button.setOnAction(event -> {
+      animationComponent.animate(imageView);
+    });
+
+    StackPane root = new StackPane();
+
+    root.setAlignment(Pos.BOTTOM_RIGHT);
+    StackPane.setMargin(button, new Insets(10));
+
+    root.getChildren().addAll(button, imageView);
+    secondRoot.getChildren().add(root);
 
     return secondStage;
+  }
+
+  //DamageAnimationComponent
+  private Effect createShadowEffect() {
+    DropShadow shadow = new DropShadow();
+    shadow.setColor(Color.GREY);
+    shadow.setRadius(15);
+    shadow.setSpread(0.5);
+    return shadow;
   }
 
 
@@ -141,18 +185,6 @@ public class DrunksApplication extends Application {
         primaryStageRoot.getChildren().add(tile);
       }
     }
-
-    // to add images in the background
-      /*  for (int col = 0; col < numCols; col++) {
-            for (int row = 0; row < numRows; row++) {
-                ImageView tileImageView = new ImageView(new Image("shoe.png"));
-                tileImageView.setFitWidth(TILE_SIZE);
-                tileImageView.setFitHeight(TILE_SIZE);
-                tileImageView.setLayoutX(col * TILE_SIZE);
-                tileImageView.setLayoutY(row * TILE_SIZE);
-                primaryStageRoot.getChildren().add(tileImageView);
-            }
-        }*/
   }
 
 
