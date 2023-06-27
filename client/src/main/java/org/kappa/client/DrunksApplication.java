@@ -7,8 +7,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -23,16 +21,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-
 public class DrunksApplication extends Application {
 
   public static final String ASSETS_PATH = "images/".replace("/", File.separator);
   public static final int TILE_SIZE = 32;
   private static final int WIDTH = 768;
   private static final int HEIGHT = 576;
-
-  private static final int INITIAL_HEALTH = 0;
-
 
   @Override
   public void start(final Stage stage) throws IOException {
@@ -110,6 +104,7 @@ public class DrunksApplication extends Application {
   }
 
   private Stage createSecondStage() {
+
     final Stage secondStage = new Stage();
     secondStage.setTitle("Second Stage");
 
@@ -128,26 +123,21 @@ public class DrunksApplication extends Application {
     //TODO: HealthComponent gibt den state
     //TODO: sprite wechseln und schatten
 
-    DamageAnimationComponent animationComponent = new DamageAnimationComponent();
+    //DamageAnimationComponent animationComponent = new DamageAnimationComponent();
+    DamageAnimationComponent animationComponent = new DamageAnimationComponent(getAssetAsStream("wall/wall1.png"), getAssetAsStream("wall/wallDamage1.png"), getAssetAsStream("wall/wallDamage2.png"), getAssetAsStream("wall/wallDamage3.png"));
 
     Button button = new Button("Animate");
 
     ImageView imageView = new ImageView();
     imageView.setPreserveRatio(true);
 
-    imageView.setImage(new Image(getAssetAsStream("punk/boydown_1.png")));
-
-    double desiredWidth = 200;
-    imageView.setFitWidth(desiredWidth);
-    imageView.setFitHeight(desiredWidth);
-
-    double imageX = (WIDTH - desiredWidth) / 2;
-    double imageY = (HEIGHT - desiredWidth) / 2;
-    imageView.setLayoutX(imageX);
-    imageView.setLayoutY(imageY);
+    imageView.setFitWidth(WIDTH / 10);
+    imageView.setFitHeight(HEIGHT / 10);
 
     button.setOnAction(event -> {
+      animationComponent.show(imageView);
       animationComponent.animate(imageView);
+      animationComponent.changeCurrentState();
     });
 
     StackPane root = new StackPane();
@@ -193,7 +183,7 @@ public class DrunksApplication extends Application {
   }
 
 
-  private static InputStream getAssetAsStream(final String assetName) {
+  public static InputStream getAssetAsStream(final String assetName) {
     return DrunksApplication.class.getResourceAsStream(ASSETS_PATH + assetName);
   }
 

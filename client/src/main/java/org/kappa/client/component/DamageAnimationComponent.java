@@ -8,16 +8,26 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
+import java.io.InputStream;
 import java.util.Objects;
 
 public class DamageAnimationComponent implements Component {
 
-    String[] state0;
-    String[] state1;
-    String[] state2;
-    String[] state3;
+    String state0;
+    String state1;
+    String state2;
+    String state3;
 
-    public DamageAnimationComponent(final String[] state0, final String[] state1, final String[] state2, final String[] state3) {
+    public int currentState;
+
+    InputStream currentImage;
+
+    InputStream image0;
+    InputStream image1;
+    InputStream image2;
+    InputStream image3;
+
+    public DamageAnimationComponent(final String state0, final String state1, final String state2, final String state3, final int currentState) {
         Objects.requireNonNull(state0);
         Objects.requireNonNull(state1);
         Objects.requireNonNull(state2);
@@ -27,9 +37,42 @@ public class DamageAnimationComponent implements Component {
         this.state1 = state1;
         this.state2 = state2;
         this.state3 = state3;
+
+        this.currentState = 0;
     }
 
-    public DamageAnimationComponent() {
+    public DamageAnimationComponent(InputStream image0, InputStream image1, InputStream image2, InputStream image3) {
+        this.image0 = image0;
+        this.image1 = image1;
+        this.image2 = image2;
+        this.image3 = image3;
+
+        this.currentImage = image0;
+    }
+
+    public void changeCurrentState() {
+        currentState = (currentState + 1) % 4;
+        switch (currentState) {
+            case 0:
+                currentImage = image0;
+                break;
+            case 1:
+                currentImage = image1;
+                break;
+            case 2:
+                currentImage = image2;
+                break;
+            case 3:
+                currentImage = image3;
+                break;
+            default:
+                currentImage = image0;
+                break;
+        }
+    }
+
+    public void show(ImageView imageView) {
+        imageView.setImage(new Image(currentImage));
     }
 
     public void animate(final ImageView imageView) {
