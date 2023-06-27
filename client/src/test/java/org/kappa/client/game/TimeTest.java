@@ -11,7 +11,7 @@ class TimeTest {
   void testTime() {
     final var start = 1_000_000_000L;
     final var interval = 500;
-    final var time = new Time(start, interval);
+    final var time = new Time(interval, start);
 
     assertEquals(0, time.getElapsedTimeInMilliseconds());
 

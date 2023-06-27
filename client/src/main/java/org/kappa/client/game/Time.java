@@ -9,24 +9,25 @@ public class Time {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Time.class);
 
-  private final long startTime;
   private final int loopInterval;
-  private long now;
+  private long lastUpdate;
 
 
-  public Time(final long startTime, final int loopInterval) {
-    this.startTime = startTime;
+  public Time(final int loopInterval, final long lastUpdate) {
     this.loopInterval = loopInterval;
+    this.lastUpdate = lastUpdate;
   }
 
 
   public void update(final long now) {
-    this.now = now;
+    this.lastUpdate = now;
   }
+
 
   public boolean isInInterval() {
     return this.isInInterval(this.loopInterval);
   }
+
 
   public boolean isInInterval(final int interval) {
     return Math.round(this.getElapsedTimeInMilliseconds() / 1000D) * 1000 % interval == 0;
@@ -54,7 +55,7 @@ public class Time {
 
 
   private long getTimeElapsed() {
-    return this.now - this.startTime;
+    return 0; // this.now - this.lastUpdate;
   }
 
 
@@ -63,12 +64,8 @@ public class Time {
   }
 
 
-  public long getStartTime() {
-    return this.startTime;
+  public long getLastUpdate() {
+    return this.lastUpdate;
   }
 
-
-  public long getNow() {
-    return this.now;
-  }
 }

@@ -69,7 +69,7 @@ public class RenderSystem implements UpdatableSystem, Listener<EntityCreatedEven
 
     if (time.isInInterval()) {
       // final var entities = this.entityManager.filterEntityByComponentType(RenderComponent.class);
-      LOGGER.debug("Time is now: {}", time.getElapsedTimeInMilliseconds() / time.getLoopInterval());
+//      LOGGER.debug("Time is now: {}", time.getElapsedTimeInMilliseconds() / time.getLoopInterval());
     }
   }
 
