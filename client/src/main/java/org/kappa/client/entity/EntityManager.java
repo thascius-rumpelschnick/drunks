@@ -4,10 +4,7 @@ import org.kappa.client.component.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 
 public class EntityManager {
@@ -47,6 +44,27 @@ public class EntityManager {
     final var componentMap = this.entityComponentMap.get(entityId);
 
     return componentClass.cast(componentMap.get(componentClass));
+  }
+
+
+  public List<Map.Entry<String, Map<Class<? extends Component>, Component>>> filterEntityByComponentType(final Class<? extends Component> componentClass) {
+    return this.entityComponentMap
+        .entrySet()
+        .stream()
+        .filter(
+            (final Map.Entry<String, Map<Class<? extends Component>, Component>> entry) -> {
+              try {
+                final var components = entry.getValue();
+
+                return components.containsKey(componentClass);
+              } catch (final Exception exception) {
+                LOGGER.error(exception.getMessage(), exception);
+
+                return false;
+              }
+            }
+        )
+        .toList();
   }
 
 

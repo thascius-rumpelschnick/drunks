@@ -6,7 +6,10 @@ import org.kappa.client.entity.ClubBuilder;
 import org.kappa.client.entity.EntityManager;
 import org.kappa.client.entity.VomitBuilder;
 import org.kappa.client.event.AttackEvent;
+import org.kappa.client.event.EntityCreatedEvent;
+import org.kappa.client.event.EventPublisher;
 import org.kappa.client.event.Listener;
+import org.kappa.client.game.Time;
 import org.kappa.client.utils.AttackType;
 import org.kappa.client.utils.IdHelper;
 import org.slf4j.Logger;
@@ -15,15 +18,19 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 
 
-public class AttackSystem implements System, Listener<AttackEvent> {
+public class AttackSystem implements UpdatableSystem, Listener<AttackEvent> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AttackSystem.class);
+  private static final EventPublisher PUBLISHER = EventPublisher.getInstance();
 
   private final EntityManager entityManager;
   private final SystemManager systemManager;
 
 
   public AttackSystem(final EntityManager entityManager, final SystemManager systemManager) {
+    Objects.requireNonNull(entityManager);
+    Objects.requireNonNull(systemManager);
+
     this.entityManager = entityManager;
     this.systemManager = systemManager;
   }
@@ -31,8 +38,9 @@ public class AttackSystem implements System, Listener<AttackEvent> {
 
   @Override
   public void updateOnEventReceived(final AttackEvent event) {
-    LOGGER.debug("Event: {}.", event);
     Objects.requireNonNull(event);
+
+    LOGGER.debug("Event: {}.", event);
 
     final var attackType = event.getBody();
     final var attackEntity = IdHelper.createRandomUuid();
@@ -48,6 +56,8 @@ public class AttackSystem implements System, Listener<AttackEvent> {
       this.entityManager.putComponent(attackEntity, vomit.getRenderComponent());
       this.entityManager.putComponent(attackEntity, vomit.getDirectionComponent());
       this.entityManager.putComponent(attackEntity, vomit.getPositionComponent());
+      this.entityManager.putComponent(attackEntity, vomit.getVelocityComponent());
+      this.entityManager.putComponent(attackEntity, vomit.getDamageComponent());
       this.entityManager.putComponent(attackEntity, vomit.getMovementAnimationComponent());
 
     } else if (AttackType.CLUB == attackType) {
@@ -57,16 +67,16 @@ public class AttackSystem implements System, Listener<AttackEvent> {
       this.entityManager.putComponent(attackEntity, club.getRenderComponent());
       this.entityManager.putComponent(attackEntity, club.getDirectionComponent());
       this.entityManager.putComponent(attackEntity, club.getPositionComponent());
+      this.entityManager.putComponent(attackEntity, club.getVelocityComponent());
+      this.entityManager.putComponent(attackEntity, club.getDamageComponent());
       this.entityManager.putComponent(attackEntity, club.getMovementAnimationComponent());
 
     } else {
       LOGGER.error("Unknown attack type: {}.", attackType);
-
       throw new IllegalArgumentException("Unknown attack type.");
     }
 
-    final var renderSystem = this.systemManager.getSystem(RenderSystem.class);
-    renderSystem.addEntityToGameBoard(attackEntity);
+    PUBLISHER.publishEvent(new EntityCreatedEvent(attackEntity));
   }
 
 
@@ -80,6 +90,8 @@ public class AttackSystem implements System, Listener<AttackEvent> {
         .render(direction.getDirection())
         .direction(direction.getDirection())
         .position(position.x(), position.y())
+        .velocity(1)
+        .damage(1)
         .movement()
         .build();
   }
@@ -101,9 +113,7 @@ public class AttackSystem implements System, Listener<AttackEvent> {
 
 
   @Override
-  public void update() {
-
+  public void update(final Time time) {
   }
-
 
 }

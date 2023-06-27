@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -20,6 +21,9 @@ public class CollisionDetectionSystem implements System {
 
 
   public CollisionDetectionSystem(final EntityManager entityManager, final SystemManager systemManager) {
+    Objects.requireNonNull(entityManager);
+    Objects.requireNonNull(systemManager);
+
     this.entityManager = entityManager;
     this.systemManager = systemManager;
   }
@@ -36,9 +40,4 @@ public class CollisionDetectionSystem implements System {
     return this.entityManager.filterEntityByComponent(new PositionComponent(x,y));
   }
 
-
-  @Override
-  public void update() {
-
-  }
 }
