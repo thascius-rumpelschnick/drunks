@@ -13,60 +13,47 @@ import java.util.Objects;
 
 public class DamageAnimationComponent implements Component {
 
-    String state0;
-    String state1;
-    String state2;
-    String state3;
-
     public int currentState;
 
     InputStream currentImage;
 
-    InputStream image0;
-    InputStream image1;
-    InputStream image2;
-    InputStream image3;
+    InputStream state0;
+    InputStream state1;
+    InputStream state2;
+    InputStream state3;
 
     public DamageAnimationComponent(final String state0, final String state1, final String state2, final String state3, final int currentState) {
         Objects.requireNonNull(state0);
-        Objects.requireNonNull(state1);
-        Objects.requireNonNull(state2);
-        Objects.requireNonNull(state3);
 
+        this.currentState = 0;
+    }
+
+    public DamageAnimationComponent(InputStream state0, InputStream state1, InputStream state2, InputStream state3) {
         this.state0 = state0;
         this.state1 = state1;
         this.state2 = state2;
         this.state3 = state3;
 
-        this.currentState = 0;
-    }
-
-    public DamageAnimationComponent(InputStream image0, InputStream image1, InputStream image2, InputStream image3) {
-        this.image0 = image0;
-        this.image1 = image1;
-        this.image2 = image2;
-        this.image3 = image3;
-
-        this.currentImage = image0;
+        this.currentImage = state0;
     }
 
     public void changeCurrentState() {
         currentState = (currentState + 1) % 4;
         switch (currentState) {
             case 0:
-                currentImage = image0;
+                currentImage = state0;
                 break;
             case 1:
-                currentImage = image1;
+                currentImage = state1;
                 break;
             case 2:
-                currentImage = image2;
+                currentImage = state2;
                 break;
             case 3:
-                currentImage = image3;
+                currentImage = state3;
                 break;
             default:
-                currentImage = image0;
+                currentImage = state0;
                 break;
         }
     }
