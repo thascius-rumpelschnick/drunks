@@ -22,18 +22,26 @@ public class DamageAnimationComponent implements Component {
     InputStream state2;
     InputStream state3;
 
-    public DamageAnimationComponent(final String state0, final String state1, final String state2, final String state3, final int currentState) {
+    public DamageAnimationComponent(InputStream state0) {
         Objects.requireNonNull(state0);
+        this.state0 = state0;
 
         this.currentState = 0;
+        this.currentImage = state0;
     }
 
     public DamageAnimationComponent(InputStream state0, InputStream state1, InputStream state2, InputStream state3) {
+        Objects.requireNonNull(state0);
+        Objects.requireNonNull(state1);
+        Objects.requireNonNull(state2);
+        Objects.requireNonNull(state3);
+
         this.state0 = state0;
         this.state1 = state1;
         this.state2 = state2;
         this.state3 = state3;
 
+        this.currentState = 0;
         this.currentImage = state0;
     }
 
