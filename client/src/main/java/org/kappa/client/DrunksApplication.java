@@ -108,44 +108,30 @@ public class DrunksApplication extends Application {
 
     final Stage secondStage = new Stage();
     secondStage.setTitle("Second Stage");
-
     final Pane secondRoot = new Pane();
     final Scene secondScene = new Scene(secondRoot, WIDTH, HEIGHT);
-
-    // Set the background color
     final String hexColor = "#F2FFF5";
     secondRoot.setStyle("-fx-background-color: " + hexColor + ";");
-
     secondStage.setScene(secondScene);
 
-    //TODO: Button der es triggered
-    //TODO: movement 2 constructoren, wie in movement, eine animate methode die aufgerufen wird, der eine bekommt die als array, im wallbuilder kommt es rein
-    //TODO: dropShadow bei statischen und dynamischen entities
-    //TODO: HealthComponent gibt den state
-    //TODO: sprite wechseln und schatten
-
-    //DamageAnimationComponent animationComponent = new DamageAnimationComponent();
-    DamageAnimationComponent animationComponent = new DamageAnimationComponent(getAssetAsStream("wall/wall1.png"), getAssetAsStream("wall/wallDamage1.png"), getAssetAsStream("wall/wallDamage2.png"), getAssetAsStream("wall/wallDamage3.png"));
+    DamageAnimationComponent animationComponent = new DamageAnimationComponent(getAssetAsStream("punk/boydown_1.png"));
+    //DamageAnimationComponent animationComponent = new DamageAnimationComponent(getAssetAsStream("wall/wall1.png"), getAssetAsStream("wall/wallDamage1.png"), getAssetAsStream("wall/wallDamage2.png"), getAssetAsStream("wall/wallDamage3.png"));
 
     Button button = new Button("Animate");
 
     ImageView imageView = new ImageView();
     imageView.setPreserveRatio(true);
-
     imageView.setFitWidth(WIDTH / 10);
     imageView.setFitHeight(HEIGHT / 10);
 
     button.setOnAction(event -> {
-      animationComponent.show(imageView);
-      animationComponent.animate(imageView);
-      animationComponent.changeCurrentState();
+      //animationComponent.damageMultipleImages(imageView);
+      animationComponent.damageSingleImage(imageView);
     });
 
     StackPane root = new StackPane();
-
     root.setAlignment(Pos.BOTTOM_RIGHT);
     StackPane.setMargin(button, new Insets(10));
-
     root.getChildren().addAll(button, imageView);
     secondRoot.getChildren().add(root);
 

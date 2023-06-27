@@ -20,13 +20,11 @@ public class DamageAnimationComponent implements Component {
     InputStream state2;
     InputStream state3;
 
-    //shadow only
     public DamageAnimationComponent(InputStream state0) {
         Objects.requireNonNull(state0);
         this.currentImage = state0;
     }
 
-    //for switch statement and shadow
     public DamageAnimationComponent(InputStream state0, InputStream state1, InputStream state2, InputStream state3) {
         Objects.requireNonNull(state0);
         Objects.requireNonNull(state1);
@@ -63,8 +61,15 @@ public class DamageAnimationComponent implements Component {
         }
     }
 
-    public void show(ImageView imageView) {
+    public void damageMultipleImages(ImageView imageView) {
         imageView.setImage(new Image(currentImage));
+        animate(imageView);
+        changeCurrentState();
+    }
+
+    public void damageSingleImage(ImageView imageView) {
+        imageView.setImage(new Image(currentImage));
+        animate(imageView);
     }
 
     public void animate(final ImageView imageView) {
@@ -108,7 +113,6 @@ public class DamageAnimationComponent implements Component {
             //change Images imageView.setImage(sprite);
         }
 
-        // Create a new instance of AnimationTransition
         public AnimationTransition createTransitionInstance() {
             return new AnimationTransition(imageView);
         }
