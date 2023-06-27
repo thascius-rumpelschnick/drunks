@@ -13,23 +13,20 @@ import java.util.Objects;
 
 public class DamageAnimationComponent implements Component {
 
-    public int currentState;
-
+    private int currentState;
     InputStream currentImage;
-
     InputStream state0;
     InputStream state1;
     InputStream state2;
     InputStream state3;
 
+    //shadow only
     public DamageAnimationComponent(InputStream state0) {
         Objects.requireNonNull(state0);
-        this.state0 = state0;
-
-        this.currentState = 0;
         this.currentImage = state0;
     }
 
+    //for switch statement and shadow
     public DamageAnimationComponent(InputStream state0, InputStream state1, InputStream state2, InputStream state3) {
         Objects.requireNonNull(state0);
         Objects.requireNonNull(state1);
@@ -98,7 +95,7 @@ public class DamageAnimationComponent implements Component {
     }
 
     private class AnimationTransition extends Transition {
-        private ImageView imageView;
+        private final ImageView imageView;
 
         public AnimationTransition(ImageView imageView) {
             this.imageView = imageView;
