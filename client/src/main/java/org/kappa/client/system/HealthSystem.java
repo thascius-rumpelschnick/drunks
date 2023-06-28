@@ -1,5 +1,6 @@
 package org.kappa.client.system;
 
+import org.kappa.client.component.HealthComponent;
 import org.kappa.client.entity.EntityManager;
 import org.kappa.client.event.DamageEvent;
 import org.kappa.client.event.EventPublisher;
@@ -31,10 +32,23 @@ public class HealthSystem implements System, Listener<DamageEvent> {
   public void updateOnEventReceived(final DamageEvent event) {
     Objects.requireNonNull(event);
 
-    LOGGER.debug("HealthSystem.updateOnEventReceived {}", event.getEntity());
+    final var entityId = event.getEntity();
+    final var damage = event.getBody();
 
-    // event.getEntity() -> Id -> entityManager -> Health Component
-    // systemManager.getSystem(AnimationSystem.class) -> animateDamage() -> entityManager -> RenderComponent + DamageAnimationComponen
-    // event.getBody() -> Damage
+    final var health = this.entityManager.getComponent(entityId, HealthComponent.class);
+    health.applyDamage(damage);
+
+    final var animationSystem = this.systemManager.getSystem(AnimationSystem.class);
+    animationSystem.startDamageAnimation(entityId, health.getHealth(), health.hasBeeDistructed());
+
+    if (health.hasBeeDistructed()) {
+      this.removeEntity(entityId);
+    }
+  }
+
+
+  private void removeEntity(final String entityId) {
+    this.systemManager.getSystem(RenderSystem.class).removeEntityFromGameBoard(entityId);
+    this.entityManager.removeEntity(entityId);
   }
 }

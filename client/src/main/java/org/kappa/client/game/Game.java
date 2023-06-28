@@ -51,7 +51,7 @@ public class Game {
     this.player = playerId;
     this.level = level;
     this.timer = new Timer(level.getLevelUpdateInterval(), System.nanoTime());
-    LOGGER.debug("StartTime: {}", this.timer.getLapTime());
+    // LOGGER.debug("StartTime: {}", this.timer.getLapTime());
     this.stage = stage;
 
     this.entityManager = new EntityManager();
@@ -68,8 +68,6 @@ public class Game {
     this.manageSystems();
     this.manageSubscriptions();
     this.initializeGame();
-
-    this.startGame();
   }
 
 
@@ -78,6 +76,7 @@ public class Game {
     this.systemManager.putSystem(this.collisionDetectionSystem);
     this.systemManager.putSystem(this.animationSystem);
     this.systemManager.putSystem(this.nonPlayerEntitySystem);
+    this.systemManager.putSystem(this.healthSystem); // ToDo: Remove later.
   }
 
 
@@ -87,6 +86,7 @@ public class Game {
     PUBLISHER.subscribe(MOVEMENT, this.movementSystem);
     PUBLISHER.subscribe(ATTACK, this.attackSystem);
     PUBLISHER.subscribe(ENTITY_CREATED, this.renderSystem);
+    PUBLISHER.subscribe(ENTITY_REMOVED, this.renderSystem);
     PUBLISHER.subscribe(DAMAGE, this.healthSystem);
 
     PUBLISHER.subscribe(ENTITY_CREATED, this.nonPlayerEntitySystem);
@@ -173,15 +173,18 @@ public class Game {
     if (imageView.getImage().getUrl().endsWith("wall1.png")) {
       final var wall = WallBuilder
           .get()
-          .render(imageView)
           .id(IdHelper.createRandomUuid())
-          .health(4)
+          .render(imageView)
           .position((int) imageView.layoutXProperty().get(), (int) imageView.layoutYProperty().get())
+          .health(4)
+          .damage()
           .build();
 
       this.entityManager.createEntity(wall.getId());
       this.entityManager.putComponent(wall.getId(), wall.getPositionComponent());
       this.entityManager.putComponent(wall.getId(), wall.getRenderComponent());
+      this.entityManager.putComponent(wall.getId(), wall.getHealthComponent());
+      this.entityManager.putComponent(wall.getId(), wall.getDamageAnimationComponent());
 
     } else if (imageView.getImage().getUrl().endsWith("wall2.png")) {
       final var water = WaterBuilder

@@ -133,7 +133,6 @@ public class DrunkBuilder {
     private VelocityComponent velocityComponent;
     private RenderComponent renderComponent;
     private MovementAnimationComponent movementAnimationComponent;
-
     private HealthComponent healthComponent;
 
     private Drunk() {

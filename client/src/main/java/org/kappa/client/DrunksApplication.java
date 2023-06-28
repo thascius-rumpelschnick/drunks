@@ -36,6 +36,7 @@ public class DrunksApplication extends Application {
     applicationManager.newGame(new Game("player", Level.ONE, stage));
 
     stage.show();
+    applicationManager.getGame().ifPresent(Game::startGame);
   }
 
 

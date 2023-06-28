@@ -3,7 +3,7 @@ package org.kappa.client.event;
 import static org.kappa.client.event.EventType.ENTITY_CREATED;
 
 
-public class EntityCreatedEvent extends Event {
+public class EntityCreatedEvent extends EntityEvent {
 
   public EntityCreatedEvent(final String entity) {
     super(entity, ENTITY_CREATED);

@@ -68,8 +68,11 @@ public class MovementSystem implements UpdatableSystem, Listener<MovementEvent> 
         default -> LOGGER.error("PLAYER: WHOOT?");
       }
 
-      if (collisionDetectionSystem.isOutOfBounds(x, y) || collisionDetectionSystem.detectCollision(x, y).isPresent()) {
-        LOGGER.debug("Out of bounds or collision detected: x = {}, y = {}", x, y);
+      if (
+          collisionDetectionSystem.isOutOfBounds(x, y)
+              || collisionDetectionSystem.detectCollision(x, y).anyMatch(e -> !entityId.equals(e.getKey()))
+      ) {
+        // LOGGER.debug("Out of bounds or collision detected: x = {}, y = {}", x, y);
         return;
       }
 

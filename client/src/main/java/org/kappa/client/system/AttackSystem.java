@@ -42,7 +42,7 @@ public class AttackSystem implements UpdatableSystem, Listener<AttackEvent> {
   public void updateOnEventReceived(final AttackEvent event) {
     Objects.requireNonNull(event);
 
-    LOGGER.debug("Event: {}.", event);
+    // LOGGER.debug("Event: {}.", event);
 
     final var attackType = event.getBody();
     final var attackEntity = IdHelper.createRandomUuid();

@@ -4,6 +4,8 @@ import org.kappa.client.component.PositionComponent;
 import org.kappa.client.component.RenderComponent;
 import org.kappa.client.entity.EntityManager;
 import org.kappa.client.event.EntityCreatedEvent;
+import org.kappa.client.event.EntityEvent;
+import org.kappa.client.event.EntityRemovedEvent;
 import org.kappa.client.event.Listener;
 import org.kappa.client.game.Timer;
 import org.kappa.client.ui.GameView;
@@ -13,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 
 
-public class RenderSystem implements UpdatableSystem, Listener<EntityCreatedEvent> {
+public class RenderSystem implements UpdatableSystem, Listener<EntityEvent> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RenderSystem.class);
 
@@ -45,6 +47,17 @@ public class RenderSystem implements UpdatableSystem, Listener<EntityCreatedEven
   }
 
 
+  public void removeEntityFromGameBoard(final String entityId) {
+    Objects.requireNonNull(entityId);
+    Objects.requireNonNull(this.gameView);
+
+    final var renderComponent = this.entityManager.getComponent(entityId, RenderComponent.class);
+    final var boardView = this.gameView.getBoard();
+
+    boardView.getBoard().getChildren().remove(renderComponent.imageView());
+  }
+
+
   public void setGameView(final GameView gameView) {
     this.gameView = gameView;
   }
@@ -56,21 +69,24 @@ public class RenderSystem implements UpdatableSystem, Listener<EntityCreatedEven
 
 
   @Override
-  public void updateOnEventReceived(final EntityCreatedEvent event) {
+  public void updateOnEventReceived(final EntityEvent event) {
     Objects.requireNonNull(event);
 
-    this.addEntityToGameBoard(event.getBody());
+    if (event instanceof EntityCreatedEvent) {
+      this.addEntityToGameBoard(event.getBody());
+    } else if (event instanceof EntityRemovedEvent) {
+      this.removeEntityFromGameBoard(event.getBody());
+    } else {
+      LOGGER.error("Event: {}", event);
+      throw new IllegalArgumentException();
+    }
+
   }
 
 
   @Override
   public void update(final Timer timer) {
     Objects.requireNonNull(timer);
-
-//    if (timer.isNextRound()) {
-      // final var entities = this.entityManager.filterEntityByComponentType(RenderComponent.class);
-//      LOGGER.debug("Time is now: {}", time.getElapsedTimeInMilliseconds() / time.getLoopInterval());
-//    }
   }
 
 }

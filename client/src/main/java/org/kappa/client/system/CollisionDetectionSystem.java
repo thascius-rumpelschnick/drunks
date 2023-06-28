@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.stream.Stream;
 
 
 public class CollisionDetectionSystem implements System {
@@ -36,7 +36,7 @@ public class CollisionDetectionSystem implements System {
         || y >= LayoutValues.GAMEBOARD_HEIGHT;
   }
 
-  public Optional<Map.Entry<String, Map<Class<? extends Component>, Component>>> detectCollision(final int x, final int y) {
+  public Stream<Map.Entry<String, Map<Class<? extends Component>, Component>>> detectCollision(final int x, final int y) {
     return this.entityManager.filterEntityByComponent(new PositionComponent(x,y));
   }
 

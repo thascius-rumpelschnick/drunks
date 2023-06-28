@@ -1,5 +1,6 @@
 package org.kappa.client.system;
 
+import org.kappa.client.component.DamageAnimationComponent;
 import org.kappa.client.component.MovementAnimationComponent;
 import org.kappa.client.component.RenderComponent;
 import org.kappa.client.entity.EntityManager;
@@ -33,6 +34,13 @@ public class AnimationSystem implements UpdatableSystem {
     final var animation = this.entityManager.getComponent(entityId, MovementAnimationComponent.class);
 
     animation.animate(sprite.imageView(), movementDirection);
+  }
+
+  public void startDamageAnimation(final String entityId, final int damage, final boolean hasBeenDestructed) {
+    final var sprite = this.entityManager.getComponent(entityId, RenderComponent.class);
+    final var animation = this.entityManager.getComponent(entityId, DamageAnimationComponent.class);
+
+    animation.animate(sprite.imageView());
   }
 
 

@@ -1,6 +1,9 @@
 package org.kappa.client.system;
 
-import org.kappa.client.component.*;
+import org.kappa.client.component.Component;
+import org.kappa.client.component.DamageComponent;
+import org.kappa.client.component.DirectionComponent;
+import org.kappa.client.component.PositionComponent;
 import org.kappa.client.entity.EntityManager;
 import org.kappa.client.event.*;
 import org.kappa.client.game.Timer;
@@ -44,7 +47,7 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityCr
     // Lots of non player entity related business logic, i.e. vomit movents, cop movements / attacks, kebab rendering...
 
     this.handleDamageLogic();
-    this.handleMovementLogic();
+    // this.handleMovementLogic();
   }
 
 
@@ -55,15 +58,22 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityCr
         .stream()
         .filter(attacker -> this.nonPlayerEntityList.contains(attacker.getKey()))
         .forEach(attacker -> {
-              final var attacked = this.entityManager.filterEntityByComponent(attacker.getValue().get(PositionComponent.class));
+              final var entities = this.entityManager.filterEntityByComponent(attacker.getValue().get(PositionComponent.class));
+              final var attacked = entities.filter(e -> !attacker.getKey().equals(e.getKey())).findFirst();
 
-              if (attacked.isPresent() && attacked.get().getValue().get(HealthComponent.class) != null) {
-                final var entityId = attacked.get().getKey();
-                final var damageComponent = (DamageComponent) attacker.getValue().get(DamageComponent.class);
+              // ToDo: Check if attacker.getValue().get(DamageComponent.class) != null?
+              if (attacked.isPresent()) {
+                try {
+                  final var entityId = attacked.get().getKey();
+                  final var damageComponent = (DamageComponent) attacker.getValue().get(DamageComponent.class);
 
-                PUBLISHER.publishEvent(new DamageEvent(entityId, damageComponent.damage()));
+                  this.removeEntity(attacker);
 
-                this.removeEntity(attacker);
+                  final var event = new DamageEvent(entityId, damageComponent.damage());
+                  PUBLISHER.publishEvent(event);
+                } catch (final Exception exception) {
+                  LOGGER.error("HandleDamageLogic: {}", exception.getMessage(), exception);
+                }
               }
             }
         );
@@ -88,7 +98,10 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityCr
 
 
   private void removeEntity(final Map.Entry<String, Map<Class<? extends Component>, Component>> entityEntry) {
+    PUBLISHER.publishEvent(new EntityRemovedEvent(entityEntry.getKey()));
+
     this.entityManager.removeEntity(entityEntry.getKey());
     this.nonPlayerEntityList.remove(entityEntry.getKey());
+
   }
 }

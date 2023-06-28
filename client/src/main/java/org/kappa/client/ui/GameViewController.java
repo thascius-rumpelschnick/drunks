@@ -42,7 +42,7 @@ public class GameViewController {
 
   @FXML
   private void handleKeyRelease(final KeyEvent event) {
-    LOGGER.debug("Key released.");
+    // LOGGER.debug("Key released.");
 
     final var publisher = EventPublisher.getInstance();
 
