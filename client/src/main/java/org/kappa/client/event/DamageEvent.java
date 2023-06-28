@@ -5,13 +5,17 @@ import static org.kappa.client.event.EventType.DAMAGE;
 
 public class DamageEvent extends Event {
 
-  public DamageEvent(final String entity) {
+  private final int damage;
+
+
+  public DamageEvent(final String entity, final int damage) {
     super(entity, DAMAGE);
+    this.damage = damage;
   }
 
 
   @Override
-  public String getBody() {
-    return this.getEntity();
+  public Integer getBody() {
+    return this.damage;
   }
 }

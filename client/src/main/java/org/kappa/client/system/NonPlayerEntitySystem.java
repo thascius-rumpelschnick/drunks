@@ -2,6 +2,7 @@ package org.kappa.client.system;
 
 import org.kappa.client.component.Component;
 import org.kappa.client.component.DamageComponent;
+import org.kappa.client.component.HealthComponent;
 import org.kappa.client.component.PositionComponent;
 import org.kappa.client.entity.EntityManager;
 import org.kappa.client.event.*;
@@ -53,13 +54,11 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityCr
     for (final Map.Entry<String, Map<Class<? extends Component>, Component>> attackingEntity : damageEntities) {
       if (this.nonPlayerEntityList.contains(attackingEntity.getKey())) {
         final var attackedEntity = this.entityManager.filterEntityByComponent(attackingEntity.getValue().get(PositionComponent.class));
-        // if (attackedEntity.isPresent() && attackedEntity.get().getValue().get(HealthComponent.class) != null) {
-        //   PUBLISHER.publishEvent(new DamageEvent(attackedEntity.get().getKey()));
-        //   LOGGER.debug("Entity: {}", attackedEntity.get().getKey());
-        // }
+        if (attackedEntity.isPresent() && attackedEntity.get().getValue().get(HealthComponent.class) != null) {
+          final var entityId = attackedEntity.get().getKey();
+          final var damageComponent = (DamageComponent) attackingEntity.getValue().get(DamageEvent.class);
 
-        if (attackedEntity.isPresent()) {
-          PUBLISHER.publishEvent(new DamageEvent(attackedEntity.get().getKey()));
+          PUBLISHER.publishEvent(new DamageEvent(entityId, damageComponent.damage()));
           LOGGER.debug("Entity: {}", attackedEntity.get().getKey());
         }
       }

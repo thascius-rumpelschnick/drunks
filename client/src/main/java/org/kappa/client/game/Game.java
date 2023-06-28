@@ -41,6 +41,7 @@ public class Game {
   private final AttackSystem attackSystem;
   private final AnimationSystem animationSystem;
   private final MovementSystem movementSystem;
+  private final HealthSystem healthSystem;
   private final CollisionDetectionSystem collisionDetectionSystem;
 
   private final NonPlayerEntitySystem nonPlayerEntitySystem;
@@ -61,6 +62,7 @@ public class Game {
     this.collisionDetectionSystem = new CollisionDetectionSystem(this.entityManager, this.systemManager);
     this.animationSystem = new AnimationSystem(this.entityManager, this.systemManager);
     this.movementSystem = new MovementSystem(this.entityManager, this.systemManager);
+    this.healthSystem = new HealthSystem(this.entityManager, this.systemManager);
     this.nonPlayerEntitySystem = new NonPlayerEntitySystem(this.entityManager, this.systemManager);
 
     this.manageSystems();
@@ -85,6 +87,8 @@ public class Game {
     PUBLISHER.subscribe(MOVEMENT, this.movementSystem);
     PUBLISHER.subscribe(ATTACK, this.attackSystem);
     PUBLISHER.subscribe(ENTITY_CREATED, this.renderSystem);
+    PUBLISHER.subscribe(DAMAGE, this.healthSystem);
+
     PUBLISHER.subscribe(ENTITY_CREATED, this.nonPlayerEntitySystem);
   }
 
