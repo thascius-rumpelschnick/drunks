@@ -2,8 +2,8 @@ package org.kappa.client.system;
 
 import org.kappa.client.component.Component;
 import org.kappa.client.component.DamageComponent;
-import org.kappa.client.component.DirectionComponent;
 import org.kappa.client.component.PositionComponent;
+import org.kappa.client.component.VelocityComponent;
 import org.kappa.client.entity.EntityManager;
 import org.kappa.client.event.*;
 import org.kappa.client.game.Timer;
@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 
 
-public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityCreatedEvent> {
+public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityEvent> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(NonPlayerEntitySystem.class);
 
@@ -35,10 +35,21 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityCr
 
 
   @Override
-  public void updateOnEventReceived(final EntityCreatedEvent event) {
+  public void updateOnEventReceived(final EntityEvent event) {
     Objects.requireNonNull(event);
 
-    this.nonPlayerEntityList.add(event.getBody());
+    final var entityId = event.getBody();
+
+    if (event instanceof EntityCreatedEvent) {
+      this.nonPlayerEntityList.add(entityId);
+
+    } else if (event instanceof EntityRemovedEvent) {
+      this.removeEntity(entityId);
+
+    } else {
+      LOGGER.error("EntityEvent: {}", event);
+      throw new IllegalArgumentException();
+    }
   }
 
 
@@ -47,7 +58,7 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityCr
     // Lots of non player entity related business logic, i.e. vomit movents, cop movements / attacks, kebab rendering...
 
     this.handleDamageLogic();
-    // this.handleMovementLogic();
+    this.handleMovementLogic();
   }
 
 
@@ -61,7 +72,7 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityCr
               final var entities = this.entityManager.filterEntityByComponent(attacker.getValue().get(PositionComponent.class));
               final var attacked = entities.filter(e -> !attacker.getKey().equals(e.getKey())).findFirst();
 
-              // ToDo: Check if attacker.getValue().get(DamageComponent.class) != null?
+              // ToDo: Check if attacker.getValue().get(DamageComponent .class) != null?
               if (attacked.isPresent()) {
                 try {
                   final var entityId = attacked.get().getKey();
@@ -85,23 +96,28 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityCr
 
     damageEntities
         .stream()
-        .filter(attacker -> this.nonPlayerEntityList.contains(attacker.getKey()))
-        .forEach(attacker -> {
-              final var direction = (DirectionComponent) attacker.getValue().get(DirectionComponent.class);
-              final var position = (PositionComponent) attacker.getValue().get(PositionComponent.class);
+        .filter(e -> this.nonPlayerEntityList.contains(e.getKey()) && e.getValue().get(VelocityComponent.class) != null)
+        .forEach(e -> {
+              final var entityId = e.getKey();
+              final var movementSystem = this.systemManager.getSystem(MovementSystem.class);
 
-              final var collisionDetectionSystem = this.systemManager.getSystem(CollisionDetectionSystem.class);
-
+              movementSystem.moveDamageEntity(entityId);
             }
         );
   }
 
 
   private void removeEntity(final Map.Entry<String, Map<Class<? extends Component>, Component>> entityEntry) {
-    PUBLISHER.publishEvent(new EntityRemovedEvent(entityEntry.getKey()));
+    final var entityId = entityEntry.getKey();
 
-    this.entityManager.removeEntity(entityEntry.getKey());
-    this.nonPlayerEntityList.remove(entityEntry.getKey());
+    PUBLISHER.publishEvent(new EntityRemovedEvent(entityId));
+    this.removeEntity(entityId);
 
+  }
+
+
+  private void removeEntity(final String entityId) {
+    this.entityManager.removeEntity(entityId);
+    this.nonPlayerEntityList.remove(entityId);
   }
 }

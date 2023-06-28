@@ -16,6 +16,11 @@ public record RenderComponent(ImageView imageView) implements Component {
   }
 
 
+  public void update(final PositionComponent positionComponent) {
+    this.update(positionComponent.x(), positionComponent.y());
+  }
+
+
   public void update(final int x, final int y) {
     this.imageView.setLayoutX(x);
     this.imageView.setLayoutY(y);

@@ -25,6 +25,11 @@ public class PositionComponent implements Component {
   }
 
 
+  public void update(final PositionComponent positionComponent) {
+    this.update(positionComponent.x(), positionComponent.y());
+  }
+
+
   public void update(final int x, final int y) {
     this.x = x;
     this.y = y;

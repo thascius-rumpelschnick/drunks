@@ -29,6 +29,11 @@ public class CollisionDetectionSystem implements System {
   }
 
 
+  public boolean isOutOfBounds(final PositionComponent position) {
+    return this.isOutOfBounds(position.x(), position.y());
+  }
+
+
   public boolean isOutOfBounds(final int x, final int y) {
     return x < 0
         || x >= LayoutValues.GAMEBOARD_WITH
@@ -36,8 +41,14 @@ public class CollisionDetectionSystem implements System {
         || y >= LayoutValues.GAMEBOARD_HEIGHT;
   }
 
+
+  public Stream<Map.Entry<String, Map<Class<? extends Component>, Component>>> detectCollision(final PositionComponent position) {
+    return this.detectCollision(position.x(), position.y());
+  }
+
+
   public Stream<Map.Entry<String, Map<Class<? extends Component>, Component>>> detectCollision(final int x, final int y) {
-    return this.entityManager.filterEntityByComponent(new PositionComponent(x,y));
+    return this.entityManager.filterEntityByComponent(new PositionComponent(x, y));
   }
 
 }

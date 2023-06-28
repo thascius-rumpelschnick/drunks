@@ -74,8 +74,10 @@ public class RenderSystem implements UpdatableSystem, Listener<EntityEvent> {
 
     if (event instanceof EntityCreatedEvent) {
       this.addEntityToGameBoard(event.getBody());
+
     } else if (event instanceof EntityRemovedEvent) {
       this.removeEntityFromGameBoard(event.getBody());
+
     } else {
       LOGGER.error("Event: {}", event);
       throw new IllegalArgumentException();

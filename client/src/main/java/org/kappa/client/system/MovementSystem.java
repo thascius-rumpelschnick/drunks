@@ -5,6 +5,8 @@ import org.kappa.client.component.PositionComponent;
 import org.kappa.client.component.RenderComponent;
 import org.kappa.client.component.VelocityComponent;
 import org.kappa.client.entity.EntityManager;
+import org.kappa.client.event.EntityRemovedEvent;
+import org.kappa.client.event.EventPublisher;
 import org.kappa.client.event.Listener;
 import org.kappa.client.event.MovementEvent;
 import org.kappa.client.game.Timer;
@@ -18,6 +20,7 @@ import java.util.Objects;
 public class MovementSystem implements UpdatableSystem, Listener<MovementEvent> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MovementSystem.class);
+  private static final EventPublisher PUBLISHER = EventPublisher.getInstance();
 
   private final EntityManager entityManager;
   private final SystemManager systemManager;
@@ -55,30 +58,62 @@ public class MovementSystem implements UpdatableSystem, Listener<MovementEvent> 
       final var position = this.entityManager.getComponent(entityId, PositionComponent.class);
       final var velocity = this.entityManager.getComponent(entityId, VelocityComponent.class);
 
+      final var newPosition = this.computeNewPosition(position, velocity, movementDirection);
+
       final var collisionDetectionSystem = this.systemManager.getSystem(CollisionDetectionSystem.class);
 
-      var x = position.x();
-      var y = position.y();
-
-      switch (movementDirection) {
-        case UP -> y -= velocity.velocity();
-        case DOWN -> y += velocity.velocity();
-        case LEFT -> x -= velocity.velocity();
-        case RIGHT -> x += velocity.velocity();
-        default -> LOGGER.error("PLAYER: WHOOT?");
-      }
-
       if (
-          collisionDetectionSystem.isOutOfBounds(x, y)
-              || collisionDetectionSystem.detectCollision(x, y).anyMatch(e -> !entityId.equals(e.getKey()))
+          collisionDetectionSystem.isOutOfBounds(newPosition)
+              || collisionDetectionSystem.detectCollision(newPosition).anyMatch(e -> !entityId.equals(e.getKey())
+          )
       ) {
         // LOGGER.debug("Out of bounds or collision detected: x = {}, y = {}", x, y);
         return;
       }
 
-      sprite.update(x, y);
-      position.update(x, y);
+      sprite.update(newPosition);
+      position.update(newPosition);
     }
+  }
+
+
+  public void moveDamageEntity(final String entityId) {
+    final var sprite = this.entityManager.getComponent(entityId, RenderComponent.class);
+    final var position = this.entityManager.getComponent(entityId, PositionComponent.class);
+    final var velocity = this.entityManager.getComponent(entityId, VelocityComponent.class);
+    final var direction = this.entityManager.getComponent(entityId, DirectionComponent.class);
+
+    final var newPosition = this.computeNewPosition(position, velocity, direction.getDirection());
+
+    final var collisionDetectionSystem = this.systemManager.getSystem(CollisionDetectionSystem.class);
+
+    if (collisionDetectionSystem.isOutOfBounds(newPosition)) {
+      PUBLISHER.publishEvent(new EntityRemovedEvent(entityId));
+    }
+
+    sprite.update(newPosition);
+    position.update(newPosition);
+  }
+
+
+  private PositionComponent computeNewPosition(
+      final PositionComponent previousPosition,
+      final VelocityComponent velocity,
+      final Direction movementDirection
+  ) {
+    var x = previousPosition.x();
+    var y = previousPosition.y();
+
+    switch (movementDirection) {
+      case UP -> y -= velocity.velocity();
+      case DOWN -> y += velocity.velocity();
+      case LEFT -> x -= velocity.velocity();
+      case RIGHT -> x += velocity.velocity();
+      default -> LOGGER.error("PLAYER: WHOOT?");
+    }
+
+    return new PositionComponent(x, y);
+
   }
 
 

@@ -36,6 +36,11 @@ public class HealthSystem implements System, Listener<DamageEvent> {
     final var damage = event.getBody();
 
     final var health = this.entityManager.getComponent(entityId, HealthComponent.class);
+
+    if (health == null) {
+      return;
+    }
+
     health.applyDamage(damage);
 
     final var animationSystem = this.systemManager.getSystem(AnimationSystem.class);

@@ -75,8 +75,9 @@ public class Game {
     this.systemManager.putSystem(this.renderSystem);
     this.systemManager.putSystem(this.collisionDetectionSystem);
     this.systemManager.putSystem(this.animationSystem);
+    this.systemManager.putSystem(this.movementSystem);
+
     this.systemManager.putSystem(this.nonPlayerEntitySystem);
-    this.systemManager.putSystem(this.healthSystem); // ToDo: Remove later.
   }
 
 

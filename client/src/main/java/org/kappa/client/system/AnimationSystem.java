@@ -4,7 +4,6 @@ import org.kappa.client.component.DamageAnimationComponent;
 import org.kappa.client.component.MovementAnimationComponent;
 import org.kappa.client.component.RenderComponent;
 import org.kappa.client.entity.EntityManager;
-import org.kappa.client.game.Timer;
 import org.kappa.client.utils.Direction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 
 
-public class AnimationSystem implements UpdatableSystem {
+public class AnimationSystem implements System {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AnimationSystem.class);
 
@@ -36,16 +35,17 @@ public class AnimationSystem implements UpdatableSystem {
     animation.animate(sprite.imageView(), movementDirection);
   }
 
+
   public void startDamageAnimation(final String entityId, final int damage, final boolean hasBeenDestructed) {
     final var sprite = this.entityManager.getComponent(entityId, RenderComponent.class);
     final var animation = this.entityManager.getComponent(entityId, DamageAnimationComponent.class);
 
+    if (animation == null) {
+      LOGGER.error("No animation for render component: {}", sprite.imageView().getImage().getUrl());
+      return;
+    }
+
     animation.animate(sprite.imageView());
   }
 
-
-  @Override
-  public void update(final Timer timer) {
-
-  }
 }
