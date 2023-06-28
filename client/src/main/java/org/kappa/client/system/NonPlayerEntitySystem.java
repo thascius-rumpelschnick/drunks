@@ -1,9 +1,6 @@
 package org.kappa.client.system;
 
-import org.kappa.client.component.Component;
-import org.kappa.client.component.DamageComponent;
-import org.kappa.client.component.HealthComponent;
-import org.kappa.client.component.PositionComponent;
+import org.kappa.client.component.*;
 import org.kappa.client.entity.EntityManager;
 import org.kappa.client.event.*;
 import org.kappa.client.game.Timer;
@@ -44,25 +41,54 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityCr
 
   @Override
   public void update(final Timer timer) {
-    // Lots of non player entity related business logic, i.e. vomit movents, cop movements / attacks, kebab rendering,
+    // Lots of non player entity related business logic, i.e. vomit movents, cop movements / attacks, kebab rendering...
 
-    //    for (final String entityId : this.nonPlayerEntityList) {
-    //      LOGGER.debug("Entity: {} - Component: {}", entityId, this.entityManager.getComponent(entityId, PositionComponent.class));
-    //    }
-
-    final var damageEntities = this.entityManager.filterEntityByComponentType(DamageComponent.class);
-    for (final Map.Entry<String, Map<Class<? extends Component>, Component>> attackingEntity : damageEntities) {
-      if (this.nonPlayerEntityList.contains(attackingEntity.getKey())) {
-        final var attackedEntity = this.entityManager.filterEntityByComponent(attackingEntity.getValue().get(PositionComponent.class));
-        if (attackedEntity.isPresent() && attackedEntity.get().getValue().get(HealthComponent.class) != null) {
-          final var entityId = attackedEntity.get().getKey();
-          final var damageComponent = (DamageComponent) attackingEntity.getValue().get(DamageEvent.class);
-
-          PUBLISHER.publishEvent(new DamageEvent(entityId, damageComponent.damage()));
-          LOGGER.debug("Entity: {}", attackedEntity.get().getKey());
-        }
-      }
-    }
+    this.handleDamageLogic();
+    this.handleMovementLogic();
   }
 
+
+  private void handleDamageLogic() {
+    final var damageEntities = this.entityManager.filterEntityByComponentType(DamageComponent.class);
+
+    damageEntities
+        .stream()
+        .filter(attacker -> this.nonPlayerEntityList.contains(attacker.getKey()))
+        .forEach(attacker -> {
+              final var attacked = this.entityManager.filterEntityByComponent(attacker.getValue().get(PositionComponent.class));
+
+              if (attacked.isPresent() && attacked.get().getValue().get(HealthComponent.class) != null) {
+                final var entityId = attacked.get().getKey();
+                final var damageComponent = (DamageComponent) attacker.getValue().get(DamageComponent.class);
+
+                PUBLISHER.publishEvent(new DamageEvent(entityId, damageComponent.damage()));
+
+                this.removeEntity(attacker);
+              }
+            }
+        );
+  }
+
+
+  private void handleMovementLogic() {
+    final var damageEntities = this.entityManager.filterEntityByComponentType(DamageComponent.class);
+
+    damageEntities
+        .stream()
+        .filter(attacker -> this.nonPlayerEntityList.contains(attacker.getKey()))
+        .forEach(attacker -> {
+              final var direction = (DirectionComponent) attacker.getValue().get(DirectionComponent.class);
+              final var position = (PositionComponent) attacker.getValue().get(PositionComponent.class);
+
+              final var collisionDetectionSystem = this.systemManager.getSystem(CollisionDetectionSystem.class);
+
+            }
+        );
+  }
+
+
+  private void removeEntity(final Map.Entry<String, Map<Class<? extends Component>, Component>> entityEntry) {
+    this.entityManager.removeEntity(entityEntry.getKey());
+    this.nonPlayerEntityList.remove(entityEntry.getKey());
+  }
 }

@@ -36,6 +36,11 @@ public class DrunkBuilder {
     return this;
   }
 
+  public DrunkBuilder health(final int health) {
+    this.entity.healthComponent = new HealthComponent(health);
+
+    return this;
+  }
 
   public DrunkBuilder render(final ImageView imageView) {
     this.entity.renderComponent = new RenderComponent(imageView);
@@ -129,10 +134,14 @@ public class DrunkBuilder {
     private RenderComponent renderComponent;
     private MovementAnimationComponent movementAnimationComponent;
 
+    private HealthComponent healthComponent;
 
     private Drunk() {
     }
 
+    public HealthComponent getHealthComponent() {
+      return this.healthComponent;
+    }
 
     public String getId() {
       return this.id;

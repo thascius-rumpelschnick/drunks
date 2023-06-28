@@ -139,6 +139,7 @@ public class Game {
     final var drunk = DrunkBuilder
         .get()
         .id(this.player)
+        .health(5)
         .render(Direction.UP)
         .direction(Direction.UP)
         .position(0, LayoutValues.GAMEBOARD_HEIGHT - LayoutValues.GAMEBOARD_TILE)
@@ -174,6 +175,7 @@ public class Game {
           .get()
           .render(imageView)
           .id(IdHelper.createRandomUuid())
+          .health(4)
           .position((int) imageView.layoutXProperty().get(), (int) imageView.layoutYProperty().get())
           .build();
 
