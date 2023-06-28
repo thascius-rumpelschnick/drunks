@@ -1,10 +1,7 @@
 package org.kappa.client.entity;
 
 import javafx.scene.image.ImageView;
-import org.kappa.client.component.DirectionComponent;
-import org.kappa.client.component.MovementAnimationComponent;
-import org.kappa.client.component.PositionComponent;
-import org.kappa.client.component.RenderComponent;
+import org.kappa.client.component.*;
 import org.kappa.client.utils.Direction;
 import org.kappa.client.utils.UrlHelper;
 
@@ -35,6 +32,13 @@ public class CopBuilder {
 
   public CopBuilder id(final String uuid) {
     this.entity.id = uuid;
+
+    return this;
+  }
+
+
+  public CopBuilder health(final int health) {
+    this.entity.healthComponent = new HealthComponent(health);
 
     return this;
   }
@@ -72,10 +76,27 @@ public class CopBuilder {
   }
 
 
+  public CopBuilder velocity(final int velocity) {
+    this.entity.velocityComponent = new VelocityComponent(velocity);
+
+    return this;
+  }
+
+
   public CopBuilder movement() {
     this.entity.movementAnimationComponent = new MovementAnimationComponent(UP, DOWN, LEFT, RIGHT);
 
     return this;
+  }
+
+
+  private boolean isValid() {
+    return this.entity.id != null
+        && this.entity.positionComponent != null
+        && this.entity.directionComponent != null
+        && this.entity.velocityComponent != null
+        && this.entity.renderComponent != null
+        && this.entity.movementAnimationComponent != null;
   }
 
 
@@ -95,6 +116,13 @@ public class CopBuilder {
 
 
   public Cop build() {
+    if (!this.isValid()) {
+      throw new IllegalArgumentException();
+    }
+
+    this.entity.renderComponent.imageView().setLayoutX(this.entity.positionComponent.x());
+    this.entity.renderComponent.imageView().setLayoutY(this.entity.positionComponent.y());
+
     return this.entity;
   }
 
@@ -104,13 +132,17 @@ public class CopBuilder {
     private String id;
     private PositionComponent positionComponent;
     private DirectionComponent directionComponent;
+    private VelocityComponent velocityComponent;
     private RenderComponent renderComponent;
     private MovementAnimationComponent movementAnimationComponent;
-
+    private HealthComponent healthComponent;
 
     private Cop() {
     }
 
+    public HealthComponent getHealthComponent() {
+      return this.healthComponent;
+    }
 
     public String getId() {
       return this.id;
@@ -129,6 +161,11 @@ public class CopBuilder {
 
     public DirectionComponent getDirectionComponent() {
       return this.directionComponent;
+    }
+
+
+    public VelocityComponent getVelocityComponent() {
+      return this.velocityComponent;
     }
 
 

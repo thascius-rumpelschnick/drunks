@@ -1,5 +1,7 @@
 package org.kappa.client.system;
 
+import org.kappa.client.game.Timer;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -26,5 +28,15 @@ public class SystemManager {
     Objects.requireNonNull(systemClass);
 
     return systemClass.cast(this.systemMap.get(systemClass));
+  }
+
+
+  public void update(final Timer timer) {
+    this.systemMap.forEach((systemClass, system) -> {
+          if (system instanceof final UpdatableSystem updatableSystem) {
+            updatableSystem.update(timer);
+          }
+        }
+    );
   }
 }

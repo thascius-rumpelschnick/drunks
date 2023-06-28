@@ -1,10 +1,7 @@
 package org.kappa.client.entity;
 
 import javafx.scene.image.ImageView;
-import org.kappa.client.component.DirectionComponent;
-import org.kappa.client.component.MovementAnimationComponent;
-import org.kappa.client.component.PositionComponent;
-import org.kappa.client.component.RenderComponent;
+import org.kappa.client.component.*;
 import org.kappa.client.utils.Direction;
 import org.kappa.client.utils.UrlHelper;
 
@@ -39,6 +36,11 @@ public class DrunkBuilder {
     return this;
   }
 
+  public DrunkBuilder health(final int health) {
+    this.entity.healthComponent = new HealthComponent(health);
+
+    return this;
+  }
 
   public DrunkBuilder render(final ImageView imageView) {
     this.entity.renderComponent = new RenderComponent(imageView);
@@ -72,6 +74,13 @@ public class DrunkBuilder {
   }
 
 
+  public DrunkBuilder velocity(final int velocity) {
+    this.entity.velocityComponent = new VelocityComponent(velocity);
+
+    return this;
+  }
+
+
   public DrunkBuilder movement() {
     this.entity.movementAnimationComponent = new MovementAnimationComponent(UP, DOWN, LEFT, RIGHT);
 
@@ -99,8 +108,8 @@ public class DrunkBuilder {
       throw new IllegalArgumentException();
     }
 
-    this.entity.renderComponent.imageView().setX(this.entity.positionComponent.x());
-    this.entity.renderComponent.imageView().setY(this.entity.positionComponent.y());
+    this.entity.renderComponent.imageView().setLayoutX(this.entity.positionComponent.x());
+    this.entity.renderComponent.imageView().setLayoutY(this.entity.positionComponent.y());
 
     return this.entity;
   }
@@ -110,6 +119,7 @@ public class DrunkBuilder {
     return this.entity.id != null
         && this.entity.positionComponent != null
         && this.entity.directionComponent != null
+        && this.entity.velocityComponent != null
         && this.entity.renderComponent != null
         && this.entity.movementAnimationComponent != null;
   }
@@ -120,13 +130,17 @@ public class DrunkBuilder {
     private String id;
     private PositionComponent positionComponent;
     private DirectionComponent directionComponent;
+    private VelocityComponent velocityComponent;
     private RenderComponent renderComponent;
     private MovementAnimationComponent movementAnimationComponent;
-
+    private HealthComponent healthComponent;
 
     private Drunk() {
     }
 
+    public HealthComponent getHealthComponent() {
+      return this.healthComponent;
+    }
 
     public String getId() {
       return this.id;
@@ -145,6 +159,11 @@ public class DrunkBuilder {
 
     public DirectionComponent getDirectionComponent() {
       return this.directionComponent;
+    }
+
+
+    public VelocityComponent getVelocityComponent() {
+      return this.velocityComponent;
     }
 
 

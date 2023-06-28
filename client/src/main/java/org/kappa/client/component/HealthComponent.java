@@ -1,37 +1,26 @@
 package org.kappa.client.component;
 
 public class HealthComponent implements Component {
-  private final int maxHealth;
-  private int currentHealth;
+  private int health;
 
 
-  public HealthComponent(final int maxHealth) {
-    this.maxHealth = maxHealth;
-    this.currentHealth = maxHealth;
+  public HealthComponent(final int health) {
+    this.health = health;
   }
 
 
-  public int getMaxHealth() {
-    return this.maxHealth;
+  public void applyDamage(final int damage) {
+    this.health -= damage;
   }
 
 
-  public int getCurrentHealth() {
-    return this.currentHealth;
+  public int getHealth() {
+    return this.health;
   }
 
 
-  public void setCurrentHealth(final int currentHealth) {
-    this.currentHealth = Math.max(0, Math.min(currentHealth, this.maxHealth));
+  public boolean hasBeeDistructed() {
+    return this.health <= 0;
   }
 
-
-  public void damage(final int amount) {
-    this.setCurrentHealth(this.currentHealth - amount);
-  }
-
-
-  public boolean isDead() {
-    return this.currentHealth <= 0;
-  }
 }
