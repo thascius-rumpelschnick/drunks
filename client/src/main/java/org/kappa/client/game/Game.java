@@ -182,6 +182,7 @@ public class Game {
       this.entityManager.createEntity(wall.getId());
       this.entityManager.putComponent(wall.getId(), wall.getPositionComponent());
       this.entityManager.putComponent(wall.getId(), wall.getRenderComponent());
+      this.entityManager.putComponent(wall.getId(), wall.getHealthComponent());
 
     } else if (imageView.getImage().getUrl().endsWith("wall2.png")) {
       final var water = WaterBuilder
@@ -196,5 +197,4 @@ public class Game {
       this.entityManager.putComponent(water.getId(), water.getRenderComponent());
     }
   }
-
 }

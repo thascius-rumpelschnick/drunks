@@ -43,21 +43,10 @@ public class DamageAnimationComponent implements Component {
     public void changeCurrentState() {
         currentState = (currentState + 1) % 4;
         switch (currentState) {
-            case 0:
-                currentImage = state0;
-                break;
-            case 1:
-                currentImage = state1;
-                break;
-            case 2:
-                currentImage = state2;
-                break;
-            case 3:
-                currentImage = state3;
-                break;
-            default:
-                currentImage = state0;
-                break;
+            case 1 -> currentImage = state1;
+            case 2 -> currentImage = state2;
+            case 3 -> currentImage = state3;
+            default -> currentImage = state0;
         }
     }
 

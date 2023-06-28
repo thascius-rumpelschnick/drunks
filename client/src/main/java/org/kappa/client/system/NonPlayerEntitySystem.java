@@ -56,8 +56,10 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityCr
         final var attackedEntity = this.entityManager.filterEntityByComponent(attackingEntity.getValue().get(PositionComponent.class));
         if (attackedEntity.isPresent() && attackedEntity.get().getValue().get(HealthComponent.class) != null) {
           final var entityId = attackedEntity.get().getKey();
-          final var damageComponent = (DamageComponent) attackingEntity.getValue().get(DamageEvent.class);
+          final var damageComponent = (DamageComponent) attackingEntity.getValue().get(DamageComponent.class);
 
+          this.entityManager.removeEntity(attackingEntity.getKey());
+          this.nonPlayerEntityList.remove(attackingEntity.getKey());
           PUBLISHER.publishEvent(new DamageEvent(entityId, damageComponent.damage()));
           LOGGER.debug("Entity: {}", attackedEntity.get().getKey());
         }
