@@ -37,6 +37,13 @@ public class CopBuilder {
   }
 
 
+  public CopBuilder health(final int health) {
+    this.entity.healthComponent = new HealthComponent(health);
+
+    return this;
+  }
+
+
   public CopBuilder render(final ImageView imageView) {
     this.entity.renderComponent = new RenderComponent(imageView);
 
@@ -128,11 +135,14 @@ public class CopBuilder {
     private VelocityComponent velocityComponent;
     private RenderComponent renderComponent;
     private MovementAnimationComponent movementAnimationComponent;
-
+    private HealthComponent healthComponent;
 
     private Cop() {
     }
 
+    public HealthComponent getHealthComponent() {
+      return healthComponent;
+    }
 
     public String getId() {
       return this.id;

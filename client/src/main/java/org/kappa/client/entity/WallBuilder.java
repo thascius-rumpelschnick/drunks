@@ -1,6 +1,7 @@
 package org.kappa.client.entity;
 
 import javafx.scene.image.ImageView;
+import org.kappa.client.component.HealthComponent;
 import org.kappa.client.component.PositionComponent;
 import org.kappa.client.component.RenderComponent;
 
@@ -20,6 +21,12 @@ public class WallBuilder {
 
     public WallBuilder id(final String uuid) {
         this.entity.id = uuid;
+
+        return this;
+    }
+
+    public WallBuilder health(final int health) {
+        this.entity.healthComponent = new HealthComponent(health);
 
         return this;
     }
@@ -55,7 +62,13 @@ public class WallBuilder {
         private String id;
         private PositionComponent positionComponent;
         private RenderComponent renderComponent;
+        private HealthComponent healthComponent;
+
         private Wall() {
+        }
+
+        public HealthComponent getHealthComponent() {
+            return healthComponent;
         }
 
         public String getId() {
@@ -69,5 +82,6 @@ public class WallBuilder {
         public PositionComponent getPositionComponent() {
             return this.positionComponent;
         }
+
     }
 }

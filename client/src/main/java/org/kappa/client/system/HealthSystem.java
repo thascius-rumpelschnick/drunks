@@ -31,7 +31,7 @@ public class HealthSystem implements System, Listener<DamageEvent> {
   public void updateOnEventReceived(final DamageEvent event) {
     Objects.requireNonNull(event);
 
-    LOGGER.debug("HealthSystem.updateOnEventReceived {}", event);
+    LOGGER.debug("HealthSystem.updateOnEventReceived {}", event.getEntity());
 
     // event.getEntity() -> Id -> entityManager -> Health Component
     // systemManager.getSystem(AnimationSystem.class) -> animateDamage() -> entityManager -> RenderComponent + DamageAnimationComponen
