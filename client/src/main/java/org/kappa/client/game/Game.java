@@ -30,7 +30,7 @@ public class Game {
 
   private final String player;
   private final Level level;
-  private final Time time;
+  private final Timer timer;
   private AnimationTimer animationTimer;
   private final Stage stage;
 
@@ -39,15 +39,19 @@ public class Game {
 
   private final RenderSystem renderSystem;
   private final AttackSystem attackSystem;
-  private final CollisionDetectionSystem collisionDetectionSystem;
   private final AnimationSystem animationSystem;
   private final MovementSystem movementSystem;
+  private final HealthSystem healthSystem;
+  private final CollisionDetectionSystem collisionDetectionSystem;
+
+  private final NonPlayerEntitySystem nonPlayerEntitySystem;
 
 
   public Game(final String playerId, final Level level, final Stage stage) throws IOException {
     this.player = playerId;
     this.level = level;
-    this.time = new Time(System.nanoTime(), this.level.getLoopInterval());
+    this.timer = new Timer(level.getLevelUpdateInterval(), System.nanoTime());
+    LOGGER.debug("StartTime: {}", this.timer.getLapTime());
     this.stage = stage;
 
     this.entityManager = new EntityManager();
@@ -58,6 +62,8 @@ public class Game {
     this.collisionDetectionSystem = new CollisionDetectionSystem(this.entityManager, this.systemManager);
     this.animationSystem = new AnimationSystem(this.entityManager, this.systemManager);
     this.movementSystem = new MovementSystem(this.entityManager, this.systemManager);
+    this.healthSystem = new HealthSystem(this.entityManager, this.systemManager);
+    this.nonPlayerEntitySystem = new NonPlayerEntitySystem(this.entityManager, this.systemManager);
 
     this.manageSystems();
     this.manageSubscriptions();
@@ -71,6 +77,7 @@ public class Game {
     this.systemManager.putSystem(this.renderSystem);
     this.systemManager.putSystem(this.collisionDetectionSystem);
     this.systemManager.putSystem(this.animationSystem);
+    this.systemManager.putSystem(this.nonPlayerEntitySystem);
   }
 
 
@@ -80,18 +87,20 @@ public class Game {
     PUBLISHER.subscribe(MOVEMENT, this.movementSystem);
     PUBLISHER.subscribe(ATTACK, this.attackSystem);
     PUBLISHER.subscribe(ENTITY_CREATED, this.renderSystem);
+    PUBLISHER.subscribe(DAMAGE, this.healthSystem);
+
+    PUBLISHER.subscribe(ENTITY_CREATED, this.nonPlayerEntitySystem);
   }
 
 
   private void initializeGame() throws IOException {
     final var scene = FXMLHelper.createSceneFromFXML(GameView.FXML_FILE);
-    final var board = (Pane) FXMLHelper.createNodeFromFXML(BoardView.FXML_FILE);
+    final var board = (Pane) FXMLHelper.createNodeFromFXML(this.level.getLevelView());
 
     this.renderSystem.setGameView(new GameView(new BoardView(board), scene));
 
     this.parseBoardElements(board);
     this.addPlayerToGame();
-    // LOGGER.debug("Game: {}", this.entityManager);
 
     this.stage.setScene(this.renderSystem.getGameView().getScene());
 
@@ -105,11 +114,10 @@ public class Game {
 
 
   private void update(final long now) {
-    this.time.update(now);
-
-    LOGGER.debug("START: {}\nNOW: {}\nELASPSED: {}", this.time.getStartTime(), this.time.getNow(), this.time.getElapsedTimeInMilliseconds());
-
-    this.systemManager.update(this.time);
+    if (this.timer.update(now)) {
+      // LOGGER.debug("NOW: {}\nROUND: {}", now, this.timer.getRound());
+      this.systemManager.update(this.timer);
+    }
   }
 
 
@@ -121,7 +129,7 @@ public class Game {
 
 
   public void stopGame() {
-    LOGGER.debug("startGame");
+    LOGGER.debug("stopGame");
 
     this.animationTimer.stop();
   }
@@ -134,7 +142,7 @@ public class Game {
         .render(Direction.UP)
         .direction(Direction.UP)
         .position(0, LayoutValues.GAMEBOARD_HEIGHT - LayoutValues.GAMEBOARD_TILE)
-        .velocity(1)
+        .velocity(LayoutValues.GAMEBOARD_TILE)
         .movement()
         .build();
 
@@ -142,6 +150,7 @@ public class Game {
     this.entityManager.putComponent(drunk.getId(), drunk.getRenderComponent());
     this.entityManager.putComponent(drunk.getId(), drunk.getDirectionComponent());
     this.entityManager.putComponent(drunk.getId(), drunk.getPositionComponent());
+    this.entityManager.putComponent(drunk.getId(), drunk.getVelocityComponent());
     this.entityManager.putComponent(drunk.getId(), drunk.getMovementAnimationComponent());
 
     this.renderSystem.addEntityToGameBoard(drunk.getId());

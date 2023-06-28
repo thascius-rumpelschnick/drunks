@@ -9,8 +9,14 @@ public enum Level {
 
 
     @Override
-    public int getLoopInterval() {
-      return 1000;
+    public int getLevelUpdateInterval() {
+      return 10;
+    }
+
+
+    @Override
+    public int getLevelCops() {
+      return 0;
     }
 
   },
@@ -22,8 +28,14 @@ public enum Level {
 
 
     @Override
-    public int getLoopInterval() {
-      return 1000;
+    public int getLevelUpdateInterval() {
+      return 10;
+    }
+
+
+    @Override
+    public int getLevelCops() {
+      return 0;
     }
 
   },
@@ -35,8 +47,14 @@ public enum Level {
 
 
     @Override
-    public int getLoopInterval() {
-      return 1000;
+    public int getLevelUpdateInterval() {
+      return 10;
+    }
+
+
+    @Override
+    public int getLevelCops() {
+      return 0;
     }
 
   };
@@ -44,9 +62,8 @@ public enum Level {
 
   public abstract String getLevelView();
 
-  /**
-   * Loop interval in milliseconds.
-   **/
-  public abstract int getLoopInterval();
+  public abstract int getLevelUpdateInterval();
+
+  public abstract int getLevelCops();
 
 }

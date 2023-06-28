@@ -1,6 +1,6 @@
 package org.kappa.client.system;
 
-import org.kappa.client.game.Time;
+import org.kappa.client.game.Timer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,10 +31,10 @@ public class SystemManager {
   }
 
 
-  public void update(final Time time) {
+  public void update(final Timer timer) {
     this.systemMap.forEach((systemClass, system) -> {
           if (system instanceof final UpdatableSystem updatableSystem) {
-            updatableSystem.update(time);
+            updatableSystem.update(timer);
           }
         }
     );

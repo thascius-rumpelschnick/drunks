@@ -5,7 +5,7 @@ import org.kappa.client.component.RenderComponent;
 import org.kappa.client.entity.EntityManager;
 import org.kappa.client.event.EntityCreatedEvent;
 import org.kappa.client.event.Listener;
-import org.kappa.client.game.Time;
+import org.kappa.client.game.Timer;
 import org.kappa.client.ui.GameView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,13 +64,13 @@ public class RenderSystem implements UpdatableSystem, Listener<EntityCreatedEven
 
 
   @Override
-  public void update(final Time time) {
-    Objects.requireNonNull(time);
+  public void update(final Timer timer) {
+    Objects.requireNonNull(timer);
 
-    if (time.isInInterval()) {
+//    if (timer.isNextRound()) {
       // final var entities = this.entityManager.filterEntityByComponentType(RenderComponent.class);
-      LOGGER.debug("Time is now: {}", time.getElapsedTimeInMilliseconds() / time.getLoopInterval());
-    }
+//      LOGGER.debug("Time is now: {}", time.getElapsedTimeInMilliseconds() / time.getLoopInterval());
+//    }
   }
 
 }

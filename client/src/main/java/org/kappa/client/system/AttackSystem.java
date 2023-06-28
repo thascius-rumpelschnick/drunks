@@ -2,6 +2,7 @@ package org.kappa.client.system;
 
 import org.kappa.client.component.DirectionComponent;
 import org.kappa.client.component.PositionComponent;
+import org.kappa.client.component.VelocityComponent;
 import org.kappa.client.entity.ClubBuilder;
 import org.kappa.client.entity.EntityManager;
 import org.kappa.client.entity.VomitBuilder;
@@ -9,9 +10,10 @@ import org.kappa.client.event.AttackEvent;
 import org.kappa.client.event.EntityCreatedEvent;
 import org.kappa.client.event.EventPublisher;
 import org.kappa.client.event.Listener;
-import org.kappa.client.game.Time;
+import org.kappa.client.game.Timer;
 import org.kappa.client.utils.AttackType;
 import org.kappa.client.utils.IdHelper;
+import org.kappa.client.utils.LayoutValues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +57,7 @@ public class AttackSystem implements UpdatableSystem, Listener<AttackEvent> {
       this.entityManager.createEntity(attackEntity);
       this.entityManager.putComponent(attackEntity, vomit.getRenderComponent());
       this.entityManager.putComponent(attackEntity, vomit.getDirectionComponent());
-      this.entityManager.putComponent(attackEntity, vomit.getPositionComponent());
+      this.entityManager.putComponent(attackEntity, computePosition(position, direction, vomit.getVelocityComponent()));
       this.entityManager.putComponent(attackEntity, vomit.getVelocityComponent());
       this.entityManager.putComponent(attackEntity, vomit.getDamageComponent());
       this.entityManager.putComponent(attackEntity, vomit.getMovementAnimationComponent());
@@ -66,7 +68,7 @@ public class AttackSystem implements UpdatableSystem, Listener<AttackEvent> {
       this.entityManager.createEntity(attackEntity);
       this.entityManager.putComponent(attackEntity, club.getRenderComponent());
       this.entityManager.putComponent(attackEntity, club.getDirectionComponent());
-      this.entityManager.putComponent(attackEntity, club.getPositionComponent());
+      this.entityManager.putComponent(attackEntity, computePosition(position, direction, club.getVelocityComponent()));
       this.entityManager.putComponent(attackEntity, club.getVelocityComponent());
       this.entityManager.putComponent(attackEntity, club.getDamageComponent());
       this.entityManager.putComponent(attackEntity, club.getMovementAnimationComponent());
@@ -80,6 +82,22 @@ public class AttackSystem implements UpdatableSystem, Listener<AttackEvent> {
   }
 
 
+  private static PositionComponent computePosition(final PositionComponent position, final DirectionComponent direction, final VelocityComponent velocity) {
+    var x = position.x();
+    var y = position.y();
+
+    switch (direction.getDirection()) {
+      case UP -> y -= velocity.velocity();
+      case DOWN -> y += velocity.velocity();
+      case LEFT -> x -= velocity.velocity();
+      case RIGHT -> x += velocity.velocity();
+      default -> LOGGER.error("WHOOT?");
+    }
+
+    return new PositionComponent(x, y);
+  }
+
+
   private VomitBuilder.Vomit getVomit(
       final String vomitId,
       final DirectionComponent direction,
@@ -90,7 +108,7 @@ public class AttackSystem implements UpdatableSystem, Listener<AttackEvent> {
         .render(direction.getDirection())
         .direction(direction.getDirection())
         .position(position.x(), position.y())
-        .velocity(1)
+        .velocity(LayoutValues.GAMEBOARD_TILE)
         .damage(1)
         .movement()
         .build();
@@ -107,13 +125,15 @@ public class AttackSystem implements UpdatableSystem, Listener<AttackEvent> {
         .render(direction.getDirection())
         .direction(direction.getDirection())
         .position(position.x(), position.y())
+        .velocity(LayoutValues.GAMEBOARD_TILE)
+        .damage(1)
         .movement()
         .build();
   }
 
 
   @Override
-  public void update(final Time time) {
+  public void update(final Timer timer) {
   }
 
 }
