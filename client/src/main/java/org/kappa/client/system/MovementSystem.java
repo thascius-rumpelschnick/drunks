@@ -3,12 +3,12 @@ package org.kappa.client.system;
 import org.kappa.client.component.DirectionComponent;
 import org.kappa.client.component.PositionComponent;
 import org.kappa.client.component.RenderComponent;
+import org.kappa.client.component.VelocityComponent;
 import org.kappa.client.entity.EntityManager;
 import org.kappa.client.event.Listener;
 import org.kappa.client.event.MovementEvent;
-import org.kappa.client.game.Time;
+import org.kappa.client.game.Timer;
 import org.kappa.client.utils.Direction;
-import org.kappa.client.utils.LayoutValues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,36 +45,42 @@ public class MovementSystem implements UpdatableSystem, Listener<MovementEvent> 
 
 
   private void move(final String entityId, final Direction movementDirection) {
-    final var sprite = this.entityManager.getComponent(entityId, RenderComponent.class);
     final var direction = this.entityManager.getComponent(entityId, DirectionComponent.class);
-    final var position = this.entityManager.getComponent(entityId, PositionComponent.class);
+    final var previousDirection = direction.getDirection();
 
-    final var collisionDetectionSystem = this.systemManager.getSystem(CollisionDetectionSystem.class);
-
-    var x = position.x();
-    var y = position.y();
-
-    switch (movementDirection) {
-      case UP -> y -= LayoutValues.GAMEBOARD_TILE;
-      case DOWN -> y += LayoutValues.GAMEBOARD_TILE;
-      case LEFT -> x -= LayoutValues.GAMEBOARD_TILE;
-      case RIGHT -> x += LayoutValues.GAMEBOARD_TILE;
-      default -> LOGGER.error("PLAYER: WHOOT?");
-    }
-
-    if (collisionDetectionSystem.isOutOfBounds(x, y) || collisionDetectionSystem.detectCollision(x, y).isPresent()) {
-      LOGGER.debug("Out of bounds or collision detected: x = {}, y = {}", x, y);
-      return;
-    }
-
-    sprite.update(x, y);
     direction.update(movementDirection);
-    position.update(x, y);
+
+    if (movementDirection.compareTo(previousDirection) == 0) {
+      final var sprite = this.entityManager.getComponent(entityId, RenderComponent.class);
+      final var position = this.entityManager.getComponent(entityId, PositionComponent.class);
+      final var velocity = this.entityManager.getComponent(entityId, VelocityComponent.class);
+
+      final var collisionDetectionSystem = this.systemManager.getSystem(CollisionDetectionSystem.class);
+
+      var x = position.x();
+      var y = position.y();
+
+      switch (movementDirection) {
+        case UP -> y -= velocity.velocity();
+        case DOWN -> y += velocity.velocity();
+        case LEFT -> x -= velocity.velocity();
+        case RIGHT -> x += velocity.velocity();
+        default -> LOGGER.error("PLAYER: WHOOT?");
+      }
+
+      if (collisionDetectionSystem.isOutOfBounds(x, y) || collisionDetectionSystem.detectCollision(x, y).isPresent()) {
+        LOGGER.debug("Out of bounds or collision detected: x = {}, y = {}", x, y);
+        return;
+      }
+
+      sprite.update(x, y);
+      position.update(x, y);
+    }
   }
 
 
   @Override
-  public void update(final Time time) {
+  public void update(final Timer timer) {
 
   }
 

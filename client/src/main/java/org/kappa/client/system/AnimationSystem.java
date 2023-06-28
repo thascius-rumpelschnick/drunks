@@ -3,7 +3,7 @@ package org.kappa.client.system;
 import org.kappa.client.component.MovementAnimationComponent;
 import org.kappa.client.component.RenderComponent;
 import org.kappa.client.entity.EntityManager;
-import org.kappa.client.game.Time;
+import org.kappa.client.game.Timer;
 import org.kappa.client.utils.Direction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class AnimationSystem implements UpdatableSystem {
 
 
   @Override
-  public void update(final Time time) {
+  public void update(final Timer timer) {
 
   }
 }

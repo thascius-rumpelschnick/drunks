@@ -89,6 +89,10 @@ public class EntityManager {
         .findFirst();
   }
 
+  public void removeEntity(final String entityId) {
+    this.entityComponentMap.remove(entityId);
+  }
+
 
   @Override
   public String toString() {

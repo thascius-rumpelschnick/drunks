@@ -7,7 +7,7 @@ public abstract class Event {
   private final EventType eventType;
 
 
-  protected Event(final String entity, final EventType eventType) {
+  public Event(final String entity, final EventType eventType) {
     this.entity = entity;
     this.eventType = eventType;
   }
