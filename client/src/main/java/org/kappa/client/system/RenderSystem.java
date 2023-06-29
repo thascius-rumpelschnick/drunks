@@ -7,7 +7,6 @@ import org.kappa.client.event.EntityCreatedEvent;
 import org.kappa.client.event.EntityEvent;
 import org.kappa.client.event.EntityRemovedEvent;
 import org.kappa.client.event.Listener;
-import org.kappa.client.game.Timer;
 import org.kappa.client.ui.GameView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 
 
-public class RenderSystem implements UpdatableSystem, Listener<EntityEvent> {
+public class RenderSystem implements System, Listener<EntityEvent> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RenderSystem.class);
 
@@ -83,12 +82,6 @@ public class RenderSystem implements UpdatableSystem, Listener<EntityEvent> {
       throw new IllegalArgumentException();
     }
 
-  }
-
-
-  @Override
-  public void update(final Timer timer) {
-    Objects.requireNonNull(timer);
   }
 
 }
