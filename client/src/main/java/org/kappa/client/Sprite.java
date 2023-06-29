@@ -6,6 +6,7 @@ import javafx.scene.input.KeyCode;
 
 import java.net.URL;
 
+@Deprecated
 public class Sprite {
 
   private final ImageView imageView;
