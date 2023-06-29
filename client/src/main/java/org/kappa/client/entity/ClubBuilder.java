@@ -10,10 +10,10 @@ import java.util.Objects;
 
 public class ClubBuilder {
 
-  private static final String[] UP = {"boyup_1.png", "boyup_2.png"};
-  private static final String[] DOWN = {"boydown_1.png", "boydown_2.png"};
-  private static final String[] LEFT = {"boyleft_1.png", "boyleft_2.png"};
-  private static final String[] RIGHT = {"boyright_1.png", "boyright_2.png"};
+  private static final String[] UP = {"club/club_1.png", "club_2.png"};
+  private static final String[] DOWN = {"club/club_2.png", "club_2.png"};
+  private static final String[] LEFT = {"club/club_1.png", "club_2.png"};
+  private static final String[] RIGHT = {"club/club_2.png", "club_2.png"};
 
   private Club entity;
 

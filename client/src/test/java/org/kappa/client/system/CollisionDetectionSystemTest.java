@@ -2,14 +2,17 @@ package org.kappa.client.system;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.kappa.client.component.PositionComponent;
 import org.kappa.client.entity.EntityManager;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
+@ExtendWith(MockitoExtension.class)
 class CollisionDetectionSystemTest {
 
   private static final String ENTITY_ID = "some-entity";
@@ -27,24 +30,24 @@ class CollisionDetectionSystemTest {
   }
 
 
- /* @Test
+  @Test
   void testDetectCollision_GivenEmptyEntityComponentMap_ShouldReturnEmptyOptional() {
     final var collision = this.collisionDetectionSystem.detectCollision(ZERO, ZERO);
 
-    assertTrue(collision.isEmpty());
-  }*/
+    assertEquals(0, collision.count());
+  }
 
 
- /* @Test
+  @Test
   void testDetectCollision_GivenEntityComponentMapWithEntityAndNoComponents_ShouldReturnEmptyOptional() {
     this.entityManager.createEntity(ENTITY_ID);
     final var collision = this.collisionDetectionSystem.detectCollision(ZERO, ZERO);
 
-    assertTrue(collision.isEmpty());
-  }*/
+    assertEquals(0, collision.count());
+  }
 
 
- /* @Test
+  @Test
   void testDetectCollision_GivenEntityComponentMapWithEntityAndComponent_ShouldReturnEntryWithEntityAndComponent() {
     // Given
     final var position = new PositionComponent(ZERO, ZERO);
@@ -53,11 +56,12 @@ class CollisionDetectionSystemTest {
 
     // When
     final var collision = this.collisionDetectionSystem.detectCollision(ZERO, ZERO);
+    final var entry = collision.findFirst();
 
     // Then
-    assertTrue(collision.isPresent());
-    assertEquals(ENTITY_ID, collision.get().getKey());
-    assertEquals(position, collision.get().getValue().get(PositionComponent.class));
-  }*/
+    assertTrue(entry.isPresent());
+    assertEquals(ENTITY_ID, entry.get().getKey());
+    assertEquals(position, entry.get().getValue().get(PositionComponent.class));
+  }
 
 }

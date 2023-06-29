@@ -45,13 +45,15 @@ public class GameViewController {
     // LOGGER.debug("Key released.");
 
     final var publisher = EventPublisher.getInstance();
+    final var game = APPLICATION_MANAGER.getGame().orElseThrow();
+    final var playerId = game.getPlayer().getId();
 
     switch (event.getCode()) {
-      case UP -> publisher.publishEvent(new MovementEvent("player", UP));
-      case DOWN -> publisher.publishEvent(new MovementEvent("player", DOWN));
-      case LEFT -> publisher.publishEvent(new MovementEvent("player", LEFT));
-      case RIGHT -> publisher.publishEvent(new MovementEvent("player", RIGHT));
-      case SPACE -> publisher.publishEvent(new AttackEvent("player", VOMIT));
+      case UP -> publisher.publishEvent(new MovementEvent(playerId, UP));
+      case DOWN -> publisher.publishEvent(new MovementEvent(playerId, DOWN));
+      case LEFT -> publisher.publishEvent(new MovementEvent(playerId, LEFT));
+      case RIGHT -> publisher.publishEvent(new MovementEvent(playerId, RIGHT));
+      case SPACE -> publisher.publishEvent(new AttackEvent(playerId, VOMIT));
       default -> LOGGER.error("GameViewController: Whoot?");
     }
   }

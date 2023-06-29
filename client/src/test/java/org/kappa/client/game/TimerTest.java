@@ -13,10 +13,10 @@ class TimerTest {
     final var timer = new Timer(10, start);
 
     timer.update(start + 59_000_000L);
-    assertEquals(0, timer.getRound());
-
-    timer.update(start + 59_000_000L);
     assertEquals(1, timer.getRound());
+
+    timer.update(start + 59_000_000L + 59_000_000L);
+    assertEquals(2, timer.getRound());
   }
 
 }

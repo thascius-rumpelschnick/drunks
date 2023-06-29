@@ -9,7 +9,6 @@ import org.kappa.client.event.EntityRemovedEvent;
 import org.kappa.client.event.EventPublisher;
 import org.kappa.client.event.Listener;
 import org.kappa.client.event.MovementEvent;
-import org.kappa.client.game.Timer;
 import org.kappa.client.utils.Direction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 
 
-public class MovementSystem implements UpdatableSystem, Listener<MovementEvent> {
+public class MovementSystem implements System, Listener<MovementEvent> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MovementSystem.class);
   private static final EventPublisher PUBLISHER = EventPublisher.getInstance();
@@ -58,7 +57,7 @@ public class MovementSystem implements UpdatableSystem, Listener<MovementEvent> 
       final var position = this.entityManager.getComponent(entityId, PositionComponent.class);
       final var velocity = this.entityManager.getComponent(entityId, VelocityComponent.class);
 
-      final var newPosition = this.computeNewPosition(position, velocity, movementDirection);
+      final var newPosition = computeNewPosition(position, velocity, movementDirection);
 
       final var collisionDetectionSystem = this.systemManager.getSystem(CollisionDetectionSystem.class);
 
@@ -83,7 +82,7 @@ public class MovementSystem implements UpdatableSystem, Listener<MovementEvent> 
     final var velocity = this.entityManager.getComponent(entityId, VelocityComponent.class);
     final var direction = this.entityManager.getComponent(entityId, DirectionComponent.class);
 
-    final var newPosition = this.computeNewPosition(position, velocity, direction.getDirection());
+    final var newPosition = computeNewPosition(position, velocity, direction.getDirection());
 
     final var collisionDetectionSystem = this.systemManager.getSystem(CollisionDetectionSystem.class);
 
@@ -96,7 +95,7 @@ public class MovementSystem implements UpdatableSystem, Listener<MovementEvent> 
   }
 
 
-  private PositionComponent computeNewPosition(
+  public static PositionComponent computeNewPosition(
       final PositionComponent previousPosition,
       final VelocityComponent velocity,
       final Direction movementDirection
@@ -113,13 +112,6 @@ public class MovementSystem implements UpdatableSystem, Listener<MovementEvent> 
     }
 
     return new PositionComponent(x, y);
-
-  }
-
-
-  @Override
-  public void update(final Timer timer) {
-
   }
 
 }
