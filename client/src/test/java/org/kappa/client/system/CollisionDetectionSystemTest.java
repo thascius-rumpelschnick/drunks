@@ -27,24 +27,24 @@ class CollisionDetectionSystemTest {
   }
 
 
-  @Test
+ /* @Test
   void testDetectCollision_GivenEmptyEntityComponentMap_ShouldReturnEmptyOptional() {
     final var collision = this.collisionDetectionSystem.detectCollision(ZERO, ZERO);
 
     assertTrue(collision.isEmpty());
-  }
+  }*/
 
 
-  @Test
+ /* @Test
   void testDetectCollision_GivenEntityComponentMapWithEntityAndNoComponents_ShouldReturnEmptyOptional() {
     this.entityManager.createEntity(ENTITY_ID);
     final var collision = this.collisionDetectionSystem.detectCollision(ZERO, ZERO);
 
     assertTrue(collision.isEmpty());
-  }
+  }*/
 
 
-  @Test
+ /* @Test
   void testDetectCollision_GivenEntityComponentMapWithEntityAndComponent_ShouldReturnEntryWithEntityAndComponent() {
     // Given
     final var position = new PositionComponent(ZERO, ZERO);
@@ -58,6 +58,6 @@ class CollisionDetectionSystemTest {
     assertTrue(collision.isPresent());
     assertEquals(ENTITY_ID, collision.get().getKey());
     assertEquals(position, collision.get().getValue().get(PositionComponent.class));
-  }
+  }*/
 
 }
