@@ -117,6 +117,7 @@ public class DrunkBuilder {
 
   private boolean isValid() {
     return this.entity.id != null
+        && this.entity.healthComponent != null
         && this.entity.positionComponent != null
         && this.entity.directionComponent != null
         && this.entity.velocityComponent != null

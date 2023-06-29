@@ -10,10 +10,10 @@ import java.util.Objects;
 
 public class VomitBuilder {
 
-  private static final String[] UP = {"vomit/vomit_1.png", "vomit/vomit_2.png"};
-  private static final String[] DOWN = {"vomit/vomit_1.png", "vomit/vomit_2.png"};
-  private static final String[] LEFT = {"vomit/vomit_1.png", "vomit/vomit_2.png"};
-  private static final String[] RIGHT = {"vomit/vomit_1.png", "vomit/vomit_2.png"};
+  private static final String[] UP = {"vomit/vomit_up.png", "vomit/vomit_up.png"};
+  private static final String[] DOWN = {"vomit/vomit_down.png", "vomit/vomit_down.png"};
+  private static final String[] LEFT = {"vomit/vomit_left.png", "vomit/vomit_left.png"};
+  private static final String[] RIGHT = {"vomit/vomit_right.png", "vomit/vomit_right.png"};
 
   private Vomit entity;
 
