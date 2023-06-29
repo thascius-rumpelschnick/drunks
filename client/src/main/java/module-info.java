@@ -11,6 +11,7 @@ module org.kappa.client {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires Java.WebSocket;
+    requires java.net.http;
 
     opens org.kappa.client to javafx.fxml;
     opens org.kappa.client.ui to javafx.fxml;

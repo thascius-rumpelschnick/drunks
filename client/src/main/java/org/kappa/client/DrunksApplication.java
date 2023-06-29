@@ -143,18 +143,6 @@ public class DrunksApplication extends Application {
         primaryStageRoot.getChildren().add(tile);
       }
     }
-
-    // to add images in the background
-      /*  for (int col = 0; col < numCols; col++) {
-            for (int row = 0; row < numRows; row++) {
-                ImageView tileImageView = new ImageView(new Image("shoe.png"));
-                tileImageView.setFitWidth(TILE_SIZE);
-                tileImageView.setFitHeight(TILE_SIZE);
-                tileImageView.setLayoutX(col * TILE_SIZE);
-                tileImageView.setLayoutY(row * TILE_SIZE);
-                primaryStageRoot.getChildren().add(tileImageView);
-            }
-        }*/
   }
 
 
@@ -172,7 +160,6 @@ public class DrunksApplication extends Application {
     return new Sprite(imagePath, imageUpPath, imageDownPath, imageLeftPath, imageRightPath,
         imageLeftRunningPath, imageRightRunningPath, (double) WIDTH / 2, (double) HEIGHT / 2, 10);
   }
-
 
   private static InputStream getAssetAsStream(final String assetName) {
     return DrunksApplication.class.getResourceAsStream(ASSETS_PATH + assetName);
