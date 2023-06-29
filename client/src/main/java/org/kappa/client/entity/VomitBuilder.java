@@ -1,10 +1,7 @@
 package org.kappa.client.entity;
 
 import javafx.scene.image.ImageView;
-import org.kappa.client.component.DirectionComponent;
-import org.kappa.client.component.MovementAnimationComponent;
-import org.kappa.client.component.PositionComponent;
-import org.kappa.client.component.RenderComponent;
+import org.kappa.client.component.*;
 import org.kappa.client.utils.Direction;
 import org.kappa.client.utils.UrlHelper;
 
@@ -13,10 +10,10 @@ import java.util.Objects;
 
 public class VomitBuilder {
 
-  private static final String[] UP = {"vomit/vomit_1.png", "vomit/vomit_2.png"};
-  private static final String[] DOWN = {"vomit/vomit_1.png", "vomit/vomit_2.png"};
-  private static final String[] LEFT = {"vomit/vomit_1.png", "vomit/vomit_2.png"};
-  private static final String[] RIGHT = {"vomit/vomit_1.png", "vomit/vomit_2.png"};
+  private static final String[] UP = {"vomit/vomit_up.png", "vomit/vomit_up.png"};
+  private static final String[] DOWN = {"vomit/vomit_down.png", "vomit/vomit_down.png"};
+  private static final String[] LEFT = {"vomit/vomit_left.png", "vomit/vomit_left.png"};
+  private static final String[] RIGHT = {"vomit/vomit_right.png", "vomit/vomit_right.png"};
 
   private Vomit entity;
 
@@ -72,6 +69,20 @@ public class VomitBuilder {
   }
 
 
+  public VomitBuilder velocity(final int velocity) {
+    this.entity.velocityComponent = new VelocityComponent(velocity);
+
+    return this;
+  }
+
+
+  public VomitBuilder damage(final int damage) {
+    this.entity.damageComponent = new DamageComponent(damage);
+
+    return this;
+  }
+
+
   public VomitBuilder movement() {
     this.entity.movementAnimationComponent = new MovementAnimationComponent(UP, DOWN, LEFT, RIGHT);
 
@@ -99,8 +110,8 @@ public class VomitBuilder {
       throw new IllegalArgumentException();
     }
 
-    this.entity.renderComponent.imageView().setX(this.entity.positionComponent.x());
-    this.entity.renderComponent.imageView().setY(this.entity.positionComponent.y());
+    this.entity.renderComponent.imageView().setLayoutX(this.entity.positionComponent.x());
+    this.entity.renderComponent.imageView().setLayoutY(this.entity.positionComponent.y());
 
     return this.entity;
   }
@@ -110,6 +121,8 @@ public class VomitBuilder {
     return this.entity.id != null
         && this.entity.positionComponent != null
         && this.entity.directionComponent != null
+        && this.entity.velocityComponent != null
+        && this.entity.damageComponent != null
         && this.entity.renderComponent != null
         && this.entity.movementAnimationComponent != null;
   }
@@ -120,6 +133,8 @@ public class VomitBuilder {
     private String id;
     private PositionComponent positionComponent;
     private DirectionComponent directionComponent;
+    private VelocityComponent velocityComponent;
+    private DamageComponent damageComponent;
     private RenderComponent renderComponent;
     private MovementAnimationComponent movementAnimationComponent;
 
@@ -145,6 +160,16 @@ public class VomitBuilder {
 
     public DirectionComponent getDirectionComponent() {
       return this.directionComponent;
+    }
+
+
+    public VelocityComponent getVelocityComponent() {
+      return this.velocityComponent;
+    }
+
+
+    public DamageComponent getDamageComponent() {
+      return this.damageComponent;
     }
 
 

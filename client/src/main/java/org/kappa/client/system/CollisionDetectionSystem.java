@@ -8,7 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 
 public class CollisionDetectionSystem implements System {
@@ -19,9 +20,17 @@ public class CollisionDetectionSystem implements System {
   private final SystemManager systemManager;
 
 
-  public CollisionDetectionSystem(EntityManager entityManager, SystemManager systemManager) {
+  public CollisionDetectionSystem(final EntityManager entityManager, final SystemManager systemManager) {
+    Objects.requireNonNull(entityManager);
+    Objects.requireNonNull(systemManager);
+
     this.entityManager = entityManager;
     this.systemManager = systemManager;
+  }
+
+
+  public boolean isOutOfBounds(final PositionComponent position) {
+    return this.isOutOfBounds(position.x(), position.y());
   }
 
 
@@ -32,13 +41,14 @@ public class CollisionDetectionSystem implements System {
         || y >= LayoutValues.GAMEBOARD_HEIGHT;
   }
 
-  public Optional<Map.Entry<String, Map<Class<? extends Component>, Component>>> detectCollision(final int x, final int y) {
-    return this.entityManager.filterEntityByComponent(new PositionComponent(x,y));
+
+  public Stream<Map.Entry<String, Map<Class<? extends Component>, Component>>> detectCollision(final PositionComponent position) {
+    return this.detectCollision(position.x(), position.y());
   }
 
 
-  @Override
-  public void update() {
-
+  public Stream<Map.Entry<String, Map<Class<? extends Component>, Component>>> detectCollision(final int x, final int y) {
+    return this.entityManager.filterEntityByComponent(new PositionComponent(x, y));
   }
+
 }

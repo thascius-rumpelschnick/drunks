@@ -1,10 +1,7 @@
 package org.kappa.client.entity;
 
 import javafx.scene.image.ImageView;
-import org.kappa.client.component.DirectionComponent;
-import org.kappa.client.component.MovementAnimationComponent;
-import org.kappa.client.component.PositionComponent;
-import org.kappa.client.component.RenderComponent;
+import org.kappa.client.component.*;
 import org.kappa.client.utils.Direction;
 import org.kappa.client.utils.UrlHelper;
 
@@ -13,10 +10,10 @@ import java.util.Objects;
 
 public class CopBuilder {
 
-  private static final String[] UP = {"enemy/copup_1.png", "enemy/copup_1.png"};
-  private static final String[] DOWN = {"enemy/copdown_1.png", "enemy/copdown_1.png"};
-  private static final String[] LEFT = {"enemy/copleft_1.png", "enemy/copleft_1.png"};
-  private static final String[] RIGHT = {"enemy/copright_1.png", "enemy/copright_1.png"};
+  private static final String[] UP = {"cop/copup_1.png", "cop/copup_1.png"};
+  private static final String[] DOWN = {"cop/copdown_1.png", "cop/copdown_1.png"};
+  private static final String[] LEFT = {"cop/copleft_1.png", "cop/copleft_1.png"};
+  private static final String[] RIGHT = {"cop/copright_1.png", "cop/copright_1.png"};
 
   private Cop entity;
 
@@ -35,6 +32,13 @@ public class CopBuilder {
 
   public CopBuilder id(final String uuid) {
     this.entity.id = uuid;
+
+    return this;
+  }
+
+
+  public CopBuilder health(final int health) {
+    this.entity.healthComponent = new HealthComponent(health);
 
     return this;
   }
@@ -72,14 +76,35 @@ public class CopBuilder {
   }
 
 
-  public CopBuilder movement() {
+  public CopBuilder velocity(final int velocity) {
+    this.entity.velocityComponent = new VelocityComponent(velocity);
+
+    return this;
+  }
+
+
+  public CopBuilder movementAnimation() {
     this.entity.movementAnimationComponent = new MovementAnimationComponent(UP, DOWN, LEFT, RIGHT);
 
     return this;
   }
 
 
+  public CopBuilder damageAnimation() {
+    this.entity.damageAnimationComponent = new DamageAnimationComponent();
+
+    return this;
+  }
+
+  public CopBuilder attack() {
+    this.entity.attackComponent = new AttackComponent();
+
+    return this;
+  }
+
+
   private String[] getSpriteDirection(final Direction direction) throws IllegalArgumentException {
+
     final String[] d;
 
     switch (direction) {
@@ -94,7 +119,27 @@ public class CopBuilder {
   }
 
 
+  private boolean isValid() {
+    return this.entity.id != null
+        && this.entity.healthComponent != null
+        && this.entity.positionComponent != null
+        && this.entity.directionComponent != null
+        && this.entity.velocityComponent != null
+        && this.entity.renderComponent != null
+        && this.entity.damageAnimationComponent != null
+        && this.entity.movementAnimationComponent != null
+        && this.entity.attackComponent != null;
+  }
+
+
   public Cop build() {
+    if (!this.isValid()) {
+      throw new IllegalArgumentException();
+    }
+
+    this.entity.renderComponent.imageView().setLayoutX(this.entity.positionComponent.x());
+    this.entity.renderComponent.imageView().setLayoutY(this.entity.positionComponent.y());
+
     return this.entity;
   }
 
@@ -102,10 +147,14 @@ public class CopBuilder {
   public static class Cop {
 
     private String id;
+    private HealthComponent healthComponent;
     private PositionComponent positionComponent;
     private DirectionComponent directionComponent;
+    private VelocityComponent velocityComponent;
     private RenderComponent renderComponent;
     private MovementAnimationComponent movementAnimationComponent;
+    private DamageAnimationComponent damageAnimationComponent;
+    private AttackComponent attackComponent;
 
 
     private Cop() {
@@ -117,8 +166,8 @@ public class CopBuilder {
     }
 
 
-    public RenderComponent getRenderComponent() {
-      return this.renderComponent;
+    public HealthComponent getHealthComponent() {
+      return this.healthComponent;
     }
 
 
@@ -132,8 +181,28 @@ public class CopBuilder {
     }
 
 
+    public VelocityComponent getVelocityComponent() {
+      return this.velocityComponent;
+    }
+
+
+    public RenderComponent getRenderComponent() {
+      return this.renderComponent;
+    }
+
+
     public MovementAnimationComponent getMovementAnimationComponent() {
       return this.movementAnimationComponent;
+    }
+
+
+    public DamageAnimationComponent getDamageAnimationComponent() {
+      return this.damageAnimationComponent;
+    }
+
+
+    public AttackComponent getAttackComponent() {
+      return this.attackComponent;
     }
 
   }

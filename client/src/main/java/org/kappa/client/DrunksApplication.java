@@ -12,6 +12,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.kappa.client.game.Game;
+import org.kappa.client.game.Player;
+import org.kappa.client.utils.Level;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,9 +34,10 @@ public class DrunksApplication extends Application {
     stage.setResizable(false);
 
     final var applicationManager = ApplicationManager.getInstance();
-    applicationManager.newGame(new Game("player", null, stage));
+    applicationManager.newGame(new Game(new Player("player", "player", 0), Level.ONE, stage));
 
     stage.show();
+    applicationManager.getGame().ifPresent(Game::startGame);
   }
 
 

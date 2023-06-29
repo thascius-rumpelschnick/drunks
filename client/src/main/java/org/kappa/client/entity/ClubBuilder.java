@@ -1,10 +1,7 @@
 package org.kappa.client.entity;
 
 import javafx.scene.image.ImageView;
-import org.kappa.client.component.DirectionComponent;
-import org.kappa.client.component.MovementAnimationComponent;
-import org.kappa.client.component.PositionComponent;
-import org.kappa.client.component.RenderComponent;
+import org.kappa.client.component.*;
 import org.kappa.client.utils.Direction;
 import org.kappa.client.utils.UrlHelper;
 
@@ -13,10 +10,10 @@ import java.util.Objects;
 
 public class ClubBuilder {
 
-  private static final String[] UP = {"boyup_1.png", "boyup_2.png"};
-  private static final String[] DOWN = {"boydown_1.png", "boydown_2.png"};
-  private static final String[] LEFT = {"boyleft_1.png", "boyleft_2.png"};
-  private static final String[] RIGHT = {"boyright_1.png", "boyright_2.png"};
+  private static final String[] UP = {"club/club_1.png", "club_2.png"};
+  private static final String[] DOWN = {"club/club_2.png", "club_2.png"};
+  private static final String[] LEFT = {"club/club_1.png", "club_2.png"};
+  private static final String[] RIGHT = {"club/club_2.png", "club_2.png"};
 
   private Club entity;
 
@@ -72,6 +69,20 @@ public class ClubBuilder {
   }
 
 
+  public ClubBuilder velocity(final int velocity) {
+    this.entity.velocityComponent = new VelocityComponent(velocity);
+
+    return this;
+  }
+
+
+  public ClubBuilder damage(final int damage) {
+    this.entity.damageComponent = new DamageComponent(damage);
+
+    return this;
+  }
+
+
   public ClubBuilder movement() {
     this.entity.movementAnimationComponent = new MovementAnimationComponent(UP, DOWN, LEFT, RIGHT);
 
@@ -99,8 +110,8 @@ public class ClubBuilder {
       throw new IllegalArgumentException();
     }
 
-    this.entity.renderComponent.imageView().setX(this.entity.positionComponent.x());
-    this.entity.renderComponent.imageView().setY(this.entity.positionComponent.y());
+    this.entity.renderComponent.imageView().setLayoutX(this.entity.positionComponent.x());
+    this.entity.renderComponent.imageView().setLayoutY(this.entity.positionComponent.y());
 
     return this.entity;
   }
@@ -110,6 +121,8 @@ public class ClubBuilder {
     return this.entity.id != null
         && this.entity.positionComponent != null
         && this.entity.directionComponent != null
+        && this.entity.velocityComponent != null
+        && this.entity.damageComponent != null
         && this.entity.renderComponent != null
         && this.entity.movementAnimationComponent != null;
   }
@@ -120,6 +133,8 @@ public class ClubBuilder {
     private String id;
     private PositionComponent positionComponent;
     private DirectionComponent directionComponent;
+    private VelocityComponent velocityComponent;
+    private DamageComponent damageComponent;
     private RenderComponent renderComponent;
     private MovementAnimationComponent movementAnimationComponent;
 
@@ -145,6 +160,16 @@ public class ClubBuilder {
 
     public DirectionComponent getDirectionComponent() {
       return this.directionComponent;
+    }
+
+
+    public VelocityComponent getVelocityComponent() {
+      return this.velocityComponent;
+    }
+
+
+    public DamageComponent getDamageComponent() {
+      return this.damageComponent;
     }
 
 

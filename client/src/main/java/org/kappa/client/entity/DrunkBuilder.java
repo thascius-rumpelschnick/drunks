@@ -1,10 +1,7 @@
 package org.kappa.client.entity;
 
 import javafx.scene.image.ImageView;
-import org.kappa.client.component.DirectionComponent;
-import org.kappa.client.component.MovementAnimationComponent;
-import org.kappa.client.component.PositionComponent;
-import org.kappa.client.component.RenderComponent;
+import org.kappa.client.component.*;
 import org.kappa.client.utils.Direction;
 import org.kappa.client.utils.UrlHelper;
 
@@ -35,6 +32,13 @@ public class DrunkBuilder {
 
   public DrunkBuilder id(final String uuid) {
     this.entity.id = uuid;
+
+    return this;
+  }
+
+
+  public DrunkBuilder health(final int health) {
+    this.entity.healthComponent = new HealthComponent(health);
 
     return this;
   }
@@ -72,8 +76,22 @@ public class DrunkBuilder {
   }
 
 
-  public DrunkBuilder movement() {
+  public DrunkBuilder velocity(final int velocity) {
+    this.entity.velocityComponent = new VelocityComponent(velocity);
+
+    return this;
+  }
+
+
+  public DrunkBuilder movementAnimation() {
     this.entity.movementAnimationComponent = new MovementAnimationComponent(UP, DOWN, LEFT, RIGHT);
+
+    return this;
+  }
+
+
+  public DrunkBuilder damageAnimation() {
+    this.entity.damageAnimationComponent = new DamageAnimationComponent();
 
     return this;
   }
@@ -94,34 +112,40 @@ public class DrunkBuilder {
   }
 
 
+  private boolean isValid() {
+    return this.entity.id != null
+        && this.entity.healthComponent != null
+        && this.entity.positionComponent != null
+        && this.entity.directionComponent != null
+        && this.entity.velocityComponent != null
+        && this.entity.renderComponent != null
+        && this.entity.damageAnimationComponent != null
+        && this.entity.movementAnimationComponent != null;
+  }
+
+
   public Drunk build() {
     if (!this.isValid()) {
       throw new IllegalArgumentException();
     }
 
-    this.entity.renderComponent.imageView().setX(this.entity.positionComponent.x());
-    this.entity.renderComponent.imageView().setY(this.entity.positionComponent.y());
+    this.entity.renderComponent.imageView().setLayoutX(this.entity.positionComponent.x());
+    this.entity.renderComponent.imageView().setLayoutY(this.entity.positionComponent.y());
 
     return this.entity;
-  }
-
-
-  private boolean isValid() {
-    return this.entity.id != null
-        && this.entity.positionComponent != null
-        && this.entity.directionComponent != null
-        && this.entity.renderComponent != null
-        && this.entity.movementAnimationComponent != null;
   }
 
 
   public static class Drunk {
 
     private String id;
+    private HealthComponent healthComponent;
     private PositionComponent positionComponent;
     private DirectionComponent directionComponent;
+    private VelocityComponent velocityComponent;
     private RenderComponent renderComponent;
     private MovementAnimationComponent movementAnimationComponent;
+    private DamageAnimationComponent damageAnimationComponent;
 
 
     private Drunk() {
@@ -133,8 +157,8 @@ public class DrunkBuilder {
     }
 
 
-    public RenderComponent getRenderComponent() {
-      return this.renderComponent;
+    public HealthComponent getHealthComponent() {
+      return this.healthComponent;
     }
 
 
@@ -148,10 +172,25 @@ public class DrunkBuilder {
     }
 
 
+    public VelocityComponent getVelocityComponent() {
+      return this.velocityComponent;
+    }
+
+
+    public RenderComponent getRenderComponent() {
+      return this.renderComponent;
+    }
+
+
     public MovementAnimationComponent getMovementAnimationComponent() {
       return this.movementAnimationComponent;
     }
 
+
+    public DamageAnimationComponent getDamageAnimationComponent() {
+      return this.damageAnimationComponent;
+    }
   }
+
 
 }

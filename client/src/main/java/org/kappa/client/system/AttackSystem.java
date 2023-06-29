@@ -2,28 +2,37 @@ package org.kappa.client.system;
 
 import org.kappa.client.component.DirectionComponent;
 import org.kappa.client.component.PositionComponent;
+import org.kappa.client.component.VelocityComponent;
 import org.kappa.client.entity.ClubBuilder;
 import org.kappa.client.entity.EntityManager;
 import org.kappa.client.entity.VomitBuilder;
 import org.kappa.client.event.AttackEvent;
+import org.kappa.client.event.EntityCreatedEvent;
+import org.kappa.client.event.EventPublisher;
 import org.kappa.client.event.Listener;
+import org.kappa.client.game.Timer;
 import org.kappa.client.utils.AttackType;
 import org.kappa.client.utils.IdHelper;
+import org.kappa.client.utils.LayoutValues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
 
-public class AttackSystem implements System, Listener<AttackEvent> {
+public class AttackSystem implements UpdatableSystem, Listener<AttackEvent> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AttackSystem.class);
+  private static final EventPublisher PUBLISHER = EventPublisher.getInstance();
 
   private final EntityManager entityManager;
   private final SystemManager systemManager;
 
 
-  public AttackSystem(EntityManager entityManager, SystemManager systemManager) {
+  public AttackSystem(final EntityManager entityManager, final SystemManager systemManager) {
+    Objects.requireNonNull(entityManager);
+    Objects.requireNonNull(systemManager);
+
     this.entityManager = entityManager;
     this.systemManager = systemManager;
   }
@@ -31,42 +40,61 @@ public class AttackSystem implements System, Listener<AttackEvent> {
 
   @Override
   public void updateOnEventReceived(final AttackEvent event) {
-    LOGGER.debug("Event: {}.", event);
     Objects.requireNonNull(event);
+
+    // LOGGER.debug("Event: {}.", event);
 
     final var attackType = event.getBody();
     final var attackEntity = IdHelper.createRandomUuid();
 
     final var entityId = event.getEntity();
-    final PositionComponent position = entityManager.getComponent(entityId, PositionComponent.class);
-    final DirectionComponent direction = entityManager.getComponent(entityId, DirectionComponent.class);
+    final PositionComponent position = this.entityManager.getComponent(entityId, PositionComponent.class);
+    final DirectionComponent direction = this.entityManager.getComponent(entityId, DirectionComponent.class);
 
-    if (AttackType.VOMIT.equals(attackType)) {
+    if (AttackType.VOMIT == attackType) {
       final var vomit = this.getVomit(attackEntity, direction, position);
 
       this.entityManager.createEntity(attackEntity);
       this.entityManager.putComponent(attackEntity, vomit.getRenderComponent());
       this.entityManager.putComponent(attackEntity, vomit.getDirectionComponent());
-      this.entityManager.putComponent(attackEntity, vomit.getPositionComponent());
+      this.entityManager.putComponent(attackEntity, computePosition(position, direction, vomit.getVelocityComponent()));
+      this.entityManager.putComponent(attackEntity, vomit.getVelocityComponent());
+      this.entityManager.putComponent(attackEntity, vomit.getDamageComponent());
       this.entityManager.putComponent(attackEntity, vomit.getMovementAnimationComponent());
 
-    } else if (AttackType.CLUB.equals(attackType)) {
+    } else if (AttackType.CLUB == attackType) {
       final var club = this.getClub(attackEntity, direction, position);
 
       this.entityManager.createEntity(attackEntity);
       this.entityManager.putComponent(attackEntity, club.getRenderComponent());
       this.entityManager.putComponent(attackEntity, club.getDirectionComponent());
-      this.entityManager.putComponent(attackEntity, club.getPositionComponent());
+      this.entityManager.putComponent(attackEntity, computePosition(position, direction, club.getVelocityComponent()));
+      this.entityManager.putComponent(attackEntity, club.getVelocityComponent());
+      this.entityManager.putComponent(attackEntity, club.getDamageComponent());
       this.entityManager.putComponent(attackEntity, club.getMovementAnimationComponent());
 
     } else {
       LOGGER.error("Unknown attack type: {}.", attackType);
-
       throw new IllegalArgumentException("Unknown attack type.");
     }
 
-    final var renderSystem = systemManager.getSystem(RenderSystem.class);
-    renderSystem.addEntityToGameBoard(attackEntity);
+    PUBLISHER.publishEvent(new EntityCreatedEvent(attackEntity));
+  }
+
+
+  private static PositionComponent computePosition(final PositionComponent position, final DirectionComponent direction, final VelocityComponent velocity) {
+    var x = position.x();
+    var y = position.y();
+
+    switch (direction.getDirection()) {
+      case UP -> y -= velocity.velocity();
+      case DOWN -> y += velocity.velocity();
+      case LEFT -> x -= velocity.velocity();
+      case RIGHT -> x += velocity.velocity();
+      default -> LOGGER.error("WHOOT?");
+    }
+
+    return new PositionComponent(x, y);
   }
 
 
@@ -80,6 +108,8 @@ public class AttackSystem implements System, Listener<AttackEvent> {
         .render(direction.getDirection())
         .direction(direction.getDirection())
         .position(position.x(), position.y())
+        .velocity(LayoutValues.GAMEBOARD_TILE)
+        .damage(1)
         .movement()
         .build();
   }
@@ -95,15 +125,15 @@ public class AttackSystem implements System, Listener<AttackEvent> {
         .render(direction.getDirection())
         .direction(direction.getDirection())
         .position(position.x(), position.y())
+        .velocity(LayoutValues.GAMEBOARD_TILE)
+        .damage(1)
         .movement()
         .build();
   }
 
 
   @Override
-  public void update() {
-
+  public void update(final Timer timer) {
   }
-
 
 }

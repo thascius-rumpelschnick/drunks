@@ -6,6 +6,7 @@ import javafx.scene.input.KeyCode;
 
 import java.net.URL;
 
+@Deprecated
 public class Sprite {
 
   private final ImageView imageView;
@@ -23,32 +24,32 @@ public class Sprite {
   private boolean isRunningRight;
 
   public Sprite(
-      String imagePath,
-      String imageUpPath,
-      String imageDownPath,
-      String imageLeftPath,
-      String imageRightPath,
-      String imageLeftRunningPath,
-      String imageRightRunningPath,
-      double x,
-      double y,
-      double speed
+      final String imagePath,
+      final String imageUpPath,
+      final String imageDownPath,
+      final String imageLeftPath,
+      final String imageRightPath,
+      final String imageLeftRunningPath,
+      final String imageRightRunningPath,
+      final double x,
+      final double y,
+      final double speed
   ) {
 
-    URL imageUrl = this.getClass().getResource(imagePath);
-    URL imageUpUrl = this.getClass().getResource(imageUpPath);
-    URL imageDownUrl = this.getClass().getResource(imageDownPath);
-    URL imageLeftUrl = this.getClass().getResource(imageLeftPath);
-    URL imageRightUrl = this.getClass().getResource(imageRightPath);
-    URL imageLeftRunningUrl = this.getClass().getResource(imageLeftRunningPath);
-    URL imageRightRunningUrl = this.getClass().getResource(imageRightRunningPath);
+    final URL imageUrl = this.getClass().getResource(imagePath);
+    final URL imageUpUrl = this.getClass().getResource(imageUpPath);
+    final URL imageDownUrl = this.getClass().getResource(imageDownPath);
+    final URL imageLeftUrl = this.getClass().getResource(imageLeftPath);
+    final URL imageRightUrl = this.getClass().getResource(imageRightPath);
+    final URL imageLeftRunningUrl = this.getClass().getResource(imageLeftRunningPath);
+    final URL imageRightRunningUrl = this.getClass().getResource(imageRightRunningPath);
 
     if (imageUrl == null || imageUpUrl == null || imageDownUrl == null || imageLeftUrl == null ||
         imageRightUrl == null || imageLeftRunningUrl == null || imageRightRunningUrl == null) {
       throw new IllegalArgumentException("Image not found");
     }
 
-    Image image = new Image(imageUrl.toString());
+    final Image image = new Image(imageUrl.toString());
     this.imageUp = new Image(imageUpUrl.toString());
     this.imageDown = new Image(imageDownUrl.toString());
     this.imageLeft = new Image(imageLeftUrl.toString());
@@ -70,7 +71,7 @@ public class Sprite {
     return this.imageView;
   }
 
-  public void move(KeyCode keyCode) {
+  public void move(final KeyCode keyCode) {
     double newX = this.x;
     double newY = this.y;
 
@@ -115,11 +116,11 @@ public class Sprite {
     this.imageView.setLayoutY(this.y);
   }
 
-  public void setRunningLeft(boolean runningLeft) {
+  public void setRunningLeft(final boolean runningLeft) {
     this.isRunningLeft = runningLeft;
   }
 
-  public void setRunningRight(boolean runningRight) {
+  public void setRunningRight(final boolean runningRight) {
     this.isRunningRight = runningRight;
   }
 }
