@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Scene?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Scene fx:id="gameViewScene" onKeyReleased="#handleKeyRelease" stylesheets="@style.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.kappa.client.ui.GameViewController">
+   <root>
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="864.0" prefWidth="1280.0" style="-fx-background-color: #F2FFF5;">
+         <children>
+            <TextField id="firstTextField" prefHeight="26.0" prefWidth="1518.0" scaleX="0.4" scaleY="2.0" style="-fx-background-color: white;" translateY="200.0">
+               <VBox.margin>
+                  <Insets left="50.0" right="50.0" top="70.0" />
+               </VBox.margin>
+            </TextField>
+            <Text fill="#65b7e6" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" translateX="405.0" translateY="220.0">
+               <font>
+                  <Font name="Arial" size="35.0" />
+               </font>
+            </Text>
+            <TextField prefHeight="26.0" prefWidth="1518.0" scaleX="0.4" scaleY="2.0" style="-fx-background-color: white;" translateY="270.0">
+               <VBox.margin>
+                  <Insets left="50.0" right="50.0" />
+               </VBox.margin>
+            </TextField>
+            <Text fill="#65b7e6" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" translateX="405.0" translateY="300.0">
+               <font>
+                  <Font name="Arial" size="35.0" />
+               </font>
+            </Text>
+            <Button mnemonicParsing="false" scaleX="2.0" scaleY="2.0" style="-fx-background-color: #65b7e6;" text="Sign up" textFill="WHITE" translateX="684.0" translateY="357.0">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+               </padding>
+            </Button>
+            <Button mnemonicParsing="false" scaleX="2.0" scaleY="2.0" style="-fx-background-color: #65b7e6;" text="Login" textFill="WHITE" translateX="500.0" translateY="330.0">
+               <padding>
+                  <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+               </padding>
+            </Button>
+            <Button id="PlayWithoutRegistration" mnemonicParsing="false" scaleX="2.0" scaleY="2.0" scaleZ="2.0" style="-fx-background-color: #65b7e6;" text="Play without registration" textFill="WHITE" translateX="550.0" translateY="380.0">
+               <padding>
+                  <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+               </padding>
+            </Button>
+         </children>
+      </VBox>
+   </root>
+</Scene>
