@@ -16,7 +16,13 @@ public enum Level {
 
     @Override
     public int getLevelCops() {
-      return 0;
+      return 5;
+    }
+
+
+    @Override
+    public int getLevelCopsMaxHealth() {
+      return 1;
     }
 
   },
@@ -35,7 +41,13 @@ public enum Level {
 
     @Override
     public int getLevelCops() {
-      return 0;
+      return 10;
+    }
+
+
+    @Override
+    public int getLevelCopsMaxHealth() {
+      return 3;
     }
 
   },
@@ -54,7 +66,13 @@ public enum Level {
 
     @Override
     public int getLevelCops() {
-      return 0;
+      return 15;
+    }
+
+
+    @Override
+    public int getLevelCopsMaxHealth() {
+      return 5;
     }
 
   };
@@ -65,5 +83,7 @@ public enum Level {
   public abstract int getLevelUpdateInterval();
 
   public abstract int getLevelCops();
+
+  public abstract int getLevelCopsMaxHealth();
 
 }

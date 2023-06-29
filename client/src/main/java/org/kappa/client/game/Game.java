@@ -79,6 +79,7 @@ public class Game {
     PUBLISHER.subscribe(DAMAGE, this.systemManager.getSystem(HealthSystem.class));
 
     PUBLISHER.subscribe(ENTITY_CREATED, this.systemManager.getSystem(NonPlayerEntitySystem.class));
+    PUBLISHER.subscribe(ENTITY_REMOVED, this.systemManager.getSystem(NonPlayerEntitySystem.class));
   }
 
 
@@ -138,15 +139,18 @@ public class Game {
         .direction(Direction.UP)
         .position(0, LayoutValues.GAMEBOARD_HEIGHT - LayoutValues.GAMEBOARD_TILE)
         .velocity(LayoutValues.GAMEBOARD_TILE)
-        .movement()
+        .movementAnimation()
+        .damageAnimation()
         .build();
 
     this.entityManager.createEntity(drunk.getId());
+    this.entityManager.putComponent(drunk.getId(), drunk.getHealthComponent());
     this.entityManager.putComponent(drunk.getId(), drunk.getRenderComponent());
     this.entityManager.putComponent(drunk.getId(), drunk.getDirectionComponent());
     this.entityManager.putComponent(drunk.getId(), drunk.getPositionComponent());
     this.entityManager.putComponent(drunk.getId(), drunk.getVelocityComponent());
     this.entityManager.putComponent(drunk.getId(), drunk.getMovementAnimationComponent());
+    this.entityManager.putComponent(drunk.getId(), drunk.getDamageAnimationComponent());
 
     this.systemManager.getSystem(RenderSystem.class).addEntityToGameBoard(drunk.getId());
   }

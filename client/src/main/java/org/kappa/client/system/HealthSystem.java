@@ -2,10 +2,7 @@ package org.kappa.client.system;
 
 import org.kappa.client.component.HealthComponent;
 import org.kappa.client.entity.EntityManager;
-import org.kappa.client.event.DamageEvent;
-import org.kappa.client.event.EventPublisher;
-import org.kappa.client.event.Listener;
-import org.kappa.client.event.Publisher;
+import org.kappa.client.event.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,16 +41,11 @@ public class HealthSystem implements System, Listener<DamageEvent> {
     health.applyDamage(damage);
 
     final var animationSystem = this.systemManager.getSystem(AnimationSystem.class);
-    animationSystem.startDamageAnimation(entityId, health.getHealth(), health.hasBeeDistructed());
+    animationSystem.startDamageAnimation(entityId, health.getHealth(), health.hasBeenDestructed());
 
-    if (health.hasBeeDistructed()) {
-      this.removeEntity(entityId);
+    if (health.hasBeenDestructed()) {
+      PUBLISHER.publishEvent(new EntityRemovedEvent(entityId));
     }
   }
 
-
-  private void removeEntity(final String entityId) {
-    this.systemManager.getSystem(RenderSystem.class).removeEntityFromGameBoard(entityId);
-    this.entityManager.removeEntity(entityId);
-  }
 }
