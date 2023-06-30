@@ -213,7 +213,6 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityEv
     return Direction.valueOf(directionValues[this.random.nextInt(directionValues.length)].name());
   }
 
-
   private void handleDynamicEntityAttack(final Level level, final Timer timer) {
     final var canShoot = this.canDo(timer);
 

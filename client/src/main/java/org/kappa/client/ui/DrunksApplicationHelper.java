@@ -51,28 +51,29 @@ public class DrunksApplicationHelper {
         Button newGameButton = (Button) root.lookup("#newGame");
 
         quitButton.setOnAction(e -> stage.close());
-        newGameButton.setOnAction(e -> {
-            startMainApplication(stage);
-        });
+        newGameButton.setOnAction(e -> startMainApplication(stage));
     }
 
     public static void startApplication(Stage stage) {
-        loadFXMLAndShow(stage, WELCOME_FXML_FILE, DrunksApplication.WELCOME_SCREEN_DURATION, () -> {
-            loadFXMLAndShow(stage, WELCOME_PUNK_FXML_FILE, DrunksApplication.WELCOME_PUNK_SCREEN_DURATION, () -> {
-                VBox root = loadFXML(stage, LOGIN_FXML_FILE);
-                assert root != null;
-                Button playWithoutRegistrationButton = (Button) root.lookup("#PlayWithoutRegistration");
-                stage.show();
 
-                playWithoutRegistrationButton.setOnAction(event -> {
-                    stage.close();
-                    startMainApplication(stage);
-                });
+        loadFXMLAndShow(stage, WELCOME_FXML_FILE, DrunksApplication.WELCOME_SCREEN_DURATION, () -> loadFXMLAndShow(stage, WELCOME_PUNK_FXML_FILE, DrunksApplication.WELCOME_PUNK_SCREEN_DURATION, () -> {
+            VBox root = loadFXML(stage, LOGIN_FXML_FILE);
+            assert root != null;
+            Button playWithoutRegistrationButton = (Button) root.lookup("#PlayWithoutRegistration");
+            stage.show();
+
+            playWithoutRegistrationButton.setOnAction(event -> {
+                stage.close();
+                startMainApplication(stage);
             });
-        });
+        }));
     }
 
-    private static <T extends Parent> void loadFXMLAndShow(Stage stage, String file, int duration, Runnable nextAction) {
+    /*private void updateCopIcon() {
+        NonPlayerEntitySystem.getCopCount();
+    }*/
+
+    private static void loadFXMLAndShow(Stage stage, String file, int duration, Runnable nextAction) {
         VBox root = loadFXML(stage, file);
         stage.show();
 
