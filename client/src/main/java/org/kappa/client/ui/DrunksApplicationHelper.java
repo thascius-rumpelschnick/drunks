@@ -17,16 +17,15 @@ import org.kappa.client.utils.Level;
 
 import java.io.IOException;
 
-public class ApplicationHelper {
+public class DrunksApplicationHelper {
 
     public static final String WELCOME_FXML_FILE = "welcome-view.fxml";
+    public static final String WELCOME_PUNK_FXML_FILE = "welcome-punk-view.fxml";
     public static final String LOGIN_FXML_FILE = "login-view.fxml";
 
-    public ApplicationHelper() {
-    }
 
     public static void startMainApplication(Stage stage) {
-        final var applicationManager = ApplicationManager.getInstance();
+        ApplicationManager applicationManager = ApplicationManager.getInstance();
         try {
             applicationManager.newGame(new Game(new Player("player", "player", 0), Level.ONE, stage));
         } catch (IOException e) {
@@ -37,27 +36,33 @@ public class ApplicationHelper {
     }
 
     public static void startApplication(Stage stage) {
-        FXMLStageLoaderHelper(stage, WELCOME_FXML_FILE);
+        loadFXMLAndShow(stage, WELCOME_FXML_FILE, DrunksApplication.WELCOME_SCREEN_DURATION, () -> {
+            loadFXMLAndShow(stage, WELCOME_PUNK_FXML_FILE, DrunksApplication.WELCOME_SCREEN_DURATION, () -> {
+                VBox root = loadFXML(stage, LOGIN_FXML_FILE);
+                assert root != null;
+                Button playWithoutRegistrationButton = (Button) root.lookup("#PlayWithoutRegistration");
+                stage.show();
+
+                playWithoutRegistrationButton.setOnAction(event -> {
+                    stage.close();
+                    startMainApplication(stage);
+                });
+            });
+        });
+    }
+
+    private static void loadFXMLAndShow(Stage stage, String file, int duration, Runnable nextAction) {
+        VBox root = loadFXML(stage, file);
         stage.show();
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(DrunksApplication.WELCOME_SCREEN_DURATION), event -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(duration), event -> {
             stage.close();
-
-            VBox root = FXMLStageLoaderHelper(stage, LOGIN_FXML_FILE);
-
-            Button playWithoutRegistrationButton = (Button) root.lookup("#PlayWithoutRegistration");
-            stage.show();
-
-            playWithoutRegistrationButton.setOnAction(secondEvent -> {
-                stage.close();
-
-                startMainApplication(stage);
-            });
+            nextAction.run();
         }));
         timeline.play();
     }
 
-    public static <T extends Parent> T FXMLStageLoaderHelper(Stage stage, String file) {
+    private static <T extends Parent> T loadFXML(Stage stage, String file) {
         FXMLLoader fxmlLoader = new FXMLLoader(DrunksApplication.class.getResource(file));
         try {
             T root = fxmlLoader.load();
@@ -69,5 +74,4 @@ public class ApplicationHelper {
         }
         return null;
     }
-
 }

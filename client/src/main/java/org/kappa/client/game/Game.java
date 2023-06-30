@@ -13,7 +13,7 @@ import org.kappa.client.event.EventPublisher;
 import org.kappa.client.system.*;
 import org.kappa.client.ui.BoardView;
 import org.kappa.client.ui.GameView;
-import org.kappa.client.ui.ApplicationHelper;
+import org.kappa.client.ui.DrunksApplicationHelper;
 import org.kappa.client.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +38,7 @@ public class Game {
   private final EntityManager entityManager;
   private final SystemManager systemManager;
 
-  private final ApplicationHelper application;
+  private final DrunksApplicationHelper application;
 
 
 
@@ -52,7 +52,7 @@ public class Game {
 
     this.entityManager = new EntityManager();
     this.systemManager = new SystemManager();
-    this.application = new ApplicationHelper();
+    this.application = new DrunksApplicationHelper();
 
     this.manageSystems();
     this.manageSubscriptions();
