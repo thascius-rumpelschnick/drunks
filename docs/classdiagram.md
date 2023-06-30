@@ -1,0 +1,3 @@
+# Classdiagram
+
+![Klassenmodell](./Klassenmodell.png)
