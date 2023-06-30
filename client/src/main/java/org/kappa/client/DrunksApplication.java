@@ -34,49 +34,14 @@ public class DrunksApplication extends Application {
   private static final int WIDTH = 768;
   private static final int HEIGHT = 576;
 
-  public static final int WELCOME_SCREEN_DURATION = 10000;
-
-
+  public static final int WELCOME_SCREEN_DURATION = 5000;
 
   @Override
   public void start(final Stage stage) throws IOException {
     stage.setTitle("Drunks!");
     stage.setResizable(false);
 
-    // Load the splash screen FXML file
-    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(ApplicationHelper.WELCOME_FXML_FILE));
-    Parent root;
-    try {
-      root = fxmlLoader.load();
-    } catch (IOException e) {
-      e.printStackTrace();
-      return;
-    }
-
-    // Set up the screen stage and scene
-    Stage welcomeScreenStage = new Stage();
-    //welcomeScreenStage.initOwner(stage);
-    Scene splashScreenScene = new Scene(root);
-
-    // Show the screen stage
-    welcomeScreenStage.setScene(splashScreenScene);
-    welcomeScreenStage.show();
-
-    // Set up a timeline to automatically close the screen stage after a specified duration
-    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(WELCOME_SCREEN_DURATION), event -> {
-      welcomeScreenStage.close();
-
-      final var applicationManager = ApplicationManager.getInstance();
-      try {
-        applicationManager.newGame(new Game(new Player("player", "player", 0), Level.ONE, stage));
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-
-      stage.show();
-      applicationManager.getGame().ifPresent(Game::startGame);
-    }));
-    timeline.play();
+    ApplicationHelper.startApplication(stage);
   }
 
 

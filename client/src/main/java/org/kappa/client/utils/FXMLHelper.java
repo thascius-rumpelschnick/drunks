@@ -11,11 +11,9 @@ import java.io.IOException;
 public enum FXMLHelper {
   ;
 
-
   public static Node createNodeFromFXML(final String fxmlFile) throws IOException {
     return new FXMLLoader(DrunksApplication.class.getResource(fxmlFile)).load();
   }
-
 
   public static Scene createSceneFromFXML(final String fxmlFile) throws IOException {
     return new FXMLLoader(DrunksApplication.class.getResource(fxmlFile)).load();
