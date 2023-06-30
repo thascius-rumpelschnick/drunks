@@ -19,7 +19,7 @@ public class HealthComponent implements Component {
   }
 
 
-  public boolean hasBeeDistructed() {
+  public boolean hasBeenDestructed() {
     return this.health <= 0;
   }
 

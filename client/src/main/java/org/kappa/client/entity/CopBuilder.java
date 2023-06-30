@@ -10,10 +10,10 @@ import java.util.Objects;
 
 public class CopBuilder {
 
-  private static final String[] UP = {"enemy/copup_1.png", "enemy/copup_1.png"};
-  private static final String[] DOWN = {"enemy/copdown_1.png", "enemy/copdown_1.png"};
-  private static final String[] LEFT = {"enemy/copleft_1.png", "enemy/copleft_1.png"};
-  private static final String[] RIGHT = {"enemy/copright_1.png", "enemy/copright_1.png"};
+  private static final String[] UP = {"cop/copup_1.png", "cop/copup_1.png"};
+  private static final String[] DOWN = {"cop/copdown_1.png", "cop/copdown_1.png"};
+  private static final String[] LEFT = {"cop/copleft_1.png", "cop/copleft_1.png"};
+  private static final String[] RIGHT = {"cop/copright_1.png", "cop/copright_1.png"};
 
   private Cop entity;
 
@@ -83,24 +83,28 @@ public class CopBuilder {
   }
 
 
-  public CopBuilder movement() {
+  public CopBuilder movementAnimation() {
     this.entity.movementAnimationComponent = new MovementAnimationComponent(UP, DOWN, LEFT, RIGHT);
 
     return this;
   }
 
 
-  private boolean isValid() {
-    return this.entity.id != null
-        && this.entity.positionComponent != null
-        && this.entity.directionComponent != null
-        && this.entity.velocityComponent != null
-        && this.entity.renderComponent != null
-        && this.entity.movementAnimationComponent != null;
+  public CopBuilder damageAnimation() {
+    this.entity.damageAnimationComponent = new DamageAnimationComponent();
+
+    return this;
+  }
+
+  public CopBuilder attack() {
+    this.entity.attackComponent = new AttackComponent();
+
+    return this;
   }
 
 
   private String[] getSpriteDirection(final Direction direction) throws IllegalArgumentException {
+
     final String[] d;
 
     switch (direction) {
@@ -112,6 +116,19 @@ public class CopBuilder {
     }
 
     return d;
+  }
+
+
+  private boolean isValid() {
+    return this.entity.id != null
+        && this.entity.healthComponent != null
+        && this.entity.positionComponent != null
+        && this.entity.directionComponent != null
+        && this.entity.velocityComponent != null
+        && this.entity.renderComponent != null
+        && this.entity.damageAnimationComponent != null
+        && this.entity.movementAnimationComponent != null
+        && this.entity.attackComponent != null;
   }
 
 
@@ -130,27 +147,27 @@ public class CopBuilder {
   public static class Cop {
 
     private String id;
+    private HealthComponent healthComponent;
     private PositionComponent positionComponent;
     private DirectionComponent directionComponent;
     private VelocityComponent velocityComponent;
     private RenderComponent renderComponent;
     private MovementAnimationComponent movementAnimationComponent;
-    private HealthComponent healthComponent;
+    private DamageAnimationComponent damageAnimationComponent;
+    private AttackComponent attackComponent;
+
 
     private Cop() {
     }
 
-    public HealthComponent getHealthComponent() {
-      return this.healthComponent;
-    }
 
     public String getId() {
       return this.id;
     }
 
 
-    public RenderComponent getRenderComponent() {
-      return this.renderComponent;
+    public HealthComponent getHealthComponent() {
+      return this.healthComponent;
     }
 
 
@@ -169,8 +186,23 @@ public class CopBuilder {
     }
 
 
+    public RenderComponent getRenderComponent() {
+      return this.renderComponent;
+    }
+
+
     public MovementAnimationComponent getMovementAnimationComponent() {
       return this.movementAnimationComponent;
+    }
+
+
+    public DamageAnimationComponent getDamageAnimationComponent() {
+      return this.damageAnimationComponent;
+    }
+
+
+    public AttackComponent getAttackComponent() {
+      return this.attackComponent;
     }
 
   }

@@ -36,11 +36,13 @@ public class DrunkBuilder {
     return this;
   }
 
+
   public DrunkBuilder health(final int health) {
     this.entity.healthComponent = new HealthComponent(health);
 
     return this;
   }
+
 
   public DrunkBuilder render(final ImageView imageView) {
     this.entity.renderComponent = new RenderComponent(imageView);
@@ -81,8 +83,15 @@ public class DrunkBuilder {
   }
 
 
-  public DrunkBuilder movement() {
+  public DrunkBuilder movementAnimation() {
     this.entity.movementAnimationComponent = new MovementAnimationComponent(UP, DOWN, LEFT, RIGHT);
+
+    return this;
+  }
+
+
+  public DrunkBuilder damageAnimation() {
+    this.entity.damageAnimationComponent = new DamageAnimationComponent();
 
     return this;
   }
@@ -103,6 +112,18 @@ public class DrunkBuilder {
   }
 
 
+  private boolean isValid() {
+    return this.entity.id != null
+        && this.entity.healthComponent != null
+        && this.entity.positionComponent != null
+        && this.entity.directionComponent != null
+        && this.entity.velocityComponent != null
+        && this.entity.renderComponent != null
+        && this.entity.damageAnimationComponent != null
+        && this.entity.movementAnimationComponent != null;
+  }
+
+
   public Drunk build() {
     if (!this.isValid()) {
       throw new IllegalArgumentException();
@@ -115,40 +136,29 @@ public class DrunkBuilder {
   }
 
 
-  private boolean isValid() {
-    return this.entity.id != null
-        && this.entity.positionComponent != null
-        && this.entity.directionComponent != null
-        && this.entity.velocityComponent != null
-        && this.entity.renderComponent != null
-        && this.entity.movementAnimationComponent != null;
-  }
-
-
   public static class Drunk {
 
     private String id;
+    private HealthComponent healthComponent;
     private PositionComponent positionComponent;
     private DirectionComponent directionComponent;
     private VelocityComponent velocityComponent;
     private RenderComponent renderComponent;
     private MovementAnimationComponent movementAnimationComponent;
-    private HealthComponent healthComponent;
+    private DamageAnimationComponent damageAnimationComponent;
+
 
     private Drunk() {
     }
 
-    public HealthComponent getHealthComponent() {
-      return this.healthComponent;
-    }
 
     public String getId() {
       return this.id;
     }
 
 
-    public RenderComponent getRenderComponent() {
-      return this.renderComponent;
+    public HealthComponent getHealthComponent() {
+      return this.healthComponent;
     }
 
 
@@ -167,10 +177,20 @@ public class DrunkBuilder {
     }
 
 
+    public RenderComponent getRenderComponent() {
+      return this.renderComponent;
+    }
+
+
     public MovementAnimationComponent getMovementAnimationComponent() {
       return this.movementAnimationComponent;
     }
 
+
+    public DamageAnimationComponent getDamageAnimationComponent() {
+      return this.damageAnimationComponent;
+    }
   }
+
 
 }
