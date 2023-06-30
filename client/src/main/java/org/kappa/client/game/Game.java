@@ -93,9 +93,6 @@ public class Game {
     final var scene = FXMLHelper.createSceneFromFXML(GameView.FXML_FILE);
     final var board = (Pane) FXMLHelper.createNodeFromFXML(this.level.getLevelView());
 
-    //final var welcomeScene = FXMLHelper.createSceneFromFXML(Application.WELCOME_FXML_FILE);
-    //this.application.fadeScreen(board, welcomeScene);
-
     this.systemManager.getSystem(RenderSystem.class).setGameView(new GameView(new BoardView(board), scene));
 
     this.parseBoardElements(board);

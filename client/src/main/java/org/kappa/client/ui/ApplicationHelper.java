@@ -5,8 +5,7 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -14,7 +13,6 @@ import org.kappa.client.ApplicationManager;
 import org.kappa.client.DrunksApplication;
 import org.kappa.client.game.Game;
 import org.kappa.client.game.Player;
-import org.kappa.client.system.SystemManager;
 import org.kappa.client.utils.Level;
 
 import java.io.IOException;
@@ -39,39 +37,37 @@ public class ApplicationHelper {
     }
 
     public static void startApplication(Stage stage) {
-        // Load the splash screen FXML file
         FXMLStageLoaderHelper(stage, WELCOME_FXML_FILE);
         stage.show();
 
-        // Set up a timeline to automatically close the screen stage after a specified duration
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(DrunksApplication.WELCOME_SCREEN_DURATION), event -> {
             stage.close();
 
-            FXMLStageLoaderHelper(stage, LOGIN_FXML_FILE);
+            VBox root = FXMLStageLoaderHelper(stage, LOGIN_FXML_FILE);
+
+            Button playWithoutRegistrationButton = (Button) root.lookup("#PlayWithoutRegistration");
             stage.show();
 
-            Timeline secondTimeline = new Timeline(new KeyFrame(Duration.millis(DrunksApplication.WELCOME_SCREEN_DURATION), secondEvent -> {
+            playWithoutRegistrationButton.setOnAction(secondEvent -> {
                 stage.close();
 
                 startMainApplication(stage);
-            }));
-            secondTimeline.play();
+            });
         }));
         timeline.play();
     }
 
-    public static void FXMLStageLoaderHelper(Stage stage, String file) {
-        Parent root = null;
+    public static <T extends Parent> T FXMLStageLoaderHelper(Stage stage, String file) {
         FXMLLoader fxmlLoader = new FXMLLoader(DrunksApplication.class.getResource(file));
         try {
-            root = fxmlLoader.load();
+            T root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            return root;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (root != null) {
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-        }
+        return null;
     }
 
 }
