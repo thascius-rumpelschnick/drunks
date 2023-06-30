@@ -1,0 +1,2 @@
+
+![[Klassenmodell.png]]
