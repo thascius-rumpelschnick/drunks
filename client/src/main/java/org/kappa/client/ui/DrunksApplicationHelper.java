@@ -56,6 +56,7 @@ public class DrunksApplicationHelper {
                 stage.show();
 
                 //Game getter für leben
+
                 //Cop
                 // generisches Event in JavaFx
                 //NonplayerEntity system, obs cop ist und zählt cop count, dann generisches event werfen

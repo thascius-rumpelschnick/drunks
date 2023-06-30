@@ -34,13 +34,9 @@ public class Game {
   private final Timer timer;
   private AnimationTimer animationTimer;
   private final Stage stage;
-
   private final EntityManager entityManager;
   private final SystemManager systemManager;
-
   private final DrunksApplicationHelper application;
-
-
 
 
   public Game(final Player player, final Level level, final Stage stage) throws IOException {
