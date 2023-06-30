@@ -1,14 +1,15 @@
-package org.kappa.server.repository;
+package org.kappa.server.persistence.repository;
 
-import org.kappa.server.entity.User;
+import org.kappa.server.persistence.entity.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
+import java.util.Optional;
 
-// import org.springframework.security.core.userdetails.User;
+
 public interface UserRepository extends MongoRepository<User, String> {
 
   @Query("{username:'?0'}")
-  User findUserByUserName(String username);
+  Optional<User> findUserByUserName(String username);
 
 }

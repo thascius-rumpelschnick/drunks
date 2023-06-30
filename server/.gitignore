@@ -1,3 +1,7 @@
+### Drunks ###
+drunks-data/*
+!drunks-data/.gitkeep
+
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar

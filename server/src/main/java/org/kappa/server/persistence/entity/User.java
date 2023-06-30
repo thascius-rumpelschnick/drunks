@@ -1,4 +1,4 @@
-package org.kappa.server.entity;
+package org.kappa.server.persistence.entity;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,13 +11,14 @@ import java.util.Set;
 
 @Document
 public class User implements UserDetails {
-  private final @MongoId ObjectId id;
+  @MongoId
+  private final ObjectId id;
   private final String username;
   private final String password;
   private final Set<GrantedAuthority> authorities;
 
 
-  public User(ObjectId id, String username, String password, Set<GrantedAuthority> authorities) {
+  public User(final ObjectId id, final String username, final String password, final Set<GrantedAuthority> authorities) {
     this.id = id;
     this.username = username;
     this.password = password;
@@ -26,13 +27,13 @@ public class User implements UserDetails {
 
 
   public ObjectId getId() {
-    return id;
+    return this.id;
   }
 
 
   @Override
   public String getUsername() {
-    return username;
+    return this.username;
   }
 
 
@@ -62,13 +63,14 @@ public class User implements UserDetails {
 
   @Override
   public String getPassword() {
-    return password;
+    return this.password;
   }
 
 
   @Override
   public Set<GrantedAuthority> getAuthorities() {
-    return authorities;
+    return this.authorities;
   }
+
 }
 

@@ -41,6 +41,7 @@ public class JasonWebTokenService {
         .withIssuer(ISSUER)
         .withSubject(SUBJECT)
         .withClaim(DATA_CLAIM, DATA)
+        .withClaim(DATA_CLAIM, DATA)
         .withIssuedAt(new Date())
         .withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_VALIDITY_IN_MILLIS))
         .withJWTId(UUID.randomUUID()

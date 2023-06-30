@@ -5,8 +5,8 @@ services:
     image: 'mongo:latest'
     environment:
       - 'MONGO_INITDB_DATABASE=drunks'
-      - 'MONGO_INITDB_ROOT_PASSWORD=toor'
-      - 'MONGO_INITDB_ROOT_USERNAME=root'
+      - 'MONGO_INITDB_ROOT_USERNAME=drunks'
+      - 'MONGO_INITDB_ROOT_PASSWORD=sknurd'
     ports:
       - '27017:27017'
     volumes:
