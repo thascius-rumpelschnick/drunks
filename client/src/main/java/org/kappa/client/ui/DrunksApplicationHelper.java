@@ -38,32 +38,21 @@ public class DrunksApplicationHelper {
             if (event.getCode() == KeyCode.ESCAPE) {
                 applicationManager.getGame().ifPresent(Game::stopGame);
                 stage.close();
-
                 VBox root = loadFXML(stage, "highscore-view.fxml");
-                assert root != null;
-                Button quitButton = (Button) root.lookup("#quit");
-                Button newGameButton = (Button) root.lookup("#newGame");
-
-                quitButton.setOnAction(e -> stage.close());
-                newGameButton.setOnAction(e -> {
-                    try {
-                        applicationManager.newGame(new Game(new Player("player", "player", 0), Level.ONE, stage));
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                });
-
+                setupHighscoreViewButtons(stage, root);
                 stage.show();
-
-                //Game getter für leben
-
-                //Cop
-                // generisches Event in JavaFx
-                //NonplayerEntity system, obs cop ist und zählt cop count, dann generisches event werfen
-                //listener in den ApplicationManager
-
-                //Game getter
             }
+        });
+    }
+
+    private static void setupHighscoreViewButtons(Stage stage, VBox root) {
+        assert root != null;
+        Button quitButton = (Button) root.lookup("#quit");
+        Button newGameButton = (Button) root.lookup("#newGame");
+
+        quitButton.setOnAction(e -> stage.close());
+        newGameButton.setOnAction(e -> {
+            startMainApplication(stage);
         });
     }
 
@@ -83,7 +72,7 @@ public class DrunksApplicationHelper {
         });
     }
 
-    private static <T extends Parent> T loadFXMLAndShow(Stage stage, String file, int duration, Runnable nextAction) {
+    private static <T extends Parent> void loadFXMLAndShow(Stage stage, String file, int duration, Runnable nextAction) {
         VBox root = loadFXML(stage, file);
         stage.show();
 
@@ -92,8 +81,6 @@ public class DrunksApplicationHelper {
             nextAction.run();
         }));
         timeline.play();
-
-        return (T) root;
     }
 
     private static <T extends Parent> T loadFXML(Stage stage, String file) {
