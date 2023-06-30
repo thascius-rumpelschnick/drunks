@@ -42,14 +42,19 @@ public class DrunksApplicationHelper {
                 VBox root = loadFXML(stage, "highscore-view.fxml");
                 assert root != null;
                 Button quitButton = (Button) root.lookup("#quit");
+                Button newGameButton = (Button) root.lookup("#newGame");
 
                 quitButton.setOnAction(e -> stage.close());
+                newGameButton.setOnAction(e -> {
+                    try {
+                        applicationManager.newGame(new Game(new Player("player", "player", 0), Level.ONE, stage));
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
 
                 stage.show();
 
-                //applicationManager new Game
-                //applicationManager.newGame(new Game(new Player("player", "player", 0), Level.ONE, stage));
-                //new level -> new game mit neuen level
                 //Game getter für leben
                 //Cop
                 // generisches Event in JavaFx

@@ -26,7 +26,7 @@
             <Font size="30.0" />
          </font>
       </Text>
-      <Button id="quit" mnemonicParsing="false" scaleX="2.0" scaleY="2.0" style="-fx-background-color: #65b7e6;" text="Quit" textFill="WHITE" translateX="685.0" translateY="387.0" onAction="#quitButtonClicked">
+      <Button id="quit" mnemonicParsing="false" scaleX="2.0" scaleY="2.0" style="-fx-background-color: #65b7e6;" text="Quit" textFill="WHITE" translateX="685.0" translateY="387.0">
          <VBox.margin>
             <Insets />
          </VBox.margin>
@@ -34,7 +34,7 @@
             <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
          </padding>
       </Button>
-      <Button mnemonicParsing="false" scaleX="2.0" scaleY="2.0" style="-fx-background-color: #65b7e6;" text="New game" textFill="WHITE" translateX="520.0" translateY="360.0">
+      <Button id="newGame" mnemonicParsing="false" scaleX="2.0" scaleY="2.0" style="-fx-background-color: #65b7e6;" text="New game" textFill="WHITE" translateX="520.0" translateY="360.0">
          <padding>
             <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
          </padding>
