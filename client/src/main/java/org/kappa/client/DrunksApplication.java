@@ -3,6 +3,8 @@ package org.kappa.client;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,6 +15,11 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.kappa.client.game.Game;
 import org.kappa.client.game.Player;
+import org.kappa.client.system.RenderSystem;
+import org.kappa.client.ui.ApplicationHelper;
+import org.kappa.client.ui.BoardView;
+import org.kappa.client.ui.GameView;
+import org.kappa.client.utils.FXMLHelper;
 import org.kappa.client.utils.Level;
 
 import java.io.File;
@@ -27,17 +34,49 @@ public class DrunksApplication extends Application {
   private static final int WIDTH = 768;
   private static final int HEIGHT = 576;
 
+  public static final int WELCOME_SCREEN_DURATION = 10000;
+
+
 
   @Override
   public void start(final Stage stage) throws IOException {
     stage.setTitle("Drunks!");
     stage.setResizable(false);
 
-    final var applicationManager = ApplicationManager.getInstance();
-    applicationManager.newGame(new Game(new Player("player", "player", 0), Level.ONE, stage));
+    // Load the splash screen FXML file
+    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(ApplicationHelper.WELCOME_FXML_FILE));
+    Parent root;
+    try {
+      root = fxmlLoader.load();
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
 
-    stage.show();
-    applicationManager.getGame().ifPresent(Game::startGame);
+    // Set up the screen stage and scene
+    Stage welcomeScreenStage = new Stage();
+    //welcomeScreenStage.initOwner(stage);
+    Scene splashScreenScene = new Scene(root);
+
+    // Show the screen stage
+    welcomeScreenStage.setScene(splashScreenScene);
+    welcomeScreenStage.show();
+
+    // Set up a timeline to automatically close the screen stage after a specified duration
+    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(WELCOME_SCREEN_DURATION), event -> {
+      welcomeScreenStage.close();
+
+      final var applicationManager = ApplicationManager.getInstance();
+      try {
+        applicationManager.newGame(new Game(new Player("player", "player", 0), Level.ONE, stage));
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+
+      stage.show();
+      applicationManager.getGame().ifPresent(Game::startGame);
+    }));
+    timeline.play();
   }
 
 
@@ -52,7 +91,7 @@ public class DrunksApplication extends Application {
     stage.setScene(scene);
 
     // Show welcoming screen
-    this.showWelcomeScreen(stage, primaryStageRoot, scene);
+    //this.showWelcomeScreen(stage, primaryStageRoot, scene);
     stage.show();
   }
 

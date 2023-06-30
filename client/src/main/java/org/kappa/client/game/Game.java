@@ -13,6 +13,7 @@ import org.kappa.client.event.EventPublisher;
 import org.kappa.client.system.*;
 import org.kappa.client.ui.BoardView;
 import org.kappa.client.ui.GameView;
+import org.kappa.client.ui.ApplicationHelper;
 import org.kappa.client.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +38,10 @@ public class Game {
   private final EntityManager entityManager;
   private final SystemManager systemManager;
 
+  private final ApplicationHelper application;
+
+
+
 
   public Game(final Player player, final Level level, final Stage stage) throws IOException {
     this.player = player;
@@ -47,6 +52,7 @@ public class Game {
 
     this.entityManager = new EntityManager();
     this.systemManager = new SystemManager();
+    this.application = new ApplicationHelper();
 
     this.manageSystems();
     this.manageSubscriptions();
@@ -86,6 +92,9 @@ public class Game {
   private void initializeGame() throws IOException {
     final var scene = FXMLHelper.createSceneFromFXML(GameView.FXML_FILE);
     final var board = (Pane) FXMLHelper.createNodeFromFXML(this.level.getLevelView());
+
+    //final var welcomeScene = FXMLHelper.createSceneFromFXML(Application.WELCOME_FXML_FILE);
+    //this.application.fadeScreen(board, welcomeScene);
 
     this.systemManager.getSystem(RenderSystem.class).setGameView(new GameView(new BoardView(board), scene));
 
