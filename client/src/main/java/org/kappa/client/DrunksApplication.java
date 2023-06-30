@@ -3,7 +3,6 @@ package org.kappa.client;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.kappa.client.ui.DrunksApplicationHelper;
-import org.kappa.client.ui.GameController;
 
 public class DrunksApplication extends Application {
 
