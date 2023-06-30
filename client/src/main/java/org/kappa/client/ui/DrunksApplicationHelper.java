@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -33,11 +34,18 @@ public class DrunksApplicationHelper {
         }
         stage.show();
         applicationManager.getGame().ifPresent(Game::startGame);
+
+        stage.getScene().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                loadFXML(stage, "highscore-view.fxml");
+                stage.show();
+            }
+        });
     }
 
     public static void startApplication(Stage stage) {
         loadFXMLAndShow(stage, WELCOME_FXML_FILE, DrunksApplication.WELCOME_SCREEN_DURATION, () -> {
-            loadFXMLAndShow(stage, WELCOME_PUNK_FXML_FILE, DrunksApplication.WELCOME_SCREEN_DURATION, () -> {
+            loadFXMLAndShow(stage, WELCOME_PUNK_FXML_FILE, DrunksApplication.WELCOME_PUNK_SCREEN_DURATION, () -> {
                 VBox root = loadFXML(stage, LOGIN_FXML_FILE);
                 assert root != null;
                 Button playWithoutRegistrationButton = (Button) root.lookup("#PlayWithoutRegistration");
