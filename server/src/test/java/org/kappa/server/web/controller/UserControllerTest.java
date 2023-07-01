@@ -4,7 +4,7 @@ import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kappa.server.ServerApplication;
+import org.kappa.server.DrunksServerApplication;
 import org.kappa.server.persistence.entity.User;
 import org.kappa.server.persistence.repository.UserRepository;
 import org.mockito.Mock;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@SpringBootTest(classes = {ServerApplication.class, UserRepository.class})
+@SpringBootTest(classes = {DrunksServerApplication.class, UserRepository.class})
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(username = "user1", password = "pwd", roles = "USER")
@@ -71,3 +71,5 @@ class UserControllerTest {
         .andExpect(status().isOk());
   }
 }
+
+// ToDo: Adjust tests!

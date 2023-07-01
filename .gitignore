@@ -1,3 +1,8 @@
+### Drunks ###
+**/logs/
+**/drunks-data/*
+!**/drunks-data/.gitkeep
+
 # General
 .DS_Store
 

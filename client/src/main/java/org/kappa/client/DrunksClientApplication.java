@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
-public class DrunksApplication extends Application {
+public class DrunksClientApplication extends Application {
 
   public static final String ASSETS_PATH = "images/".replace("/", File.separator);
   public static final int TILE_SIZE = 32;
@@ -176,7 +176,7 @@ public class DrunksApplication extends Application {
 
 
   private static InputStream getAssetAsStream(final String assetName) {
-    return DrunksApplication.class.getResourceAsStream(ASSETS_PATH + assetName);
+    return DrunksClientApplication.class.getResourceAsStream(ASSETS_PATH + assetName);
   }
 
 
