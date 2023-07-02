@@ -1,6 +1,10 @@
+### Drunks ###
+drunks-data/*
+!drunks-data/.gitkeep
+
 HELP.md
 target/
-!.mvn/wrapper/maven-wrapper.jar
+!../.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 

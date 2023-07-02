@@ -1,5 +1,7 @@
 module org.kappa.client {
     requires slf4j.api;
+    requires java.net.http;
+    requires com.fasterxml.jackson.databind;
 
     requires javafx.controls;
     requires javafx.fxml;
@@ -23,4 +25,6 @@ module org.kappa.client {
     exports org.kappa.client.game;
     exports org.kappa.client.ui;
     exports org.kappa.client.utils;
+    exports org.kappa.client.http;
+    opens org.kappa.client.http to javafx.fxml;
 }
