@@ -11,7 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.kappa.client.ApplicationManager;
-import org.kappa.client.DrunksApplication;
+import org.kappa.client.DrunksClientApplication;
 import org.kappa.client.game.Game;
 import org.kappa.client.game.Player;
 import org.kappa.client.utils.Level;
@@ -27,7 +27,7 @@ public class DrunksApplicationHelper {
     public static void startMainApplication(Stage stage) {
         ApplicationManager applicationManager = ApplicationManager.getInstance();
         try {
-            applicationManager.newGame(new Game(new Player("player", "player", 0), Level.ONE, stage));
+            applicationManager.newGame(new Game(new Player("player", "player", "", 0, 0, 0), Level.ONE, stage));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -56,7 +56,7 @@ public class DrunksApplicationHelper {
 
     public static void startApplication(Stage stage) {
 
-        loadFXMLAndShow(stage, WELCOME_FXML_FILE, DrunksApplication.WELCOME_SCREEN_DURATION, () -> loadFXMLAndShow(stage, WELCOME_PUNK_FXML_FILE, DrunksApplication.WELCOME_PUNK_SCREEN_DURATION, () -> {
+        loadFXMLAndShow(stage, WELCOME_FXML_FILE, DrunksClientApplication.WELCOME_SCREEN_DURATION, () -> loadFXMLAndShow(stage, WELCOME_PUNK_FXML_FILE, DrunksClientApplication.WELCOME_PUNK_SCREEN_DURATION, () -> {
             VBox root = loadFXML(stage, LOGIN_FXML_FILE);
             assert root != null;
             Button playWithoutRegistrationButton = (Button) root.lookup("#PlayWithoutRegistration");
@@ -85,7 +85,7 @@ public class DrunksApplicationHelper {
     }
 
     private static <T extends Parent> T loadFXML(Stage stage, String file) {
-        FXMLLoader fxmlLoader = new FXMLLoader(DrunksApplication.class.getResource(file));
+        FXMLLoader fxmlLoader = new FXMLLoader(DrunksClientApplication.class.getResource(file));
         try {
             T root = fxmlLoader.load();
             Scene scene = new Scene(root);
