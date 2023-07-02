@@ -1,5 +1,6 @@
 package org.kappa.client.ui;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXMLLoader;
@@ -15,15 +16,20 @@ import org.kappa.client.ApplicationManager;
 import org.kappa.client.DrunksClientApplication;
 import org.kappa.client.game.Game;
 import org.kappa.client.game.Player;
+import org.kappa.client.http.UserData;
 import org.kappa.client.utils.Level;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class DrunksApplicationHelper {
 
     public static final String WELCOME_FXML_FILE = "welcome-view.fxml";
     public static final String WELCOME_PUNK_FXML_FILE = "welcome-punk-view.fxml";
     public static final String LOGIN_FXML_FILE = "login-view.fxml";
+    private static final Logger LOGGER = LoggerFactory.getLogger(DrunksClientApplication.class);
 
     public static void startMainApplication(Stage stage) {
         ApplicationManager applicationManager = ApplicationManager.getInstance();
@@ -56,6 +62,8 @@ public class DrunksApplicationHelper {
     }
 
     public static void startApplication(Stage stage) {
+        final var applicationManager = ApplicationManager.getInstance();
+        final var httpClient = applicationManager.getHttpClient();
 
         loadFXMLAndShow(stage, WELCOME_FXML_FILE, DrunksClientApplication.WELCOME_SCREEN_DURATION, () -> loadFXMLAndShow(stage, WELCOME_PUNK_FXML_FILE, DrunksClientApplication.WELCOME_PUNK_SCREEN_DURATION, () -> {
             VBox root = loadFXML(stage, LOGIN_FXML_FILE);
@@ -65,25 +73,57 @@ public class DrunksApplicationHelper {
             TextField usernameTextField = (TextField) root.lookup("#usernameTextfield");
             TextField passwordTextField = (TextField) root.lookup("#passwordTextfield");
             Button signUpButton = (Button) root.lookup("#SignUpToPlay");
+            Button loginButton = (Button) root.lookup("#LoginToPlay");
             stage.show();
 
-            playWithoutRegistrationButton.setOnAction(event -> {
-                stage.close();
-                startMainApplication(stage);
+            playWithoutRegistrationButton.setOnAction(event -> startFirstStage(stage));
+
+            loginButton.setOnAction(event -> {
+                String username = usernameTextField.getText();
+                String password = passwordTextField.getText();
+                Optional<UserData> userData = httpClient.getUserData(username, password);
+
+                if (userData.isPresent()) {
+                    startFirstStage(stage);
+                } else {
+                    System.out.println("User authentication failed. Invalid username or password.");
+                }
             });
 
             signUpButton.setOnAction(event -> {
                 String username = usernameTextField.getText();
                 String password = passwordTextField.getText();
+
+                try {
+                    LOGGER.debug(httpClient.registerUser(username, password).name());
+                    LOGGER.debug(httpClient.registerUser(username, password).name());
+
+                    LOGGER.debug(httpClient.getUserData(username, password).toString());
+                    LOGGER.debug(httpClient.saveUserData(username, password, new UserData(username, 100, Level.ONE)).toString());
+
+                    Optional<UserData> userData = httpClient.getUserData(username, password);
+                    LOGGER.debug(userData.toString());
+
+                    if (userData.isPresent()) {
+                        startFirstStage(stage);
+                    } else {
+                        System.out.println("User authentication failed. Invalid username or password.");
+                    }
+
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+
                 System.out.println("Username: " + username);
                 System.out.println("Password: " + password);
             });
         }));
     }
 
-    /*private void updateCopIcon() {
-        NonPlayerEntitySystem.getCopCount();
-    }*/
+    private static void startFirstStage(Stage stage) {
+        stage.close();
+        startMainApplication(stage);
+    }
 
     private static void loadFXMLAndShow(Stage stage, String file, int duration, Runnable nextAction) {
         VBox root = loadFXML(stage, file);

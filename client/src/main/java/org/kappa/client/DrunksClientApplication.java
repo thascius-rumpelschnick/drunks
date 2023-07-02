@@ -33,12 +33,12 @@ public class DrunksClientApplication extends Application {
     final var applicationManager = ApplicationManager.getInstance();
 
     final var httpClient = applicationManager.getHttpClient();
-    LOGGER.debug(httpClient.registerUser("foo", "foobar").name());
+    //LOGGER.debug(httpClient.registerUser("foo", "foobar").name());
     //enum compareTo Equals oder status 200 prüfen
-    LOGGER.debug(httpClient.registerUser("foo", "foobar").name());
-    LOGGER.debug(httpClient.getUserData("foo", "foobar").toString());
-    LOGGER.debug(httpClient.saveUserData("foo", "foobar", new UserData("foo", 100, Level.ONE)).toString());
-    LOGGER.debug(httpClient.getUserData("foo", "foobar").toString());
+    //LOGGER.debug(httpClient.registerUser("foo", "foobar").name());
+    //LOGGER.debug(httpClient.getUserData("foo", "foobar").toString());
+    //LOGGER.debug(httpClient.saveUserData("foo", "foobar", new UserData("foo", 100, Level.ONE)).toString());
+    //LOGGER.debug(httpClient.getUserData("foo", "foobar").toString());
 
     /*applicationManager.newGame(
         new Game(
