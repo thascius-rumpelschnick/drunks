@@ -1,7 +1,7 @@
 package org.kappa.server.rest.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import org.kappa.server.domain.User;
 import org.kappa.server.service.UserService;
 import org.slf4j.Logger;
@@ -25,23 +25,24 @@ public class UserController {
 
 
   @PostMapping("/register")
-  public ResponseEntity<String> saveUser(@Valid final User user) {
+  public ResponseEntity<String> saveUser(@Valid @RequestBody final User user) {
     if (this.userService.findUserByUserName(user.username()).isPresent()) {
       return ResponseEntity.badRequest().body("User with username: " + user.username() + " is already registered.");
     }
 
     this.userService.saveUser(user);
 
-    return ResponseEntity.ok("User created");
+    return ResponseEntity.ok("User created.");
   }
 
 
   @DeleteMapping("/delete")
-  public ResponseEntity<String> deleteUser(@NotBlank(message = "Username must not be null.") @RequestParam final String username) {
-    final var user = this.userService.deleteUser(username);
+  public ResponseEntity<String> deleteUser(final HttpServletRequest request) {
+    final var registeredUsername = request.getUserPrincipal().getName();
+    final var user = this.userService.deleteUser(registeredUsername);
 
     if (user.isEmpty()) {
-      return ResponseEntity.badRequest().body("User with username: " + username + " could not be deleted.");
+      return ResponseEntity.badRequest().body("User with username: " + registeredUsername + " could not be deleted.");
     }
 
     return ResponseEntity.ok("User deleted.");
