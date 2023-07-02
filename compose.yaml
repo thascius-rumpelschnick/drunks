@@ -1,4 +1,3 @@
-# ToDo: Moved to parent module. Remove!
 version: '3.8'
 
 services:

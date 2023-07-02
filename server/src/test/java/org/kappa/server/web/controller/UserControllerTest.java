@@ -1,73 +1,93 @@
 package org.kappa.server.web.controller;
 
-import org.bson.types.ObjectId;
-import org.junit.jupiter.api.BeforeEach;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kappa.server.ServerApplication;
-import org.kappa.server.persistence.entity.User;
-import org.kappa.server.persistence.repository.UserRepository;
-import org.mockito.Mock;
+import org.kappa.server.domain.User;
+import org.kappa.server.rest.controller.UserController;
+import org.kappa.server.service.UserService;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Optional;
-import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@SpringBootTest(classes = {ServerApplication.class, UserRepository.class})
+@WebMvcTest(UserController.class)
 @ExtendWith(MockitoExtension.class)
-@AutoConfigureMockMvc
-@WithMockUser(username = "user1", password = "pwd", roles = "USER")
+@WithMockUser(username = "foo", password = "foobar", roles = "USER")
 class UserControllerTest {
-
-  @Autowired
-  private WebApplicationContext context;
-
-  @Autowired
-  private MongoTemplate mongoTemplate;
-
-  @Autowired
-  private BCryptPasswordEncoder bCryptPasswordEncoder;
 
   @Autowired
   private MockMvc mvc;
 
-  @Mock
-  private UserRepository userRepository;
+  @MockBean
+  private UserService userService;
+
+  private final ObjectMapper mapper = new ObjectMapper();
 
 
-  @BeforeEach
-  void beforeEach() {
-    final var user = new User(new ObjectId(), "foo", "bar", Set.of(new SimpleGrantedAuthority("USER")));
-    when(this.userRepository.findUserByUserName(anyString())).thenReturn(Optional.of(user));
+  @Test
+  void testRegister_GivenRequestBodyWithUser_ShouldReturnStatusOk() throws Exception {
+    // Given
+    final var user = new User("foo", "foobar");
+    final var payload = this.mapper.writeValueAsString(user);
+
+    when(this.userService.findUserByUserName(anyString())).thenReturn(Optional.empty());
+
+    // When
+    final var response = this.mvc.perform(
+            post("/api/v1/user/register", user)
+                .with(csrf())
+                .content(payload).header("Content-Type", "application/json")
+                .accept("application/json")
+        )
+        .andExpect(status().isOk())
+        .andReturn()
+        .getResponse();
+
+    // Then
+    verify(this.userService, times(1)).findUserByUserName(anyString());
+    verify(this.userService, times(1)).saveUser(user);
+
+    assertEquals("User created.", response.getContentAsString());
   }
 
 
   @Test
-  void loginPost() throws Exception {
-    this.mvc.perform(post("/api/v1/user/login")).andExpect(status().isOk());
+  void testDelete_GivenAuthenicatedRequestWithUser_ShouldReturnStatusOk() throws Exception {
+    // Given
+    final var user = new User("foo", "foobar");
+
+    when(this.userService.deleteUser(anyString())).thenReturn(Optional.of(user));
+
+    // When
+    final var response = this.mvc.perform(
+            delete("/api/v1/user/delete")
+                .with(httpBasic(user.username(), user.password()))
+                .with(csrf())
+                .accept("application/json")
+        )
+        .andExpect(status().isOk())
+        .andReturn()
+        .getResponse();
+
+    // Then
+    verify(this.userService, times(1)).deleteUser(user.username());
+
+    assertEquals("User deleted.", response.getContentAsString());
   }
 
-
-  @Test
-  void test1() throws Exception {
-    this.mvc.perform(get("/api/v1/user/test").with(httpBasic("foo", "bar")))
-        .andExpect(status().isOk());
-  }
 }
