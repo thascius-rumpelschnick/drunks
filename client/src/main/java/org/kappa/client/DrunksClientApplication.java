@@ -1,7 +1,9 @@
 package org.kappa.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import org.kappa.client.http.UserData;
 import org.kappa.client.ui.DrunksApplicationHelper;
 import javafx.util.Duration;
 import org.kappa.client.game.Game;
@@ -24,19 +26,19 @@ public class DrunksClientApplication extends Application {
   public static final int WELCOME_PUNK_SCREEN_DURATION = 2500;
 
   @Override
-  public void start(final Stage stage) {
+  public void start(final Stage stage) throws JsonProcessingException {
     stage.setTitle("Drunks!");
     stage.setResizable(false);
 
     final var applicationManager = ApplicationManager.getInstance();
 
     final var httpClient = applicationManager.getHttpClient();
-    // LOGGER.debug(httpClient.registerUser("foo", "foobar").name());
-    // LOGGER.debug(httpClient.registerUser("foo", "foobar").name());
-    //
-    // LOGGER.debug(httpClient.getUserData("foo", "foobar").toString());
-    // LOGGER.debug(httpClient.saveUserData("foo", "foobar", new UserData("foo", 100, Level.ONE)).toString());
-    // LOGGER.debug(httpClient.getUserData("foo", "foobar").toString());
+    LOGGER.debug(httpClient.registerUser("foo", "foobar").name());
+    //enum compareTo Equals oder status 200 prüfen
+    LOGGER.debug(httpClient.registerUser("foo", "foobar").name());
+    LOGGER.debug(httpClient.getUserData("foo", "foobar").toString());
+    LOGGER.debug(httpClient.saveUserData("foo", "foobar", new UserData("foo", 100, Level.ONE)).toString());
+    LOGGER.debug(httpClient.getUserData("foo", "foobar").toString());
 
     /*applicationManager.newGame(
         new Game(
