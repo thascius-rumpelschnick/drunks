@@ -10,7 +10,7 @@
 
       <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="864.0" prefWidth="1280.0" style="-fx-background-color: #F2FFF5;">
          <children>
-            <TextField id="firstTextField" prefHeight="26.0" prefWidth="1518.0" scaleX="0.4" scaleY="2.0" style="-fx-background-color: white;" translateY="200.0">
+            <TextField id="usernameTextfield" prefHeight="26.0" prefWidth="1518.0" scaleX="0.4" scaleY="2.0" style="-fx-background-color: white;" translateY="200.0">
                <VBox.margin>
                   <Insets left="50.0" right="50.0" top="70.0" />
                </VBox.margin>
@@ -20,7 +20,7 @@
                   <Font name="Arial" size="35.0" />
                </font>
             </Text>
-            <TextField prefHeight="26.0" prefWidth="1518.0" scaleX="0.4" scaleY="2.0" style="-fx-background-color: white;" translateY="270.0">
+            <TextField id="passwordTextfield" prefHeight="26.0" prefWidth="1518.0" scaleX="0.4" scaleY="2.0" style="-fx-background-color: white;" translateY="270.0">
                <VBox.margin>
                   <Insets left="50.0" right="50.0" />
                </VBox.margin>
@@ -30,7 +30,7 @@
                   <Font name="Arial" size="35.0" />
                </font>
             </Text>
-            <Button mnemonicParsing="false" scaleX="2.0" scaleY="2.0" style="-fx-background-color: #65b7e6;" text="Sign up" textFill="WHITE" translateX="684.0" translateY="357.0">
+            <Button  id="SignUpToPlay" mnemonicParsing="false" scaleX="2.0" scaleY="2.0" style="-fx-background-color: #65b7e6;" text="Sign up" textFill="WHITE" translateX="684.0" translateY="357.0">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
@@ -38,7 +38,7 @@
                   <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
                </padding>
             </Button>
-            <Button mnemonicParsing="false" scaleX="2.0" scaleY="2.0" style="-fx-background-color: #65b7e6;" text="Login" textFill="WHITE" translateX="500.0" translateY="330.0">
+            <Button id="LoginToPlay" mnemonicParsing="false" scaleX="2.0" scaleY="2.0" style="-fx-background-color: #65b7e6;" text="Login" textFill="WHITE" translateX="500.0" translateY="330.0">
                <padding>
                   <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
                </padding>

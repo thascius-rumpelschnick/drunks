@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -59,12 +60,23 @@ public class DrunksApplicationHelper {
         loadFXMLAndShow(stage, WELCOME_FXML_FILE, DrunksClientApplication.WELCOME_SCREEN_DURATION, () -> loadFXMLAndShow(stage, WELCOME_PUNK_FXML_FILE, DrunksClientApplication.WELCOME_PUNK_SCREEN_DURATION, () -> {
             VBox root = loadFXML(stage, LOGIN_FXML_FILE);
             assert root != null;
+
             Button playWithoutRegistrationButton = (Button) root.lookup("#PlayWithoutRegistration");
+            TextField usernameTextField = (TextField) root.lookup("#usernameTextfield");
+            TextField passwordTextField = (TextField) root.lookup("#passwordTextfield");
+            Button signUpButton = (Button) root.lookup("#SignUpToPlay");
             stage.show();
 
             playWithoutRegistrationButton.setOnAction(event -> {
                 stage.close();
                 startMainApplication(stage);
+            });
+
+            signUpButton.setOnAction(event -> {
+                String username = usernameTextField.getText();
+                String password = passwordTextField.getText();
+                System.out.println("Username: " + username);
+                System.out.println("Password: " + password);
             });
         }));
     }
