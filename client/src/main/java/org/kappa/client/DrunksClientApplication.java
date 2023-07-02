@@ -13,14 +13,19 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.kappa.client.game.Game;
 import org.kappa.client.game.Player;
+import org.kappa.client.utils.IdHelper;
 import org.kappa.client.utils.Level;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
 
-public class DrunksApplication extends Application {
+public class DrunksClientApplication extends Application {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DrunksClientApplication.class);
 
   public static final String ASSETS_PATH = "images/".replace("/", File.separator);
   public static final int TILE_SIZE = 32;
@@ -34,7 +39,22 @@ public class DrunksApplication extends Application {
     stage.setResizable(false);
 
     final var applicationManager = ApplicationManager.getInstance();
-    applicationManager.newGame(new Game(new Player("player", "player", 0), Level.ONE, stage));
+
+    final var httpClient = applicationManager.getHttpClient();
+    // LOGGER.debug(httpClient.registerUser("foo", "foobar").name());
+    // LOGGER.debug(httpClient.registerUser("foo", "foobar").name());
+    //
+    // LOGGER.debug(httpClient.getUserData("foo", "foobar").toString());
+    // LOGGER.debug(httpClient.saveUserData("foo", "foobar", new UserData("foo", 100, Level.ONE)).toString());
+    // LOGGER.debug(httpClient.getUserData("foo", "foobar").toString());
+
+    applicationManager.newGame(
+        new Game(
+            new Player(IdHelper.createRandomUuid(), "user", "password", 100, 0, 5)
+            , Level.ONE,
+            stage
+        )
+    );
 
     stage.show();
     applicationManager.getGame().ifPresent(Game::startGame);
@@ -176,7 +196,7 @@ public class DrunksApplication extends Application {
 
 
   private static InputStream getAssetAsStream(final String assetName) {
-    return DrunksApplication.class.getResourceAsStream(ASSETS_PATH + assetName);
+    return DrunksClientApplication.class.getResourceAsStream(ASSETS_PATH + assetName);
   }
 
 

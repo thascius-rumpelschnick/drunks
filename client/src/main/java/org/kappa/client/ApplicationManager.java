@@ -1,6 +1,7 @@
 package org.kappa.client;
 
 import org.kappa.client.game.Game;
+import org.kappa.client.http.DrunksClient;
 
 import java.util.Optional;
 
@@ -10,6 +11,8 @@ public class ApplicationManager {
   private static ApplicationManager applicationManager;
 
   private Game game;
+
+  private final DrunksClient httpClient = DrunksClient.create();
 
 
   private ApplicationManager() {
@@ -35,4 +38,8 @@ public class ApplicationManager {
     return Optional.ofNullable(this.game);
   }
 
+
+  public DrunksClient getHttpClient() {
+    return this.httpClient;
+  }
 }

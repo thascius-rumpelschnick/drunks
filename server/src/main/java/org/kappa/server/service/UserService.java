@@ -29,8 +29,11 @@ public class UserService {
   }
 
 
-  public Optional<org.kappa.server.persistence.entity.User> findUserByUserName(final String username) {
-    return this.userRepository.findUserByUserName(username);
+  public Optional<User> findUserByUserName(final String username) {
+    final var user = this.userRepository.findUserByUserName(username);
+
+    return user.map(value -> new User(value.getUsername(), value.getPassword()));
+
   }
 
 
