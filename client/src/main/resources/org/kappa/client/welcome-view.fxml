@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="864.0" prefWidth="1280.0" style="-fx-background-color: #F2FFF5;">
+         <children>
+            <ImageView fitHeight="532.0" fitWidth="951.0" translateX="150.0" translateY="150.0">
+               <image>
+                  <Image url="@images/application/Title.png" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>

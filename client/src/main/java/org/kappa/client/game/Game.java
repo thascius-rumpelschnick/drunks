@@ -13,6 +13,7 @@ import org.kappa.client.event.EventPublisher;
 import org.kappa.client.system.*;
 import org.kappa.client.ui.BoardView;
 import org.kappa.client.ui.GameView;
+import org.kappa.client.ui.DrunksApplicationHelper;
 import org.kappa.client.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +34,9 @@ public class Game {
   private final Timer timer;
   private AnimationTimer animationTimer;
   private final Stage stage;
-
   private final EntityManager entityManager;
   private final SystemManager systemManager;
+  private final DrunksApplicationHelper application;
 
 
   public Game(final Player player, final Level level, final Stage stage) throws IOException {
@@ -47,6 +48,7 @@ public class Game {
 
     this.entityManager = new EntityManager();
     this.systemManager = new SystemManager();
+    this.application = new DrunksApplicationHelper();
 
     this.manageSystems();
     this.manageSubscriptions();
