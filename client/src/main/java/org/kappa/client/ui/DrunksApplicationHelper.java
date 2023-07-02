@@ -3,6 +3,7 @@ package org.kappa.client.ui;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -86,7 +87,8 @@ public class DrunksApplicationHelper {
                 if (userData.isPresent()) {
                     startFirstStage(stage);
                 } else {
-                    System.out.println("User authentication failed. Invalid username or password.");
+                    setErrorMessage(usernameTextField, "Invalid username or password");
+                    setErrorMessage(passwordTextField, "Invalid username or password");
                 }
             });
 
@@ -107,7 +109,8 @@ public class DrunksApplicationHelper {
                     if (userData.isPresent()) {
                         startFirstStage(stage);
                     } else {
-                        System.out.println("User authentication failed. Invalid username or password.");
+                        setErrorMessage(usernameTextField, "User registration failed.");
+                        setErrorMessage(passwordTextField, "User registration failed.");
                     }
 
                 } catch (JsonProcessingException e) {
@@ -146,5 +149,12 @@ public class DrunksApplicationHelper {
         } catch (IOException e) {
             throw new RuntimeException("Failed to load FXML file: " + file, e);
         }
+    }
+
+    private static void setErrorMessage(TextField textField, String message) {
+        Platform.runLater(() -> {
+            textField.setText(message);
+            textField.setStyle("-fx-text-fill: red;");
+        });
     }
 }
