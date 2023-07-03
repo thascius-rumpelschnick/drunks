@@ -2,6 +2,55 @@
 
 ## HowTo
 
+### RESTful API
+
+      ########################################################################################################################
+      
+      ### Deprecated! Send POST request with body as parameters
+      POST http://localhost:8080/api/v1/user/register
+      Content-Type: application/x-www-form-urlencoded
+      Accept: application/json
+      
+      username=foo&password=bar
+      
+      
+      ### Send POST request with body as parameters
+      POST http://localhost:8080/api/v1/user/register
+      Content-Type: application/json
+      Accept: application/json
+      
+      {
+      "username": "foo",
+      "password": "foobar"
+      }
+      
+      
+      ### Basic Zm9vOmJhcg== -> foo:bar
+      DELETE http://localhost:8080/api/v1/user/delete
+      Authorization: Basic Zm9vOmJhcg==
+      Accept: application/json
+      
+      
+      ### GET api/v1/user-data
+      GET http://localhost:8080/api/v1/user-data?username=foo
+      Authorization: Basic Zm9vOmJhcg==
+      Accept: application/json
+      
+      
+      ### PATCH api/v1/user-data
+      PATCH http://localhost:8080/api/v1/user-data
+      Authorization: Basic Zm9vOmJhcg==
+      Accept: application/json
+      Content-Type: application/json
+      
+      {
+      "username": "foo",
+      "highScore": 1000,
+      "level": 0
+      }
+      
+      ########################################################################################################################
+
 ### Style Guide
 
 1. [Google Styleguide HowTo](https://medium.com/swlh/configuring-google-style-guide-for-java-for-intellij-c727af4ef248)
