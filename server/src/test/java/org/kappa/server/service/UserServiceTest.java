@@ -14,8 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -88,6 +87,53 @@ class UserServiceTest {
 
 
   @Test
-  void deleteUser() {
+  void testDeleteUser_GivenUsername_ShouldReturnDomainUserWithDummyPassword() {
+    // Given
+    final var username = "foo";
+    final var entity = new User(new ObjectId(), username, "foobar", Set.of(new SimpleGrantedAuthority("USER")));
+
+    when(this.userRepository.findUserByUserName(anyString())).thenReturn(Optional.of(entity));
+
+    // When
+    final var user = this.userService.deleteUser(username);
+
+    // Then
+    verify(this.userRepository, times(1)).findUserByUserName(username);
+    verify(this.userRepository, times(1)).delete(any());
+    verify(this.userDataService, times(1)).deleteUserDataByUserName(anyString());
+
+    assertEquals(new org.kappa.server.domain.User(username, "pwd"), user.get());
   }
+
+
+  @Test
+  void testDeleteUser_GivenUsername_WhenUserDoesNoExistShouldReturnEmptyOptional() {
+    // Given
+    final var username = "foo";
+
+    when(this.userRepository.findUserByUserName(anyString())).thenReturn(Optional.empty());
+
+    // When
+    final var user = this.userService.deleteUser(username);
+
+    // Then
+    verify(this.userRepository, times(1)).findUserByUserName(username);
+    verify(this.userRepository, times(0)).delete(any());
+    verify(this.userDataService, times(0)).deleteUserDataByUserName(anyString());
+
+    assertTrue(user.isEmpty());
+  }
+
+
+  @Test
+  void testDeleteUser_GivenNoUsername_ShouldThrowException() {
+    // Given When
+    assertThrows(IllegalArgumentException.class, () -> this.userService.deleteUser(null));
+
+    // Then
+    verify(this.userRepository, times(0)).findUserByUserName(anyString());
+    verify(this.userRepository, times(0)).delete(any());
+    verify(this.userDataService, times(0)).deleteUserDataByUserName(anyString());
+  }
+
 }
