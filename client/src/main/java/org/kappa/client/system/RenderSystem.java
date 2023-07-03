@@ -1,5 +1,6 @@
 package org.kappa.client.system;
 
+import org.kappa.client.ApplicationManager;
 import org.kappa.client.component.PositionComponent;
 import org.kappa.client.component.RenderComponent;
 import org.kappa.client.entity.EntityManager;
@@ -8,6 +9,7 @@ import org.kappa.client.event.EntityEvent;
 import org.kappa.client.event.EntityRemovedEvent;
 import org.kappa.client.event.Listener;
 import org.kappa.client.ui.GameView;
+import org.kappa.client.ui.UpdateGameDataEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,6 +78,8 @@ public class RenderSystem implements System, Listener<EntityEvent> {
 
     } else if (event instanceof EntityRemovedEvent) {
       this.removeEntityFromGameBoard(event.getBody());
+
+      this.gameView.getScene().getRoot().fireEvent(new UpdateGameDataEvent(ApplicationManager.getInstance().getGame().get().getPlayer(), null, null));
 
     } else {
       LOGGER.error("Event: {}", event);

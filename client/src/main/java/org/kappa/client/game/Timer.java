@@ -3,6 +3,8 @@ package org.kappa.client.game;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalTime;
+
 
 // nanosecond = 1_000_000_000 of second
 public class Timer {
@@ -11,29 +13,33 @@ public class Timer {
   private static final Long FRACTAL = 100_000_000L;
 
   private final int updateInterval;
-  private long lapTime;
+  private final LocalTime startTime;
+  private final LocalTime lapTime;
   private int round;
 
 
-  public Timer(final int updateInterval, final long lapTime) {
+  public Timer(final long startTime, final int updateInterval) {
+    this.startTime = LocalTime.ofNanoOfDay(startTime);
+    this.lapTime = LocalTime.from(this.startTime);
     this.updateInterval = updateInterval;
-    this.lapTime = lapTime;
   }
 
 
   public boolean update(final long now) {
-    if ((now - this.lapTime) >= this.round * FRACTAL) {
-      this.round++;
+    final var t = LocalTime.ofNanoOfDay(now);
 
-      if (this.round > 10) {
-        this.round = 1;
-        this.lapTime = now;
-      }
+    return (this.lapTime.getNano() - t.getNano() / 10_000_000) > 5000;
 
-      return true;
-    }
-
-    return false;
+    // if ((now - this.lapTime) >= this.round * FRACTAL) {
+    //   this.round++;
+    //
+    //   if (this.round > 10) {
+    //     this.round = 1;
+    //     this.lapTime = now;
+    //   }
+    //
+    //   return true;
+    // }
   }
 
 
@@ -42,7 +48,7 @@ public class Timer {
   }
 
 
-  public long getLapTime() {
+  public LocalTime getLapTime() {
     return this.lapTime;
   }
 
@@ -50,6 +56,11 @@ public class Timer {
   public int getRound() {
     return this.round;
   }
+
+
+  // public long getStartTimeInSeconds() {
+  //   return convertToSeconds(this.startTime);
+  // }
 
 
   @Deprecated

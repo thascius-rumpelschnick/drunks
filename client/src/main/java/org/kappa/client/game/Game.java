@@ -13,6 +13,7 @@ import org.kappa.client.event.EventPublisher;
 import org.kappa.client.system.*;
 import org.kappa.client.ui.BoardView;
 import org.kappa.client.ui.GameView;
+import org.kappa.client.ui.UpdateGameDataEvent;
 import org.kappa.client.utils.Direction;
 import org.kappa.client.utils.FXMLHelper;
 import org.kappa.client.utils.IdHelper;
@@ -88,6 +89,11 @@ public class Game {
   private void initializeGame() throws IOException {
     final var scene = FXMLHelper.createSceneFromFXML(GameView.FXML_FILE);
     final var board = (Pane) FXMLHelper.createParentFromFXML(this.gameStats.getLevel().getLevelView());
+
+    scene.addEventHandler(UpdateGameDataEvent.UPDATE_GAME_DATA_EVENT_TYPE, (final UpdateGameDataEvent e) -> {
+      final var p = e.getPlayer();
+      LOGGER.debug(p.toString());
+    });
 
     this.systemManager.getSystem(RenderSystem.class).setGameView(new GameView(new BoardView(board), scene));
 
