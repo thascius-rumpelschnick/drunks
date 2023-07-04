@@ -2,26 +2,15 @@ package org.kappa.client;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import org.kappa.client.ui.DrunksApplicationHelper;
-import javafx.util.Duration;
-import org.kappa.client.game.Game;
-import org.kappa.client.game.Player;
-import org.kappa.client.utils.IdHelper;
-import org.kappa.client.utils.Level;
+import org.kappa.client.ui.DrunksApplicationRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 
 
 public class DrunksClientApplication extends Application {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DrunksClientApplication.class);
 
-  public static final int WELCOME_SCREEN_DURATION = 5000;
-  public static final int WELCOME_PUNK_SCREEN_DURATION = 2500;
 
   @Override
   public void start(final Stage stage) {
@@ -49,7 +38,7 @@ public class DrunksClientApplication extends Application {
     stage.show();
     applicationManager.getGame().ifPresent(Game::startGame);*/
 
-    DrunksApplicationHelper.startApplication(stage);
+    DrunksApplicationRunner.create().runApplication(stage);
   }
 
   public static void main(final String[] args) {

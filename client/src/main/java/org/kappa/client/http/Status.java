@@ -2,7 +2,7 @@ package org.kappa.client.http;
 
 public enum Status {
 
-  ACCEPTED(200), BAD_REQUEST(400), INTERNAL_SERVER_ERROR(500);
+  ACCEPTED(200), BAD_REQUEST(400), DENIED(401), INTERNAL_SERVER_ERROR(500);
 
   public final int statusCode;
 

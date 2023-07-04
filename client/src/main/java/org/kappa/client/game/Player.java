@@ -6,17 +6,13 @@ public class Player {
   private final String username;
   private final String password;
   private final int highScore;
-  private final int score;
-  private final int health;
 
 
-  public Player(final String id, final String username, final String password, final int highScore, final int score, final int health) {
+  public Player(final String id, final String username, final String password, final int highScore) {
     this.id = id;
     this.username = username;
     this.password = password;
     this.highScore = highScore;
-    this.score = score;
-    this.health = health;
   }
 
 
@@ -27,16 +23,6 @@ public class Player {
 
   public int getHighScore() {
     return this.highScore;
-  }
-
-
-  public int getScore() {
-    return this.score;
-  }
-
-
-  public int getHealth() {
-    return this.health;
   }
 
 

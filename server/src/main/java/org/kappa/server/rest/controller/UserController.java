@@ -24,6 +24,18 @@ public class UserController {
   }
 
 
+  @GetMapping
+  public ResponseEntity<String> getUser(final HttpServletRequest request) {
+    final var registeredUsername = request.getUserPrincipal().getName();
+
+    if (this.userService.findUserByUserName(registeredUsername).isEmpty()) {
+      return ResponseEntity.badRequest().body("User not registered.");
+    }
+
+    return ResponseEntity.ok("User registered.");
+  }
+
+
   @PostMapping("/register")
   public ResponseEntity<String> saveUser(@Valid @RequestBody final User user) {
     if (this.userService.findUserByUserName(user.username()).isPresent()) {
