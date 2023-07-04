@@ -13,7 +13,10 @@ import org.kappa.client.event.EventPublisher;
 import org.kappa.client.system.*;
 import org.kappa.client.ui.BoardView;
 import org.kappa.client.ui.GameView;
-import org.kappa.client.utils.*;
+import org.kappa.client.utils.Direction;
+import org.kappa.client.utils.FXMLHelper;
+import org.kappa.client.utils.IdHelper;
+import org.kappa.client.utils.LayoutValues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +32,7 @@ public class Game {
   private static final EventPublisher PUBLISHER = EventPublisher.getInstance();
 
   private final Player player;
-  private final Level level;
+  private final GameStats gameStats;
   private final Timer timer;
   private AnimationTimer animationTimer;
   private final Stage stage;
@@ -37,10 +40,10 @@ public class Game {
   private final SystemManager systemManager;
 
 
-  public Game(final Player player, final Level level, final Stage stage) throws IOException {
+  public Game(final Player player, final GameStats gameStats, final Stage stage) throws IOException {
     this.player = player;
-    this.level = level;
-    this.timer = new Timer(level.getLevelUpdateInterval(), System.nanoTime());
+    this.gameStats = gameStats;
+    this.timer = new Timer(gameStats.getLevel().getLevelUpdateInterval(), System.nanoTime());
 
     this.stage = stage;
 
@@ -64,7 +67,7 @@ public class Game {
     this.systemManager.putSystem(new HealthSystem(this.entityManager, this.systemManager));
     this.systemManager.putSystem(new CollisionDetectionSystem(this.entityManager, this.systemManager));
 
-    this.systemManager.putSystem(new NonPlayerEntitySystem(this.entityManager, this.systemManager, this.level));
+    this.systemManager.putSystem(new NonPlayerEntitySystem(this.entityManager, this.systemManager, this.gameStats.getLevel()));
   }
 
 
@@ -84,7 +87,7 @@ public class Game {
 
   private void initializeGame() throws IOException {
     final var scene = FXMLHelper.createSceneFromFXML(GameView.FXML_FILE);
-    final var board = (Pane) FXMLHelper.createParentFromFXML(this.level.getLevelView());
+    final var board = (Pane) FXMLHelper.createParentFromFXML(this.gameStats.getLevel().getLevelView());
 
     this.systemManager.getSystem(RenderSystem.class).setGameView(new GameView(new BoardView(board), scene));
 
@@ -104,7 +107,6 @@ public class Game {
 
   private void update(final long now) {
     if (this.timer.update(now)) {
-      // LOGGER.debug("NOW: {}\nROUND: {}", now, this.timer.getRound());
       this.systemManager.update(this.timer);
     }
   }
@@ -133,7 +135,7 @@ public class Game {
     final var drunk = DrunkBuilder
         .get()
         .id(this.player.getId())
-        .health(5)
+        .health(this.gameStats.getPlayerHealth())
         .render(Direction.UP)
         .direction(Direction.UP)
         .position(0, LayoutValues.GAMEBOARD_HEIGHT - LayoutValues.GAMEBOARD_TILE)

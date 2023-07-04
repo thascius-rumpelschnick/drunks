@@ -42,9 +42,9 @@ public class DrunksApplicationRunner {
   private final ApplicationManager applicationManager = ApplicationManager.getInstance();
 
 
-  public void startMainApplication(final Stage stage, final Player player, final Level level) {
+  public void startMainApplication(final Stage stage, final Player player, final GameStats gameStats) {
     try {
-      this.applicationManager.newGame(new Game(player, level, stage));
+      this.applicationManager.newGame(new Game(player, gameStats, stage));
     } catch (final IOException exception) {
       LOGGER.error(exception.getMessage(), exception);
       System.exit(1);
@@ -63,7 +63,7 @@ public class DrunksApplicationRunner {
         final Button newGameButton = (Button) root.lookup("#newGame");
 
         quitButton.setOnAction(e -> stage.close());
-        newGameButton.setOnAction(e -> this.startMainApplication(stage, player, level));
+        newGameButton.setOnAction(e -> this.startMainApplication(stage, player, gameStats));
         stage.show();
       }
     });
@@ -131,7 +131,7 @@ public class DrunksApplicationRunner {
         );
 
         stage.close();
-        this.startMainApplication(stage, player, gameStats.getLevel());
+        this.startMainApplication(stage, player, gameStats);
       }
     });
 
@@ -166,7 +166,7 @@ public class DrunksApplicationRunner {
         final var gameStats = createDummyStats();
 
         stage.close();
-        this.startMainApplication(stage, player, gameStats.getLevel());
+        this.startMainApplication(stage, player, gameStats);
       }
     });
 
@@ -176,7 +176,7 @@ public class DrunksApplicationRunner {
       final var gameStats = createDummyStats();
 
       stage.close();
-      this.startMainApplication(stage, player, gameStats.getLevel());
+      this.startMainApplication(stage, player, gameStats);
     });
   }
 
