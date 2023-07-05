@@ -1,5 +1,6 @@
 package org.kappa.client.system;
 
+import org.kappa.client.ApplicationManager;
 import org.kappa.client.component.HealthComponent;
 import org.kappa.client.entity.EntityManager;
 import org.kappa.client.event.*;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 
 import static org.kappa.client.event.EventType.ENTITY_REMOVED;
+import static org.kappa.client.ui.UpdateGameType.UPDATE_STATS;
 
 
 public class HealthSystem implements System, Listener<DamageEvent> {
@@ -47,6 +49,15 @@ public class HealthSystem implements System, Listener<DamageEvent> {
 
     if (health.hasBeenDestructed()) {
       PUBLISHER.publishEvent(new EntityEvent(entityId, ENTITY_REMOVED));
+    }
+
+    final var applicationManager = ApplicationManager.getInstance();
+
+    if (applicationManager.getPlayer().orElseThrow().getId().equals(entityId)) {
+      final var gameStats = applicationManager.getGameStats().orElseThrow();
+      gameStats.setPlayerHealth(health.getHealth());
+
+      applicationManager.fireGlobalEvent(UPDATE_STATS, gameStats, this);
     }
   }
 

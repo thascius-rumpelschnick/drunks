@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -19,13 +20,14 @@ import org.kappa.client.game.Player;
 import org.kappa.client.http.Status;
 import org.kappa.client.http.UserData;
 import org.kappa.client.utils.FXMLHelper;
-import org.kappa.client.utils.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 import static org.kappa.client.http.Status.*;
+import static org.kappa.client.ui.UpdateGameType.*;
+import static org.kappa.client.utils.Level.ONE;
 
 
 public class DrunksApplicationRunner {
@@ -38,13 +40,16 @@ public class DrunksApplicationRunner {
 
   private static final int WELCOME_SCREEN_DURATION = 500;
   private static final int WELCOME_PUNK_SCREEN_DURATION = 250;
+  public static final String DUMMY = "dummy";
+  public static final String HIGHSCORE_VIEW_FXML = "highscore-view.fxml";
 
   private final ApplicationManager applicationManager = ApplicationManager.getInstance();
 
 
-  public void startMainApplication(final Stage stage, final Player player, final GameStats gameStats) {
+  public void runGame(final Stage stage, final Player player, final GameStats gameStats) {
     try {
       this.applicationManager.newGame(new Game(player, gameStats, stage));
+
     } catch (final IOException exception) {
       LOGGER.error(exception.getMessage(), exception);
       System.exit(1);
@@ -53,28 +58,84 @@ public class DrunksApplicationRunner {
     stage.show();
     this.applicationManager.getGame().ifPresent(Game::startGame);
 
+    stage.getScene().addEventHandler(
+        UpdateGameEvent.UPDATE_GAME_EVENT_TYPE,
+        (final UpdateGameEvent e) -> {
+          LOGGER.debug(e.getUpdateGameType().name());
+
+          if (GAME_OVER == e.getUpdateGameType()) {
+            this.showFinalScreen(stage, player, gameStats);
+          }
+
+          if (LEVEL_COMPLETED == e.getUpdateGameType()) {
+            stage.close();
+            gameStats.nextLevel();
+
+            this.runGame(stage, player, gameStats);
+          }
+
+          if (UPDATE_STATS == e.getUpdateGameType()) {
+            final Text cops = (Text) stage.getScene().getRoot().lookup("#gv-cops");
+            cops.setText(String.valueOf(gameStats.getCopsCount()));
+
+            final Text score = (Text) stage.getScene().getRoot().lookup("#gv-score");
+            score.setText(String.valueOf(gameStats.getPlayerScore()));
+
+            final Text health = (Text) stage.getScene().getRoot().lookup("#gv-health");
+            health.setText(String.valueOf(gameStats.getPlayerHealth()));
+
+            final Text level = (Text) stage.getScene().getRoot().lookup("#gv-level");
+            level.setText(String.valueOf(gameStats.getLevel().ordinal() + 1));
+          }
+        });
+
     stage.getScene().setOnKeyPressed(event -> {
-      if (event.getCode() == KeyCode.ESCAPE) {
-        this.applicationManager.getGame().ifPresent(Game::stopGame);
-        stage.close();
-
-        final VBox root = (VBox) this.loadRootAndSetScene(stage, "highscore-view.fxml");
-        final Button quitButton = (Button) root.lookup("#quit");
-        final Button newGameButton = (Button) root.lookup("#newGame");
-
-        quitButton.setOnAction(e -> stage.close());
-        newGameButton.setOnAction(e -> this.startMainApplication(stage, player, gameStats));
-        stage.show();
+      if (KeyCode.ESCAPE == event.getCode()) {
+        this.showFinalScreen(stage, player, gameStats);
       }
     });
   }
 
 
-  public void run(final Stage stage) {
-    // Show Drunks Logo
-    // loadRootAndSetScene(stage, WELCOME_FXML_FILE);
-    // stage.show();
+  private void showFinalScreen(final Stage stage, final Player player, final GameStats gameStats) {
+    this.applicationManager.getGame().ifPresent(Game::stopGame);
+    stage.close();
 
+    final VBox root = (VBox) this.loadRootAndSetScene(stage, HIGHSCORE_VIEW_FXML);
+    final Button quitButton = (Button) root.lookup("#quit");
+    final Button newGameButton = (Button) root.lookup("#newGame");
+
+    quitButton.setOnAction(e -> {
+      final var httpClient = this.applicationManager.getHttpClient();
+      final var status = httpClient.getUser(player.getUsername(), player.getPassword());
+
+      if (ACCEPTED == status) {
+        final var userData = httpClient.getUserData(player.getUsername(), player.getPassword());
+        final var highScore = userData.map(d -> Math.max(d.highScore(), player.getHighScore()));
+
+        try {
+          httpClient.saveUserData(
+              player.getUsername(),
+              player.getPassword(),
+              new UserData(player.getUsername(), highScore.orElseThrow(), gameStats.getLevel())
+          );
+
+        } catch (final JsonProcessingException exception) {
+          LOGGER.error(exception.getMessage());
+          System.exit(1);
+        }
+      }
+
+      stage.close();
+    });
+
+    newGameButton.setOnAction(e -> this.runGame(stage, player, gameStats));
+
+    stage.show();
+  }
+
+
+  public void run(final Stage stage) {
     // Show Drunks Logo for a while
     // Show Punk Logo for a while
     // Then show form
@@ -125,34 +186,41 @@ public class DrunksApplicationRunner {
         );
 
         final var gameStats = new GameStats(
-            userData.map(UserData::level).orElse(Level.ONE),
+            userData.map(UserData::level).orElse(ONE),
             5,
             0
         );
 
         stage.close();
-        this.startMainApplication(stage, player, gameStats);
+
+        this.runGame(stage, player, gameStats);
       }
     });
 
     final Button register = (Button) root.lookup("#register");
     register.setOnAction(event -> {
-      final Status status;
+      Status status = null;
       try {
         status = httpClient.registerUser(username.getText(), password.getText());
-      } catch (final JsonProcessingException e) {
-        throw new RuntimeException(e);
+
+      } catch (final JsonProcessingException exception) {
+        LOGGER.error(exception.getMessage());
+        System.exit(1);
       }
 
       if (INTERNAL_SERVER_ERROR == status) {
         usernameText.setText("Not empty and not more than 15 characters");
+        usernameText.setFill(Color.RED);
         passwordText.setText("Minimum 5 characters");
+        passwordText.setFill(Color.RED);
       }
 
       if (BAD_REQUEST == status) {
         final var message = "User already registered";
         usernameText.setText(message);
+        usernameText.setFill(Color.RED);
         passwordText.setText(message);
+        passwordText.setFill(Color.RED);
       }
 
       if (ACCEPTED == status) {
@@ -163,20 +231,20 @@ public class DrunksApplicationRunner {
             0
         );
 
-        final var gameStats = createDummyStats();
+        final var gameStats = createInitialStats();
 
         stage.close();
-        this.startMainApplication(stage, player, gameStats);
+        this.runGame(stage, player, gameStats);
       }
     });
 
     final Button playWithoutRegistrationButton = (Button) root.lookup("#play-without-registration");
     playWithoutRegistrationButton.setOnAction(event -> {
       final var player = createDummyPlayer();
-      final var gameStats = createDummyStats();
+      final var gameStats = createInitialStats();
 
       stage.close();
-      this.startMainApplication(stage, player, gameStats);
+      this.runGame(stage, player, gameStats);
     });
   }
 
@@ -201,6 +269,7 @@ public class DrunksApplicationRunner {
       stage.setScene(scene);
 
       return root;
+
     } catch (final IOException exception) {
       LOGGER.error(exception.getMessage(), exception);
 
@@ -212,12 +281,12 @@ public class DrunksApplicationRunner {
 
 
   private static Player createDummyPlayer() {
-    return new Player("player", "player", "", 0);
+    return new Player(DUMMY, DUMMY, DUMMY, 0);
   }
 
 
-  private static GameStats createDummyStats() {
-    return new GameStats(Level.ONE, 5, 0);
+  private static GameStats createInitialStats() {
+    return new GameStats(ONE, 5, 0);
   }
 
 

@@ -4,6 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.kappa.client.entity.DrunkBuilder;
 import org.kappa.client.entity.EntityManager;
@@ -13,7 +14,6 @@ import org.kappa.client.event.EventPublisher;
 import org.kappa.client.system.*;
 import org.kappa.client.ui.BoardView;
 import org.kappa.client.ui.GameView;
-import org.kappa.client.ui.UpdateGameDataEvent;
 import org.kappa.client.utils.Direction;
 import org.kappa.client.utils.FXMLHelper;
 import org.kappa.client.utils.IdHelper;
@@ -54,6 +54,7 @@ public class Game {
     this.manageSubscriptions();
 
     this.initializeGame();
+    this.initializeStats();
   }
 
 
@@ -89,15 +90,11 @@ public class Game {
     final var scene = FXMLHelper.createSceneFromFXML(GameView.FXML_FILE);
     final var board = (Pane) FXMLHelper.createParentFromFXML(this.gameStats.getLevel().getLevelView());
 
-    scene.addEventHandler(UpdateGameDataEvent.UPDATE_GAME_DATA_EVENT_TYPE, (final UpdateGameDataEvent e) -> {
-      final var p = e.getPlayer();
-      LOGGER.debug(p.toString());
-    });
-
     this.systemManager.getSystem(RenderSystem.class).setGameView(new GameView(new BoardView(board), scene));
 
     this.parseBoardElements(board);
     this.addPlayerToGame();
+
     this.stage.setScene(scene);
 
     this.animationTimer = new AnimationTimer() {
@@ -109,29 +106,30 @@ public class Game {
   }
 
 
+  private void initializeStats() {
+    final Text cops = (Text) this.stage.getScene().getRoot().lookup("#gv-cops");
+    cops.setText(String.valueOf(this.gameStats.getLevel().getLevelCops()));
+
+    final Text score = (Text) this.stage.getScene().getRoot().lookup("#gv-score");
+    score.setText(String.valueOf(this.gameStats.getPlayerScore()));
+
+    final Text health = (Text) this.stage.getScene().getRoot().lookup("#gv-health");
+    health.setText(String.valueOf(this.gameStats.getPlayerHealth()));
+
+    final Text level = (Text) this.stage.getScene().getRoot().lookup("#gv-level");
+    level.setText(String.valueOf(this.gameStats.getLevel().ordinal() + 1));
+  }
+
+
   private void update(final long now) {
     if (this.timer.update(now)) {
-      this.systemManager.update(this.timer);
+      try {
+        this.systemManager.update(this.timer);
+      } catch (final Exception exception) {
+        // ToDo: SystemManager throws ConcurrentModificationException.
+        LOGGER.error(exception.getMessage(), exception);
+      }
     }
-  }
-
-
-  public void startGame() {
-    LOGGER.debug("startGame");
-
-    this.animationTimer.start();
-  }
-
-
-  public void stopGame() {
-    LOGGER.debug("stopGame");
-
-    this.animationTimer.stop();
-  }
-
-
-  public Player getPlayer() {
-    return this.player;
   }
 
 
@@ -201,6 +199,42 @@ public class Game {
       this.entityManager.putComponent(water.getId(), water.getPositionComponent());
       this.entityManager.putComponent(water.getId(), water.getRenderComponent());
     }
+  }
+
+
+  public void startGame() {
+    LOGGER.debug("startGame");
+
+    this.animationTimer.start();
+  }
+
+
+  public void stopGame() {
+    LOGGER.debug("stopGame");
+
+    this.animationTimer.stop();
+  }
+
+
+  public void reset() {
+    this.stopGame();
+    this.entityManager.reset();
+    this.systemManager.reset();
+  }
+
+
+  public Player getPlayer() {
+    return this.player;
+  }
+
+
+  public GameStats getGameStats() {
+    return this.gameStats;
+  }
+
+
+  public Stage getStage() {
+    return this.stage;
   }
 
 }

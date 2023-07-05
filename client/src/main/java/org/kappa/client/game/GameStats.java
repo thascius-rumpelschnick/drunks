@@ -2,16 +2,18 @@ package org.kappa.client.game;
 
 import org.kappa.client.utils.Level;
 
+import static org.kappa.client.utils.Level.ONE;
+
 
 public class GameStats {
 
-  private final Level level;
+  private Level level;
 
-  private final int copsCount;
+  private int copsCount;
 
-  private final int playerHealth;
+  private int playerHealth;
 
-  private final int playerScore;
+  private int playerScore;
 
 
   public GameStats(final Level level, final int playerHealth, final int playerScore) {
@@ -19,6 +21,11 @@ public class GameStats {
     this.copsCount = level.getLevelCops();
     this.playerHealth = playerHealth;
     this.playerScore = playerScore;
+  }
+
+
+  public void nextLevel() {
+    this.level = this.level.nextLevel().orElse(ONE);
   }
 
 
@@ -32,12 +39,27 @@ public class GameStats {
   }
 
 
+  public void setCopsCount(final int copsCount) {
+    this.copsCount = copsCount;
+  }
+
+
   public int getPlayerHealth() {
     return this.playerHealth;
   }
 
 
+  public void setPlayerHealth(final int playerHealth) {
+    this.playerHealth = playerHealth;
+  }
+
+
   public int getPlayerScore() {
     return this.playerScore;
+  }
+
+
+  public void incrementPlayerScore(final int points) {
+    this.playerScore += points;
   }
 }

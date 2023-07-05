@@ -32,7 +32,7 @@ public class UserController {
       return ResponseEntity.badRequest().body("User not registered.");
     }
 
-    return ResponseEntity.ok("User registered.");
+    return ResponseEntity.ok("User exists.");
   }
 
 

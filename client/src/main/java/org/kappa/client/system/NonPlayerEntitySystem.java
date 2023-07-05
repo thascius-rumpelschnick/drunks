@@ -1,5 +1,6 @@
 package org.kappa.client.system;
 
+import org.kappa.client.ApplicationManager;
 import org.kappa.client.component.*;
 import org.kappa.client.entity.CopBuilder;
 import org.kappa.client.entity.EntityManager;
@@ -13,6 +14,7 @@ import java.util.*;
 
 import static org.kappa.client.event.EventType.ENTITY_CREATED;
 import static org.kappa.client.event.EventType.ENTITY_REMOVED;
+import static org.kappa.client.ui.UpdateGameType.*;
 
 
 public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityEvent> {
@@ -241,9 +243,32 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityEv
 
 
   private void removeEntity(final String entityId) {
-    if (this.entityManager.filterEntityByComponentType(AttackComponent.class).stream().filter(e -> entityId.equals(e.getKey())).count() == 1) {
-      this.copCount--;
+    final var applicationManager = ApplicationManager.getInstance();
+    final var gameStats = applicationManager.getGameStats().orElseThrow();
+
+    if (
+        this.entityManager
+            .filterEntityByComponentType(AttackComponent.class)
+            .stream()
+            .filter(e -> entityId.equals(e.getKey())).count() == 1
+    ) {
       LOGGER.debug("CopCount: {}", this.copCount);
+
+      this.copCount--;
+
+      gameStats.setCopsCount(this.copCount);
+      gameStats.incrementPlayerScore(10);
+
+      var updateGameType = UPDATE_STATS;
+      if (this.copCount <= 0) {
+        updateGameType = LEVEL_COMPLETED;
+      }
+
+      applicationManager.fireGlobalEvent(updateGameType, gameStats, this);
+    }
+
+    if (applicationManager.getPlayer().orElseThrow().getId().equals(entityId)) {
+      applicationManager.fireGlobalEvent(GAME_OVER, gameStats, this);
     }
 
     this.entityManager.removeEntity(entityId);
