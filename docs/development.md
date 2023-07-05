@@ -6,15 +6,13 @@
 
       ########################################################################################################################
       
-      ### Deprecated! Send POST request with body as parameters
-      POST http://localhost:8080/api/v1/user/register
-      Content-Type: application/x-www-form-urlencoded
+      ### GET user
+      GET http://localhost:8080/api/v1/user
+      Authorization: Basic Zm9vOmZvb2Jhcg==
       Accept: application/json
+
       
-      username=foo&password=bar
-      
-      
-      ### Send POST request with body as parameters
+      ### Register user
       POST http://localhost:8080/api/v1/user/register
       Content-Type: application/json
       Accept: application/json
@@ -25,21 +23,21 @@
       }
       
       
-      ### Basic Zm9vOmJhcg== -> foo:bar
+      ### Basic Zm9vOmZvb2Jhcg=== -> foo:foobar
       DELETE http://localhost:8080/api/v1/user/delete
-      Authorization: Basic Zm9vOmJhcg==
+      Authorization: Basic Zm9vOmZvb2Jhcg==
       Accept: application/json
       
       
       ### GET api/v1/user-data
       GET http://localhost:8080/api/v1/user-data?username=foo
-      Authorization: Basic Zm9vOmJhcg==
+      Authorization: Basic Zm9vOmZvb2Jhcg==
       Accept: application/json
       
       
       ### PATCH api/v1/user-data
       PATCH http://localhost:8080/api/v1/user-data
-      Authorization: Basic Zm9vOmJhcg==
+      Authorization: Basic Zm9vOmZvb2Jhcg==
       Accept: application/json
       Content-Type: application/json
       
