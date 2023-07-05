@@ -5,7 +5,7 @@ import org.kappa.client.component.PositionComponent;
 import org.kappa.client.component.RenderComponent;
 import org.kappa.client.component.VelocityComponent;
 import org.kappa.client.entity.EntityManager;
-import org.kappa.client.event.EntityRemovedEvent;
+import org.kappa.client.event.EntityEvent;
 import org.kappa.client.event.EventPublisher;
 import org.kappa.client.event.Listener;
 import org.kappa.client.event.MovementEvent;
@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
+
+import static org.kappa.client.event.EventType.ENTITY_REMOVED;
 
 
 public class MovementSystem implements System, Listener<MovementEvent> {
@@ -87,7 +89,7 @@ public class MovementSystem implements System, Listener<MovementEvent> {
     final var collisionDetectionSystem = this.systemManager.getSystem(CollisionDetectionSystem.class);
 
     if (collisionDetectionSystem.isOutOfBounds(newPosition)) {
-      PUBLISHER.publishEvent(new EntityRemovedEvent(entityId));
+      PUBLISHER.publishEvent(new EntityEvent(entityId, ENTITY_REMOVED));
     }
 
     sprite.update(newPosition);

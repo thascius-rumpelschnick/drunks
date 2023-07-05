@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
+import static org.kappa.client.event.EventType.ENTITY_REMOVED;
+
 
 public class HealthSystem implements System, Listener<DamageEvent> {
 
@@ -44,7 +46,7 @@ public class HealthSystem implements System, Listener<DamageEvent> {
     animationSystem.startDamageAnimation(entityId, health.getHealth(), health.hasBeenDestructed());
 
     if (health.hasBeenDestructed()) {
-      PUBLISHER.publishEvent(new EntityRemovedEvent(entityId));
+      PUBLISHER.publishEvent(new EntityEvent(entityId, ENTITY_REMOVED));
     }
   }
 

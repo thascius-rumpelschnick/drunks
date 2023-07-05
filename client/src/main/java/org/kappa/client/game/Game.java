@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.lang.System;
 
 import static org.kappa.client.event.EventType.*;
 
@@ -44,7 +43,7 @@ public class Game {
   public Game(final Player player, final GameStats gameStats, final Stage stage) throws IOException {
     this.player = player;
     this.gameStats = gameStats;
-    this.timer = new Timer(System.nanoTime(), gameStats.getLevel().getLevelUpdateInterval());
+    this.timer = new Timer(gameStats.getLevel().getLevelUpdateInterval());
 
     this.stage = stage;
 
@@ -99,8 +98,7 @@ public class Game {
 
     this.parseBoardElements(board);
     this.addPlayerToGame();
-
-    this.stage.setScene(this.systemManager.getSystem(RenderSystem.class).getGameView().getScene());
+    this.stage.setScene(scene);
 
     this.animationTimer = new AnimationTimer() {
       @Override
