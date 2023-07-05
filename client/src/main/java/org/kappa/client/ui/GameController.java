@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+@Deprecated
 public class GameController {
     @FXML
     private Button quitButton;
@@ -17,7 +18,7 @@ public class GameController {
         //newGameButton.setOnAction(e -> DrunksApplicationHelper.startNewGame(stage));
     }
 
-    public void setStage(Stage stage) {
+    public void setStage(final Stage stage) {
         this.stage = stage;
     }
 }

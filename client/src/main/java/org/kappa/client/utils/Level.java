@@ -22,7 +22,7 @@ public enum Level {
 
     @Override
     public int getLevelCopsMaxHealth() {
-      return 1;
+      return 2;
     }
 
   },
