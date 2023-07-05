@@ -16,32 +16,12 @@ public class DrunksClientApplication extends Application {
   public void start(final Stage stage) {
     stage.setTitle("Drunks!");
     stage.setResizable(false);
-
-    final var applicationManager = ApplicationManager.getInstance();
-
-    final var httpClient = applicationManager.getHttpClient();
-    // LOGGER.debug(httpClient.registerUser("foo", "foobar").name());
-    // LOGGER.debug(httpClient.registerUser("foo", "foobar").name());
-    //
-    // LOGGER.debug(httpClient.getUserData("foo", "foobar").toString());
-    // LOGGER.debug(httpClient.saveUserData("foo", "foobar", new UserData("foo", 100, Level.ONE)).toString());
-    // LOGGER.debug(httpClient.getUserData("foo", "foobar").toString());
-
-    /*applicationManager.newGame(
-        new Game(
-            new Player(IdHelper.createRandomUuid(), "user", "password", 100, 0, 5)
-            , Level.ONE,
-            stage
-        )
-    );
-
-    stage.show();
-    applicationManager.getGame().ifPresent(Game::startGame);*/
-
-    DrunksApplicationRunner.create().runApplication(stage);
+    DrunksApplicationRunner.create().run(stage);
   }
+
 
   public static void main(final String[] args) {
     launch();
   }
+
 }

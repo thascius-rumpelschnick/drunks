@@ -44,7 +44,7 @@ public class Game {
   public Game(final Player player, final GameStats gameStats, final Stage stage) throws IOException {
     this.player = player;
     this.gameStats = gameStats;
-    this.timer = new Timer(gameStats.getLevel().getLevelUpdateInterval(), System.nanoTime());
+    this.timer = new Timer(System.nanoTime(), gameStats.getLevel().getLevelUpdateInterval());
 
     this.stage = stage;
 

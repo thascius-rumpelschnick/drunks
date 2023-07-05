@@ -70,7 +70,7 @@ public class DrunksApplicationRunner {
   }
 
 
-  public void runApplication(final Stage stage) {
+  public void run(final Stage stage) {
     // Show Drunks Logo
     // loadRootAndSetScene(stage, WELCOME_FXML_FILE);
     // stage.show();
