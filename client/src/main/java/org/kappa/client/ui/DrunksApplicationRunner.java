@@ -123,13 +123,15 @@ public class DrunksApplicationRunner {
 
       if (ACCEPTED == status) {
         final var userData = httpClient.getUserData(player.username(), player.password());
-        final var highScore = userData.map(d -> Math.max(d.highScore(), player.highScore()));
+        final var highScore = userData
+            .map(d -> Math.max(d.highScore(), gameStats.getPlayerScore()))
+            .orElse(gameStats.getPlayerScore());
 
         try {
           httpClient.saveUserData(
               player.username(),
               player.password(),
-              new UserData(player.username(), highScore.orElseThrow(), gameStats.getLevel())
+              new UserData(player.username(), highScore, gameStats.getLevel())
           );
 
         } catch (final JsonProcessingException exception) {
@@ -148,9 +150,6 @@ public class DrunksApplicationRunner {
 
 
   public void run(final Stage stage) {
-    // Show Drunks Logo for a while
-    // Show Punk Logo for a while
-    // Then show form
     this.loadFXMLAndShow(
         stage,
         WELCOME_FXML_FILE,
@@ -184,7 +183,9 @@ public class DrunksApplicationRunner {
       if (DENIED == status) {
         final var message = "Register user";
         usernameText.setText(message);
+        usernameText.setFill(Color.RED);
         passwordText.setText(message);
+        passwordText.setFill(Color.RED);
       }
 
       if (ACCEPTED == status) {
@@ -200,7 +201,7 @@ public class DrunksApplicationRunner {
         final var gameStats = new GameStats(
             userData.map(UserData::level).orElse(ONE),
             5,
-            0
+            userData.map(UserData::highScore).orElse(0)
         );
 
         stage.close();
