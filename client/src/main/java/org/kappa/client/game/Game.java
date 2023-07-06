@@ -136,7 +136,7 @@ public class Game {
   private void addPlayerToGame() {
     final var drunk = DrunkBuilder
         .get()
-        .id(this.player.getId())
+        .id(this.player.id())
         .health(this.gameStats.getPlayerHealth())
         .render(Direction.UP)
         .direction(Direction.UP)

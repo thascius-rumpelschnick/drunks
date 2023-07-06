@@ -53,7 +53,7 @@ public class HealthSystem implements System, Listener<DamageEvent> {
 
     final var applicationManager = ApplicationManager.getInstance();
 
-    if (applicationManager.getPlayer().orElseThrow().getId().equals(entityId)) {
+    if (applicationManager.getPlayer().orElseThrow().id().equals(entityId)) {
       final var gameStats = applicationManager.getGameStats().orElseThrow();
       gameStats.setPlayerHealth(health.getHealth());
 

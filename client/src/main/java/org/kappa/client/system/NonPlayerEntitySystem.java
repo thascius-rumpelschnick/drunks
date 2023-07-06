@@ -267,7 +267,7 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityEv
       applicationManager.fireGlobalEvent(updateGameType, gameStats, this);
     }
 
-    if (applicationManager.getPlayer().orElseThrow().getId().equals(entityId)) {
+    if (applicationManager.getPlayer().orElseThrow().id().equals(entityId)) {
       applicationManager.fireGlobalEvent(GAME_OVER, gameStats, this);
     }
 
