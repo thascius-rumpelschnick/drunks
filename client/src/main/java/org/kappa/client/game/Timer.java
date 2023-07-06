@@ -3,31 +3,41 @@ package org.kappa.client.game;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Random;
+
 
 // nanosecond = 1_000_000_000 of second
 public class Timer {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Timer.class);
-  private static final Long FRACTAL = 100_000_000L;
+
+  private final Random random = new Random();
 
   private final int updateInterval;
+  private long startTime;
   private long lapTime;
-  private int round;
+  private int round = 1;
 
 
-  public Timer(final int updateInterval, final long lapTime) {
+  public Timer(final int updateInterval) {
     this.updateInterval = updateInterval;
-    this.lapTime = lapTime;
   }
 
 
   public boolean update(final long now) {
-    if ((now - this.lapTime) >= this.round * FRACTAL) {
+    final var nowInMillis = convertToMilliseconds(now);
+
+    if (this.startTime == 0) {
+      this.startTime = this.lapTime = nowInMillis;
+    }
+
+    // Update game board every 100 milliseconds
+    if (nowInMillis - this.lapTime >= 100) {
+      this.lapTime = nowInMillis;
       this.round++;
 
-      if (this.round > 10) {
+      if (this.round == 10) {
         this.round = 1;
-        this.lapTime = now;
       }
 
       return true;
@@ -37,13 +47,8 @@ public class Timer {
   }
 
 
-  public int getUpdateInterval() {
-    return this.updateInterval;
-  }
-
-
-  public long getLapTime() {
-    return this.lapTime;
+  public boolean canAct() {
+    return this.random.nextInt(11) == this.round;
   }
 
 
@@ -52,7 +57,6 @@ public class Timer {
   }
 
 
-  @Deprecated
   private static long convertToMilliseconds(final long nanoseconds) {
     return Math.max(0L, Math.round(nanoseconds / 1_000_000D));
   }

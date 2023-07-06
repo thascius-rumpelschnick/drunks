@@ -5,8 +5,8 @@ import javafx.animation.Transition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
-import org.kappa.client.utils.Direction;
-import org.kappa.client.utils.UrlHelper;
+import org.kappa.client.util.Direction;
+import org.kappa.client.util.UrlHelper;
 
 import java.util.Objects;
 

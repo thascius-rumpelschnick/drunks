@@ -7,6 +7,7 @@ module org.kappa.client {
     requires javafx.fxml;
     requires javafx.web;
 
+    // ToDo: Remove 11 -15.
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
     requires net.synedra.validatorfx;
@@ -15,14 +16,15 @@ module org.kappa.client {
 
     opens org.kappa.client to javafx.fxml;
     opens org.kappa.client.ui to javafx.fxml;
+    opens org.kappa.client.http to javafx.fxml;
 
     exports org.kappa.client;
-    exports org.kappa.client.component;
     exports org.kappa.client.entity;
+    exports org.kappa.client.component;
+    exports org.kappa.client.system;
     exports org.kappa.client.event;
     exports org.kappa.client.game;
     exports org.kappa.client.ui;
-    exports org.kappa.client.utils;
+    exports org.kappa.client.util;
     exports org.kappa.client.http;
-    opens org.kappa.client.http to javafx.fxml;
 }

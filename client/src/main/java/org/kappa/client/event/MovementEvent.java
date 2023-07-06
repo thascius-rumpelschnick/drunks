@@ -1,6 +1,6 @@
 package org.kappa.client.event;
 
-import org.kappa.client.utils.Direction;
+import org.kappa.client.util.Direction;
 
 import static org.kappa.client.event.EventType.MOVEMENT;
 

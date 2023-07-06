@@ -1,4 +1,4 @@
-package org.kappa.client.utils;
+package org.kappa.client.util;
 
 public enum Direction {
 

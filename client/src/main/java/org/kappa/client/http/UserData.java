@@ -1,6 +1,6 @@
 package org.kappa.client.http;
 
-import org.kappa.client.utils.Level;
+import org.kappa.client.util.Level;
 
 
 public record UserData(String username, int highScore, Level level) {

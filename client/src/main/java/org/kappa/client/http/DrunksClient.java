@@ -19,6 +19,7 @@ import static org.kappa.client.http.Status.*;
 public class DrunksClient {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DrunksClient.class);
+  private static final String GET_USER_URI = "http://localhost:8080/api/v1/user";
   private static final String REGISTER_USER_URI = "http://localhost:8080/api/v1/user/register";
   private static final String DELETE_USER_URI = "http://localhost:8080/api/v1/user/delete";
   private static final String USER_DATA_URI = "http://localhost:8080/api/v1/user-data";
@@ -37,6 +38,16 @@ public class DrunksClient {
     this.mapper = mapper;
   }
 
+  public Status getUser(final String username, final String password) {
+    final var request = HttpRequest.newBuilder()
+        .uri(URI.create(GET_USER_URI))
+        .GET()
+        .header(AUTHORIZATION, basicHttpAsBase64DecodedString(username, password))
+        .header(ACCEPT, APPLICATION_JSON)
+        .build();
+
+    return this.requestUser(request);
+  }
 
   public Status registerUser(final String username, final String password) throws JsonProcessingException {
     final var payload = this.mapper.writeValueAsString(new User(username, password));
@@ -71,11 +82,19 @@ public class DrunksClient {
       final var responseBody = response.body();
 
       if (statusCode == 200) {
-        LOGGER.info(responseBody);
-
+        LOGGER.debug(responseBody);
         return ACCEPTED;
       }
 
+      if (statusCode == 401) {
+        LOGGER.debug(responseBody);
+        return DENIED;
+      }
+
+      if (statusCode == 500) {
+        LOGGER.debug(responseBody);
+        return INTERNAL_SERVER_ERROR;
+      }
 
     } catch (final Exception exception) {
       LOGGER.error(exception.getMessage());
@@ -122,7 +141,7 @@ public class DrunksClient {
       final var responseBody = response.body();
 
       if (statusCode == 200) {
-        LOGGER.info(responseBody);
+        LOGGER.debug(responseBody);
 
         return Optional.of(this.mapper.readValue(responseBody, UserData.class));
       }

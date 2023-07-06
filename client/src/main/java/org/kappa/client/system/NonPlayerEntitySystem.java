@@ -1,15 +1,20 @@
 package org.kappa.client.system;
 
+import org.kappa.client.ApplicationManager;
 import org.kappa.client.component.*;
 import org.kappa.client.entity.CopBuilder;
 import org.kappa.client.entity.EntityManager;
 import org.kappa.client.event.*;
 import org.kappa.client.game.Timer;
-import org.kappa.client.utils.*;
+import org.kappa.client.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+
+import static org.kappa.client.event.EventType.ENTITY_CREATED;
+import static org.kappa.client.event.EventType.ENTITY_REMOVED;
+import static org.kappa.client.ui.UpdateGameType.*;
 
 
 public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityEvent> {
@@ -17,11 +22,10 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityEv
   private static final Logger LOGGER = LoggerFactory.getLogger(NonPlayerEntitySystem.class);
   private static final Publisher PUBLISHER = EventPublisher.getInstance();
 
+  private final Random random = new Random();
   private final EntityManager entityManager;
   private final SystemManager systemManager;
   private final Level level;
-
-  private final Random random;
   private final List<String> nonPlayerEntityList;
 
   private int copCount;
@@ -32,7 +36,6 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityEv
     this.systemManager = systemManager;
     this.level = level;
 
-    this.random = new Random();
     this.nonPlayerEntityList = new ArrayList<>();
 
     this.copCount = level.getLevelCops();
@@ -45,10 +48,10 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityEv
 
     final var entityId = event.getBody();
 
-    if (event instanceof EntityCreatedEvent) {
+    if (ENTITY_CREATED == event.getEventType()) {
       this.nonPlayerEntityList.add(entityId);
 
-    } else if (event instanceof EntityRemovedEvent) {
+    } else if (ENTITY_REMOVED == event.getEventType()) {
       this.removeEntity(entityId);
 
     } else {
@@ -62,9 +65,9 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityEv
   public void update(final Timer timer) {
     this.handleDamageLogic();
     this.handleDamageMovementLogic();
-    this.handleDynamicEntityCreation(this.level, timer);
-    this.handleDynamicEntityMovement(this.level, timer);
-    this.handleDynamicEntityAttack(this.level, timer);
+    this.handleDynamicEntityCreation(timer);
+    this.handleDynamicEntityMovement(timer);
+    this.handleDynamicEntityAttack(timer);
   }
 
 
@@ -113,13 +116,13 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityEv
   }
 
 
-  private void handleDynamicEntityCreation(final Level level, final Timer timer) {
-    final var canBeCreated = this.copCount > 0 && this.canDo(timer);
+  private void handleDynamicEntityCreation(final Timer timer) {
     final var entityId = IdHelper.createRandomUuid();
 
     if (
-        canBeCreated
-            && this.entityManager.filterEntityByComponentType(AttackComponent.class).size() < level.getLevelCops()
+        timer.canAct()
+            && this.copCount > 0
+            && this.entityManager.filterEntityByComponentType(AttackComponent.class).size() < this.copCount
             && this.nonPlayerEntityList.stream().noneMatch(entityId::equals)
     ) {
       final var collision = this.systemManager.getSystem(CollisionDetectionSystem.class);
@@ -146,7 +149,7 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityEv
       final var direction = this.getRandomDirection();
       final var cop = CopBuilder.get()
           .id(entityId)
-          .health(this.random.nextInt(1, level.getLevelCopsMaxHealth() + 1))
+          .health(this.random.nextInt(1, this.level.getLevelCopsMaxHealth() + 1))
           .render(direction)
           .position(x, y)
           .direction(direction)
@@ -168,13 +171,13 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityEv
 
       this.nonPlayerEntityList.add(cop.getId());
 
-      PUBLISHER.publishEvent(new EntityCreatedEvent(entityId));
+      PUBLISHER.publishEvent(new EntityEvent(entityId, ENTITY_CREATED));
     }
   }
 
 
-  private void handleDynamicEntityMovement(final Level level, final Timer timer) {
-    final var canMove = this.canDo(timer);
+  private void handleDynamicEntityMovement(final Timer timer) {
+    final var canMove = timer.canAct();
 
     if (canMove) {
       final var movers = this.entityManager.filterEntityByComponentType(AttackComponent.class);
@@ -213,8 +216,9 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityEv
     return Direction.valueOf(directionValues[this.random.nextInt(directionValues.length)].name());
   }
 
-  private void handleDynamicEntityAttack(final Level level, final Timer timer) {
-    final var canShoot = this.canDo(timer);
+
+  private void handleDynamicEntityAttack(final Timer timer) {
+    final var canShoot = timer.canAct();
 
     if (canShoot) {
       final var attackers = this.entityManager.filterEntityByComponentType(AttackComponent.class);
@@ -229,25 +233,42 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityEv
   }
 
 
-  private boolean canDo(final Timer timer) {
-    // return this.random.nextBoolean() && this.random.nextInt(1, 1 + 1) == timer.getRound();
-    return this.random.nextBoolean() && this.random.nextBoolean();
-  }
-
-
   private void removeEntity(final Map.Entry<String, Map<Class<? extends Component>, Component>> entityEntry) {
     final var entityId = entityEntry.getKey();
 
-    PUBLISHER.publishEvent(new EntityRemovedEvent(entityId));
+    PUBLISHER.publishEvent(new EntityEvent(entityId, ENTITY_REMOVED));
     this.removeEntity(entityId);
 
   }
 
 
   private void removeEntity(final String entityId) {
-    if (this.entityManager.filterEntityByComponentType(AttackComponent.class).stream().filter(e -> entityId.equals(e.getKey())).count() == 1) {
-      this.copCount--;
+    final var applicationManager = ApplicationManager.getInstance();
+    final var gameStats = applicationManager.getGameStats().orElseThrow();
+
+    if (
+        this.entityManager
+            .filterEntityByComponentType(AttackComponent.class)
+            .stream()
+            .filter(e -> entityId.equals(e.getKey())).count() == 1
+    ) {
       LOGGER.debug("CopCount: {}", this.copCount);
+
+      this.copCount--;
+
+      gameStats.setCopsCount(this.copCount);
+      gameStats.incrementPlayerScore(1);
+
+      var updateGameType = UPDATE_STATS;
+      if (this.copCount <= 0) {
+        updateGameType = LEVEL_COMPLETED;
+      }
+
+      applicationManager.fireGlobalEvent(updateGameType, gameStats, this);
+    }
+
+    if (applicationManager.getPlayer().orElseThrow().id().equals(entityId)) {
+      applicationManager.fireGlobalEvent(GAME_OVER, gameStats, this);
     }
 
     this.entityManager.removeEntity(entityId);

@@ -2,7 +2,7 @@
 
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.Pane?>
-<Pane fx:id="boardView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPress" prefHeight="704.0" prefWidth="1024.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.kappa.client.ui.BoardViewController">
+<Pane fx:id="boardView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="704.0" prefWidth="1024.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ImageView id="dummyBoard" pickOnBounds="true" preserveRatio="true">
          <image>

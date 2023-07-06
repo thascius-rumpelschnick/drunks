@@ -92,8 +92,14 @@ public class EntityManager {
         );
   }
 
+
   public void removeEntity(final String entityId) {
     this.entityComponentMap.remove(entityId);
+  }
+
+
+  public void reset() {
+    this.entityComponentMap.clear();
   }
 
 

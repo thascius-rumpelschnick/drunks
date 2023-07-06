@@ -1,4 +1,7 @@
-package org.kappa.client.utils;
+package org.kappa.client.util;
+
+import java.util.Optional;
+
 
 public enum Level {
   ONE {
@@ -22,7 +25,13 @@ public enum Level {
 
     @Override
     public int getLevelCopsMaxHealth() {
-      return 1;
+      return 2;
+    }
+
+
+    @Override
+    public Optional<Level> nextLevel() {
+      return Optional.of(Level.TWO);
     }
 
   },
@@ -50,6 +59,12 @@ public enum Level {
       return 3;
     }
 
+
+    @Override
+    public Optional<Level> nextLevel() {
+      return Optional.of(Level.THREE);
+    }
+
   },
   THREE {
     @Override
@@ -75,6 +90,12 @@ public enum Level {
       return 5;
     }
 
+
+    @Override
+    public Optional<Level> nextLevel() {
+      return Optional.empty();
+    }
+
   };
 
 
@@ -85,5 +106,7 @@ public enum Level {
   public abstract int getLevelCops();
 
   public abstract int getLevelCopsMaxHealth();
+
+  public abstract Optional<Level> nextLevel();
 
 }

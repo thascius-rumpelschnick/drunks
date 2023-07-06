@@ -3,15 +3,16 @@ package org.kappa.client.system;
 import org.kappa.client.component.PositionComponent;
 import org.kappa.client.component.RenderComponent;
 import org.kappa.client.entity.EntityManager;
-import org.kappa.client.event.EntityCreatedEvent;
 import org.kappa.client.event.EntityEvent;
-import org.kappa.client.event.EntityRemovedEvent;
 import org.kappa.client.event.Listener;
 import org.kappa.client.ui.GameView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
+
+import static org.kappa.client.event.EventType.ENTITY_CREATED;
+import static org.kappa.client.event.EventType.ENTITY_REMOVED;
 
 
 public class RenderSystem implements System, Listener<EntityEvent> {
@@ -62,19 +63,14 @@ public class RenderSystem implements System, Listener<EntityEvent> {
   }
 
 
-  public GameView getGameView() {
-    return this.gameView;
-  }
-
-
   @Override
   public void updateOnEventReceived(final EntityEvent event) {
     Objects.requireNonNull(event);
 
-    if (event instanceof EntityCreatedEvent) {
+    if (ENTITY_CREATED == event.getEventType()) {
       this.addEntityToGameBoard(event.getBody());
 
-    } else if (event instanceof EntityRemovedEvent) {
+    } else if (ENTITY_REMOVED == event.getEventType()) {
       this.removeEntityFromGameBoard(event.getBody());
 
     } else {

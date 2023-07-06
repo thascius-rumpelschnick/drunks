@@ -1,7 +1,7 @@
-package org.kappa.client.utils;
+package org.kappa.client.util;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import org.kappa.client.DrunksClientApplication;
 
@@ -11,7 +11,7 @@ import java.io.IOException;
 public enum FXMLHelper {
   ;
 
-  public static Node createNodeFromFXML(final String fxmlFile) throws IOException {
+  public static Parent createParentFromFXML(final String fxmlFile) throws IOException {
     return new FXMLLoader(DrunksClientApplication.class.getResource(fxmlFile)).load();
   }
 

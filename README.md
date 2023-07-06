@@ -4,7 +4,7 @@
 
 ## Concept
 
--> [Classes & ECS structure](./docs/classdiagram.md)  
+-> [Classes & ECS structure](./docs/class-diagram.md)  
 
 -> [Interfaces](./docs/interfaces.md)  
 
