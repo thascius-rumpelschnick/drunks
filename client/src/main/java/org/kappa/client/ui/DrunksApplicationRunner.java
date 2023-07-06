@@ -102,22 +102,34 @@ public class DrunksApplicationRunner {
     stage.close();
 
     final VBox root = (VBox) this.loadRootAndSetScene(stage, HIGHSCORE_VIEW_FXML);
-    final Button quitButton = (Button) root.lookup("#quit");
-    final Button newGameButton = (Button) root.lookup("#newGame");
+
+    final var currentHighscore = Math.max(player.highScore(), gameStats.getPlayerScore());
+
+    final Text highscore = (Text) stage.getScene().getRoot().lookup("#hv-highscore");
+    highscore.setText(String.valueOf(currentHighscore));
+
+    final Text score = (Text) stage.getScene().getRoot().lookup("#hv-score");
+    score.setText(String.valueOf(gameStats.getPlayerScore()));
+
+    final Text level = (Text) stage.getScene().getRoot().lookup("#hv-level");
+    level.setText(String.valueOf(gameStats.getLevel().ordinal() + 1));
+
+    final Button newGameButton = (Button) root.lookup("#hv-resume");
+    final Button quitButton = (Button) root.lookup("#hv-quit");
 
     quitButton.setOnAction(e -> {
       final var httpClient = this.applicationManager.getHttpClient();
-      final var status = httpClient.getUser(player.getUsername(), player.getPassword());
+      final var status = httpClient.getUser(player.username(), player.password());
 
       if (ACCEPTED == status) {
-        final var userData = httpClient.getUserData(player.getUsername(), player.getPassword());
-        final var highScore = userData.map(d -> Math.max(d.highScore(), player.getHighScore()));
+        final var userData = httpClient.getUserData(player.username(), player.password());
+        final var highScore = userData.map(d -> Math.max(d.highScore(), player.highScore()));
 
         try {
           httpClient.saveUserData(
-              player.getUsername(),
-              player.getPassword(),
-              new UserData(player.getUsername(), highScore.orElseThrow(), gameStats.getLevel())
+              player.username(),
+              player.password(),
+              new UserData(player.username(), highScore.orElseThrow(), gameStats.getLevel())
           );
 
         } catch (final JsonProcessingException exception) {
