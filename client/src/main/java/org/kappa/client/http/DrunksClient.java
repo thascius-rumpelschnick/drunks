@@ -82,17 +82,17 @@ public class DrunksClient {
       final var responseBody = response.body();
 
       if (statusCode == 200) {
-        LOGGER.info(responseBody);
+        LOGGER.debug(responseBody);
         return ACCEPTED;
       }
 
       if (statusCode == 401) {
-        LOGGER.info(responseBody);
+        LOGGER.debug(responseBody);
         return DENIED;
       }
 
       if (statusCode == 500) {
-        LOGGER.info(responseBody);
+        LOGGER.debug(responseBody);
         return INTERNAL_SERVER_ERROR;
       }
 
@@ -141,7 +141,7 @@ public class DrunksClient {
       final var responseBody = response.body();
 
       if (statusCode == 200) {
-        LOGGER.info(responseBody);
+        LOGGER.debug(responseBody);
 
         return Optional.of(this.mapper.readValue(responseBody, UserData.class));
       }
