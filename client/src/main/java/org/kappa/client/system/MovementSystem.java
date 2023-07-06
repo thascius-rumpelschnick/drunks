@@ -9,7 +9,7 @@ import org.kappa.client.event.EntityEvent;
 import org.kappa.client.event.EventPublisher;
 import org.kappa.client.event.Listener;
 import org.kappa.client.event.MovementEvent;
-import org.kappa.client.utils.Direction;
+import org.kappa.client.util.Direction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

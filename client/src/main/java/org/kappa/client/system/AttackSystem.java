@@ -10,9 +10,9 @@ import org.kappa.client.event.AttackEvent;
 import org.kappa.client.event.EntityEvent;
 import org.kappa.client.event.EventPublisher;
 import org.kappa.client.event.Listener;
-import org.kappa.client.utils.AttackType;
-import org.kappa.client.utils.IdHelper;
-import org.kappa.client.utils.LayoutValues;
+import org.kappa.client.util.AttackType;
+import org.kappa.client.util.IdHelper;
+import org.kappa.client.util.LayoutValues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

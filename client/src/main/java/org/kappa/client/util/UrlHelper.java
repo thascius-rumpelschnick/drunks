@@ -1,4 +1,4 @@
-package org.kappa.client.utils;
+package org.kappa.client.util;
 
 import org.kappa.client.DrunksClientApplication;
 import org.slf4j.Logger;

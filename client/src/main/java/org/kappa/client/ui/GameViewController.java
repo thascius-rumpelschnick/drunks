@@ -13,8 +13,8 @@ import org.kappa.client.game.Game;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.kappa.client.utils.AttackType.VOMIT;
-import static org.kappa.client.utils.Direction.*;
+import static org.kappa.client.util.AttackType.VOMIT;
+import static org.kappa.client.util.Direction.*;
 
 
 public class GameViewController {

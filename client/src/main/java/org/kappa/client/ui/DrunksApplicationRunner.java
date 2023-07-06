@@ -19,7 +19,7 @@ import org.kappa.client.game.GameStats;
 import org.kappa.client.game.Player;
 import org.kappa.client.http.Status;
 import org.kappa.client.http.UserData;
-import org.kappa.client.utils.FXMLHelper;
+import org.kappa.client.util.FXMLHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +27,7 @@ import java.io.IOException;
 
 import static org.kappa.client.http.Status.*;
 import static org.kappa.client.ui.UpdateGameType.*;
-import static org.kappa.client.utils.Level.ONE;
+import static org.kappa.client.util.Level.ONE;
 
 
 public class DrunksApplicationRunner {

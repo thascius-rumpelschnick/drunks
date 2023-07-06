@@ -1,8 +1,8 @@
 package org.kappa.client.game;
 
-import org.kappa.client.utils.Level;
+import org.kappa.client.util.Level;
 
-import static org.kappa.client.utils.Level.ONE;
+import static org.kappa.client.util.Level.ONE;
 
 
 public class GameStats {

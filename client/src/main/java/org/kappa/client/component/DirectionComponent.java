@@ -1,6 +1,6 @@
 package org.kappa.client.component;
 
-import org.kappa.client.utils.Direction;
+import org.kappa.client.util.Direction;
 
 
 public class DirectionComponent implements Component {

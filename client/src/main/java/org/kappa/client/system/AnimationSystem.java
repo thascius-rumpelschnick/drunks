@@ -4,7 +4,7 @@ import org.kappa.client.component.DamageAnimationComponent;
 import org.kappa.client.component.MovementAnimationComponent;
 import org.kappa.client.component.RenderComponent;
 import org.kappa.client.entity.EntityManager;
-import org.kappa.client.utils.Direction;
+import org.kappa.client.util.Direction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

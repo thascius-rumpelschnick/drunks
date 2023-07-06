@@ -2,8 +2,8 @@ package org.kappa.client.entity;
 
 import javafx.scene.image.ImageView;
 import org.kappa.client.component.*;
-import org.kappa.client.utils.Direction;
-import org.kappa.client.utils.UrlHelper;
+import org.kappa.client.util.Direction;
+import org.kappa.client.util.UrlHelper;
 
 import java.util.Objects;
 

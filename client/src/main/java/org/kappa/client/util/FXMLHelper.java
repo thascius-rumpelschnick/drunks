@@ -1,4 +1,4 @@
-package org.kappa.client.utils;
+package org.kappa.client.util;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

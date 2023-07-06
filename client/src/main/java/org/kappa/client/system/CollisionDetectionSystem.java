@@ -3,7 +3,7 @@ package org.kappa.client.system;
 import org.kappa.client.component.Component;
 import org.kappa.client.component.PositionComponent;
 import org.kappa.client.entity.EntityManager;
-import org.kappa.client.utils.LayoutValues;
+import org.kappa.client.util.LayoutValues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

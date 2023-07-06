@@ -25,6 +25,6 @@ module org.kappa.client {
     exports org.kappa.client.event;
     exports org.kappa.client.game;
     exports org.kappa.client.ui;
-    exports org.kappa.client.utils;
+    exports org.kappa.client.util;
     exports org.kappa.client.http;
 }

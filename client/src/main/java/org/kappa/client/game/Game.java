@@ -14,10 +14,10 @@ import org.kappa.client.event.EventPublisher;
 import org.kappa.client.system.*;
 import org.kappa.client.ui.BoardView;
 import org.kappa.client.ui.GameView;
-import org.kappa.client.utils.Direction;
-import org.kappa.client.utils.FXMLHelper;
-import org.kappa.client.utils.IdHelper;
-import org.kappa.client.utils.LayoutValues;
+import org.kappa.client.util.Direction;
+import org.kappa.client.util.FXMLHelper;
+import org.kappa.client.util.IdHelper;
+import org.kappa.client.util.LayoutValues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

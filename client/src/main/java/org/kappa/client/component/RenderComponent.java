@@ -4,7 +4,7 @@ import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import org.kappa.client.utils.LayoutValues;
+import org.kappa.client.util.LayoutValues;
 
 
 public record RenderComponent(ImageView imageView) implements Component {
