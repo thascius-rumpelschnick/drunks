@@ -4,6 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.kappa.client.entity.DrunkBuilder;
 import org.kappa.client.entity.EntityManager;
@@ -13,12 +14,14 @@ import org.kappa.client.event.EventPublisher;
 import org.kappa.client.system.*;
 import org.kappa.client.ui.BoardView;
 import org.kappa.client.ui.GameView;
-import org.kappa.client.utils.*;
+import org.kappa.client.util.Direction;
+import org.kappa.client.util.FXMLHelper;
+import org.kappa.client.util.IdHelper;
+import org.kappa.client.util.LayoutValues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.lang.System;
 
 import static org.kappa.client.event.EventType.*;
 
@@ -29,19 +32,18 @@ public class Game {
   private static final EventPublisher PUBLISHER = EventPublisher.getInstance();
 
   private final Player player;
-  private final Level level;
+  private final GameStats gameStats;
   private final Timer timer;
   private AnimationTimer animationTimer;
   private final Stage stage;
-
   private final EntityManager entityManager;
   private final SystemManager systemManager;
 
 
-  public Game(final Player player, final Level level, final Stage stage) throws IOException {
+  public Game(final Player player, final GameStats gameStats, final Stage stage) throws IOException {
     this.player = player;
-    this.level = level;
-    this.timer = new Timer(level.getLevelUpdateInterval(), System.nanoTime());
+    this.gameStats = gameStats;
+    this.timer = new Timer(gameStats.getLevel().getLevelUpdateInterval());
 
     this.stage = stage;
 
@@ -52,6 +54,7 @@ public class Game {
     this.manageSubscriptions();
 
     this.initializeGame();
+    this.initializeStats();
   }
 
 
@@ -65,7 +68,7 @@ public class Game {
     this.systemManager.putSystem(new HealthSystem(this.entityManager, this.systemManager));
     this.systemManager.putSystem(new CollisionDetectionSystem(this.entityManager, this.systemManager));
 
-    this.systemManager.putSystem(new NonPlayerEntitySystem(this.entityManager, this.systemManager, this.level));
+    this.systemManager.putSystem(new NonPlayerEntitySystem(this.entityManager, this.systemManager, this.gameStats.getLevel()));
   }
 
 
@@ -85,14 +88,14 @@ public class Game {
 
   private void initializeGame() throws IOException {
     final var scene = FXMLHelper.createSceneFromFXML(GameView.FXML_FILE);
-    final var board = (Pane) FXMLHelper.createNodeFromFXML(this.level.getLevelView());
+    final var board = (Pane) FXMLHelper.createParentFromFXML(this.gameStats.getLevel().getLevelView());
 
     this.systemManager.getSystem(RenderSystem.class).setGameView(new GameView(new BoardView(board), scene));
 
     this.parseBoardElements(board);
     this.addPlayerToGame();
 
-    this.stage.setScene(this.systemManager.getSystem(RenderSystem.class).getGameView().getScene());
+    this.stage.setScene(scene);
 
     this.animationTimer = new AnimationTimer() {
       @Override
@@ -103,38 +106,38 @@ public class Game {
   }
 
 
+  private void initializeStats() {
+    final Text cops = (Text) this.stage.getScene().getRoot().lookup("#gv-cops");
+    cops.setText(String.valueOf(this.gameStats.getLevel().getLevelCops()));
+
+    final Text score = (Text) this.stage.getScene().getRoot().lookup("#gv-score");
+    score.setText(String.valueOf(this.gameStats.getPlayerScore()));
+
+    final Text health = (Text) this.stage.getScene().getRoot().lookup("#gv-health");
+    health.setText(String.valueOf(this.gameStats.getPlayerHealth()));
+
+    final Text level = (Text) this.stage.getScene().getRoot().lookup("#gv-level");
+    level.setText(String.valueOf(this.gameStats.getLevel().ordinal() + 1));
+  }
+
+
   private void update(final long now) {
     if (this.timer.update(now)) {
-      // LOGGER.debug("NOW: {}\nROUND: {}", now, this.timer.getRound());
-      this.systemManager.update(this.timer);
+      try {
+        this.systemManager.update(this.timer);
+      } catch (final Exception exception) {
+        // ToDo: SystemManager throws ConcurrentModificationException.
+        LOGGER.error(exception.getMessage(), exception);
+      }
     }
-  }
-
-
-  public void startGame() {
-    LOGGER.debug("startGame");
-
-    this.animationTimer.start();
-  }
-
-
-  public void stopGame() {
-    LOGGER.debug("stopGame");
-
-    this.animationTimer.stop();
-  }
-
-
-  public Player getPlayer() {
-    return this.player;
   }
 
 
   private void addPlayerToGame() {
     final var drunk = DrunkBuilder
         .get()
-        .id(this.player.getId())
-        .health(5)
+        .id(this.player.id())
+        .health(this.gameStats.getPlayerHealth())
         .render(Direction.UP)
         .direction(Direction.UP)
         .position(0, LayoutValues.GAMEBOARD_HEIGHT - LayoutValues.GAMEBOARD_TILE)
@@ -196,6 +199,42 @@ public class Game {
       this.entityManager.putComponent(water.getId(), water.getPositionComponent());
       this.entityManager.putComponent(water.getId(), water.getRenderComponent());
     }
+  }
+
+
+  public void startGame() {
+    LOGGER.debug("startGame");
+
+    this.animationTimer.start();
+  }
+
+
+  public void stopGame() {
+    LOGGER.debug("stopGame");
+
+    this.animationTimer.stop();
+  }
+
+
+  public void reset() {
+    this.stopGame();
+    this.entityManager.reset();
+    this.systemManager.reset();
+  }
+
+
+  public Player getPlayer() {
+    return this.player;
+  }
+
+
+  public GameStats getGameStats() {
+    return this.gameStats;
+  }
+
+
+  public Stage getStage() {
+    return this.stage;
   }
 
 }

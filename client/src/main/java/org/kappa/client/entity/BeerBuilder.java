@@ -1,4 +1,4 @@
 package org.kappa.client.entity;
 
-public interface Entity {
+public class BeerBuilder {
 }

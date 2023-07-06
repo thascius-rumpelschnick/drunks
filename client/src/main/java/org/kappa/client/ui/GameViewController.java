@@ -13,8 +13,8 @@ import org.kappa.client.game.Game;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.kappa.client.utils.AttackType.VOMIT;
-import static org.kappa.client.utils.Direction.*;
+import static org.kappa.client.util.AttackType.VOMIT;
+import static org.kappa.client.util.Direction.*;
 
 
 public class GameViewController {
@@ -42,11 +42,11 @@ public class GameViewController {
 
   @FXML
   private void handleKeyRelease(final KeyEvent event) {
-    // LOGGER.debug("Key released.");
+    LOGGER.debug("Key released.");
 
     final var publisher = EventPublisher.getInstance();
     final var game = APPLICATION_MANAGER.getGame().orElseThrow();
-    final var playerId = game.getPlayer().getId();
+    final var playerId = game.getPlayer().id();
 
     switch (event.getCode()) {
       case UP -> publisher.publishEvent(new MovementEvent(playerId, UP));

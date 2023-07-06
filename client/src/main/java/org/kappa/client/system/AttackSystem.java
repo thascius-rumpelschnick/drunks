@@ -7,20 +7,21 @@ import org.kappa.client.entity.ClubBuilder;
 import org.kappa.client.entity.EntityManager;
 import org.kappa.client.entity.VomitBuilder;
 import org.kappa.client.event.AttackEvent;
-import org.kappa.client.event.EntityCreatedEvent;
+import org.kappa.client.event.EntityEvent;
 import org.kappa.client.event.EventPublisher;
 import org.kappa.client.event.Listener;
-import org.kappa.client.game.Timer;
-import org.kappa.client.utils.AttackType;
-import org.kappa.client.utils.IdHelper;
-import org.kappa.client.utils.LayoutValues;
+import org.kappa.client.util.AttackType;
+import org.kappa.client.util.IdHelper;
+import org.kappa.client.util.LayoutValues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
+import static org.kappa.client.event.EventType.ENTITY_CREATED;
 
-public class AttackSystem implements UpdatableSystem, Listener<AttackEvent> {
+
+public class AttackSystem implements System, Listener<AttackEvent> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AttackSystem.class);
   private static final EventPublisher PUBLISHER = EventPublisher.getInstance();
@@ -78,7 +79,7 @@ public class AttackSystem implements UpdatableSystem, Listener<AttackEvent> {
       throw new IllegalArgumentException("Unknown attack type.");
     }
 
-    PUBLISHER.publishEvent(new EntityCreatedEvent(attackEntity));
+    PUBLISHER.publishEvent(new EntityEvent(attackEntity, ENTITY_CREATED));
   }
 
 
@@ -129,11 +130,6 @@ public class AttackSystem implements UpdatableSystem, Listener<AttackEvent> {
         .damage(1)
         .movement()
         .build();
-  }
-
-
-  @Override
-  public void update(final Timer timer) {
   }
 
 }

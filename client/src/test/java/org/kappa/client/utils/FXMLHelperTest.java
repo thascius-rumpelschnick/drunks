@@ -1,6 +1,7 @@
 package org.kappa.client.utils;
 
 import org.junit.jupiter.api.Test;
+import org.kappa.client.util.FXMLHelper;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

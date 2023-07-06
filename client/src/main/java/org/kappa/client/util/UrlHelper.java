@@ -1,17 +1,20 @@
-package org.kappa.client.utils;
+package org.kappa.client.util;
 
 import org.kappa.client.DrunksClientApplication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.net.URL;
 
 
 public enum UrlHelper {
   ;
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(UrlHelper.class);
+
 
   public static URL getRessourceAsUrl(final String url) {
-    return DrunksClientApplication.class.getResource("images" + File.separator + url);
+    return DrunksClientApplication.class.getResource("images/" + url);
   }
 
 

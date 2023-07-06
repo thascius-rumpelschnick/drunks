@@ -1,6 +1,6 @@
 package org.kappa.client.event;
 
-import org.kappa.client.utils.AttackType;
+import org.kappa.client.util.AttackType;
 
 import static org.kappa.client.event.EventType.ATTACK;
 

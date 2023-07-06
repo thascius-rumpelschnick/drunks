@@ -1,6 +1,7 @@
 package org.kappa.client.utils;
 
 import org.junit.jupiter.api.Test;
+import org.kappa.client.util.IdHelper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
