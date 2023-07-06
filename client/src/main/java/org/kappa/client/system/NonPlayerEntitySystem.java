@@ -257,7 +257,7 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityEv
       this.copCount--;
 
       gameStats.setCopsCount(this.copCount);
-      gameStats.incrementPlayerScore(10);
+      gameStats.incrementPlayerScore(1);
 
       var updateGameType = UPDATE_STATS;
       if (this.copCount <= 0) {

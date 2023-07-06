@@ -44,7 +44,7 @@
                         </ImageView>
                         <ImageView fitHeight="35.0" fitWidth="35.0" GridPane.rowIndex="1">
                            <image>
-                              <Image url="@images/cop/copdown_1.png" />
+                              <Image url="@images/application/cup.png" />
                            </image>
                         </ImageView>
                         <ImageView fitHeight="27.0" fitWidth="31.0" GridPane.rowIndex="2">
