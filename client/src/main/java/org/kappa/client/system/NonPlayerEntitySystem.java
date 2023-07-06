@@ -7,7 +7,6 @@ import org.kappa.client.entity.EntityManager;
 import org.kappa.client.event.*;
 import org.kappa.client.game.Timer;
 import org.kappa.client.util.*;
-import org.kappa.client.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
