@@ -53,7 +53,7 @@ public class AttackSystem implements System, Listener<AttackEvent> {
     final DirectionComponent direction = this.entityManager.getComponent(entityId, DirectionComponent.class);
 
     if (AttackType.VOMIT == attackType) {
-      final var vomit = this.getVomit(attackEntity, direction, position);
+      final var vomit = this.getVomit(attackEntity, direction, position, entityId);
 
       this.entityManager.createEntity(attackEntity);
       this.entityManager.putComponent(attackEntity, vomit.getRenderComponent());
@@ -64,7 +64,7 @@ public class AttackSystem implements System, Listener<AttackEvent> {
       this.entityManager.putComponent(attackEntity, vomit.getMovementAnimationComponent());
 
     } else if (AttackType.CLUB == attackType) {
-      final var club = this.getClub(attackEntity, direction, position);
+      final var club = this.getClub(attackEntity, direction, position, entityId);
 
       this.entityManager.createEntity(attackEntity);
       this.entityManager.putComponent(attackEntity, club.getRenderComponent());
@@ -102,7 +102,8 @@ public class AttackSystem implements System, Listener<AttackEvent> {
   private VomitBuilder.Vomit getVomit(
       final String vomitId,
       final DirectionComponent direction,
-      final PositionComponent position
+      final PositionComponent position,
+      final String entityId
   ) {
     return VomitBuilder.get()
         .id(vomitId)
@@ -110,7 +111,7 @@ public class AttackSystem implements System, Listener<AttackEvent> {
         .direction(direction.getDirection())
         .position(position.x(), position.y())
         .velocity(LayoutValues.GAMEBOARD_TILE)
-        .damage(1)
+        .damage(1, entityId)
         .movement()
         .build();
   }
@@ -119,7 +120,8 @@ public class AttackSystem implements System, Listener<AttackEvent> {
   private ClubBuilder.Club getClub(
       final String clubId,
       final DirectionComponent direction,
-      final PositionComponent position
+      final PositionComponent position,
+      final String entityId
   ) {
     return ClubBuilder.get()
         .id(clubId)
@@ -127,7 +129,7 @@ public class AttackSystem implements System, Listener<AttackEvent> {
         .direction(direction.getDirection())
         .position(position.x(), position.y())
         .velocity(LayoutValues.GAMEBOARD_TILE)
-        .damage(1)
+        .damage(1, entityId)
         .movement()
         .build();
   }

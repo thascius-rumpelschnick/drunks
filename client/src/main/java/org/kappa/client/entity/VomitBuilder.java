@@ -76,8 +76,8 @@ public class VomitBuilder {
   }
 
 
-  public VomitBuilder damage(final int damage) {
-    this.entity.damageComponent = new DamageComponent(damage);
+  public VomitBuilder damage(final int damage, final String entityId) {
+    this.entity.damageComponent = new DamageComponent(damage, entityId);
 
     return this;
   }
