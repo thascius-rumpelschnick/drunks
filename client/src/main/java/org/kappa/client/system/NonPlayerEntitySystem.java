@@ -120,7 +120,7 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityEv
     final var entityId = IdHelper.createRandomUuid();
 
     if (
-        timer.canAct()
+        timer.canAct(15)
             && this.copCount > 0
             && this.entityManager.filterEntityByComponentType(AttackComponent.class).size() < this.copCount
             && this.nonPlayerEntityList.stream().noneMatch(entityId::equals)
@@ -177,14 +177,14 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityEv
 
 
   private void handleDynamicEntityMovement(final Timer timer) {
-    final var canMove = timer.canAct();
+    final var canMove = timer.canAct(3);
 
     if (canMove) {
       final var movers = this.entityManager.filterEntityByComponentType(AttackComponent.class);
 
       if (!movers.isEmpty()) {
         final var mover = movers.get(this.random.nextInt(movers.size()));
-        Direction direction = this.random.nextBoolean()
+        Direction direction = this.random.nextInt(5) >= 2
             ? ((DirectionComponent) mover.getValue().get(DirectionComponent.class)).getDirection()
             : this.getRandomDirection();
 
@@ -218,7 +218,7 @@ public class NonPlayerEntitySystem implements UpdatableSystem, Listener<EntityEv
 
 
   private void handleDynamicEntityAttack(final Timer timer) {
-    final var canShoot = timer.canAct();
+    final var canShoot = timer.canAct(6);
 
     if (canShoot) {
       final var attackers = this.entityManager.filterEntityByComponentType(AttackComponent.class);

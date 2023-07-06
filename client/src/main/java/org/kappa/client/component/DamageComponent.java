@@ -1,4 +1,4 @@
 package org.kappa.client.component;
 
-public record DamageComponent(int damage) implements Component {
+public record DamageComponent(int damage, String entityId) implements Component {
 }

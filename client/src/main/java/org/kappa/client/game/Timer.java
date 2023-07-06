@@ -47,8 +47,8 @@ public class Timer {
   }
 
 
-  public boolean canAct() {
-    return this.random.nextInt(11) == this.round;
+  public boolean canAct(final int updateInterval) {
+    return this.random.nextInt(updateInterval) == (updateInterval - 1);
   }
 
 
